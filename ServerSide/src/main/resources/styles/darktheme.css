@@ -1,0 +1,27 @@
+.roott {
+-fx-base: rgb(50, 50, 50);
+-fx-background: rgb(50, 50, 50);
+-fx-control-inner-background:  rgb(50, 50, 50);
+}
+ 
+.tabt {
+-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base,30%));
+}
+ 
+.menu-bart {
+-fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base,30%));
+}
+ 
+.tool-bar:horizontalt {
+-fx-background-color:
+linear-gradient(to bottom, derive(-fx-base,+50%), derive(-fx-base,-40%), derive(-fx-base,-20%));
+}
+ 
+.buttont {
+-fx-background-color: transparent;
+}
+ 
+.button:hovertt {
+-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+-fx-color: -fx-hover-base;
+}
