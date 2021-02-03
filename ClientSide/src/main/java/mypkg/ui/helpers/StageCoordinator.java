@@ -34,10 +34,9 @@ public class StageCoordinator {
             throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
         }
 
-        if (!scenes.containsKey("DatabaseSheet")) {
+        if (!scenes.containsKey("Login")) {
             try {
-//                System.out.println("Created New Scene");
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/DatabaseSheet.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
                 Parent dataSheet = fxmlLoader.load();
                 Scene dataSheetScene = new Scene(dataSheet);
                 SceneData dataSheetData = new SceneData(fxmlLoader, dataSheet, dataSheetScene);
@@ -47,8 +46,7 @@ public class StageCoordinator {
                 System.out.println("IO Exception: Couldn't load 'Login View' FXML file");
             }
         } else {
-            System.out.println("Loaded Existing Scene");
-            SceneData loginSceneData = scenes.get("login");
+            SceneData loginSceneData = scenes.get("Login");
             Scene loginScene = loginSceneData.getScene();
             primaryStage.setScene(loginScene);
         }

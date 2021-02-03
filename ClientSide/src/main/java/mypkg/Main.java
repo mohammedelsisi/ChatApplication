@@ -30,23 +30,12 @@ public class Main extends Application {
         stageCoordinator.switchToLoginScene();
         primaryStage.show();
 
-
-
     }
 
     @Override
     public void init() {
-        Properties prop = new Properties();
-
-        FileInputStream fis = null;
-        MysqlDataSource mysqlDataSource= null;
-
         try {
-            fis = new FileInputStream(Main.class.getResource("/db.properties").getFile());
-            prop.load(fis);
-            DataSource ds = DataSourceFactory.getMysqlDataSource(prop.getProperty("UN"),prop.getProperty("pass"),"m7mdschema");
-
-            connection = ds.getConnection();
+            connection = DataSourceFactory.getConnection();
         } catch (SQLException | FileNotFoundException throwables) {
             throwables.printStackTrace();
         } catch (IOException e) {
@@ -57,7 +46,6 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        /* Terminate Database & Network Connections  */
         try {
             connection.close();
         } catch (SQLException throwables) {

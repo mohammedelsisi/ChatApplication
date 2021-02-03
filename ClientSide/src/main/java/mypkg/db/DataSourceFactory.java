@@ -1,8 +1,12 @@
 package mypkg.db;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import mypkg.Main;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,32 +15,22 @@ import java.util.Properties;
 public class DataSourceFactory {
 
 
-    private static MysqlDataSource mysqlDataSource;
+    private static Connection mysqlConnection;
 
-
-    public static DataSource getMysqlDataSource(Properties file, String database) {
-        if (mysqlDataSource == null) {
-            mysqlDataSource = new MysqlDataSource();
-            mysqlDataSource.setUser(file.getProperty("userName"));
-            mysqlDataSource.setPassword(file.getProperty("password"));
-            mysqlDataSource.setDatabaseName(database);
-            return mysqlDataSource;
+    public static Connection getConnection() throws SQLException, IOException {
+        if (mysqlConnection == null) {
+            FileInputStream fis = new FileInputStream(Main.class.getResource("/db.properties").getFile());
+            Properties prop = new Properties();
+            prop.load(fis);
+            MysqlDataSource ds = new MysqlDataSource();
+            ds.setUser(prop.getProperty("username"));
+            ds.setPassword(prop.getProperty("password"));;
+            ds.setDatabaseName(prop.getProperty("database"));
+            mysqlConnection=ds.getConnection();
         }
-        return null;
+        return mysqlConnection;
     }
-
-    public static DataSource getMysqlDataSource(String userName, String password, String database) {
-        if (mysqlDataSource == null) {
-            mysqlDataSource = new MysqlDataSource();
-            mysqlDataSource.setUser(userName);
-            mysqlDataSource.setPassword(password);
-            mysqlDataSource.setDatabaseName(database);
-            return mysqlDataSource;
-        }
-        return null;
-    }
-    private DataSourceFactory(){
-
+    private DataSourceFactory() {
     }
 
 }
