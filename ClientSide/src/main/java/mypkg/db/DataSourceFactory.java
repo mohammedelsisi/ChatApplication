@@ -19,7 +19,7 @@ public class DataSourceFactory {
 
     public static Connection getConnection() throws SQLException, IOException {
         if (mysqlConnection == null) {
-            FileInputStream fis = new FileInputStream(Main.class.getResource("/db.properties").getFile());
+            FileInputStream fis = new FileInputStream(Main.class.getResource("/db.properties").getPath());
             Properties prop = new Properties();
             prop.load(fis);
             MysqlDataSource ds = new MysqlDataSource();
