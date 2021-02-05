@@ -16,7 +16,8 @@ public class StageCoordinator {
     private static final StageCoordinator stageCoordinator = new StageCoordinator();
     private final Map<String, SceneData> scenes = new HashMap<>();
 
-    private StageCoordinator() { }
+    private StageCoordinator() {
+    }
 
     public void initStage(Stage stage) {
         if (primaryStage != null) {
@@ -34,19 +35,19 @@ public class StageCoordinator {
             throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
         }
 
-        if (!scenes.containsKey("Login")) {
+        if (!scenes.containsKey("MainScene")) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
-                Parent dataSheet = fxmlLoader.load();
-                Scene dataSheetScene = new Scene(dataSheet);
-                SceneData dataSheetData = new SceneData(fxmlLoader, dataSheet, dataSheetScene);
-                scenes.put("dataSheet", dataSheetData);
-                primaryStage.setScene(dataSheetScene);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/MainScene2.fxml"));
+                Parent main = fxmlLoader.load();
+                Scene mainScene = new Scene(main,650,520);
+                SceneData MainSceneData = new SceneData(fxmlLoader, main, mainScene);
+                scenes.put("MainScene", MainSceneData);
+                primaryStage.setScene(mainScene);
             } catch (IOException e) {
                 System.out.println("IO Exception: Couldn't load 'Login View' FXML file");
             }
         } else {
-            SceneData loginSceneData = scenes.get("Login");
+            SceneData loginSceneData = scenes.get("MainScene");
             Scene loginScene = loginSceneData.getScene();
             primaryStage.setScene(loginScene);
         }
@@ -54,5 +55,25 @@ public class StageCoordinator {
     }
 
 
+    public Parent getSignInScene() {
+        if (primaryStage == null) {
+            throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
+        }
+        if (!scenes.containsKey("signIn")) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/SignIn.fxml"));
+                Parent signin = fxmlLoader.load();
+                Scene signinScene = new Scene(signin);
+                SceneData signInData = new SceneData(fxmlLoader, signin, signinScene);
+                scenes.put("signIn", signInData);
+                return signin;
+            } catch (IOException e) {
+                System.out.println("IO Exception: Couldn't load 'Login View' FXML file");
+            }
+        }
+            SceneData loginSceneData = scenes.get("signIn");
+            Parent signin = loginSceneData.getView();
+            return signin;
 
+    }
 }

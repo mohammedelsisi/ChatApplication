@@ -5,15 +5,26 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="VBox" alignment="CENTER_LEFT" prefHeight="480.0" prefWidth="480.0" style="-fx-background-color: #ccccff;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="VBox" alignment="CENTER" prefHeight="532.0" prefWidth="346.0" style="-fx-background-color: #32425b;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.SignInController">
    <children>
-      <Label prefHeight="42.0" prefWidth="146.0" text="Sign In" textFill="#d7615b">
+      <ImageView fitHeight="173.0" fitWidth="203.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Pics/unnamed.png" />
+         </image></ImageView>
+      <Label text="Welcome to LongTalk Chat App" textFill="WHITE">
          <font>
-            <Font size="20.0" />
+            <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label prefHeight="42.0" prefWidth="312.0" text="Sign In" textFill="WHITE">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="25.0" />
          </font>
          <VBox.margin>
             <Insets left="20.0" right="15.0" top="20.0" />
@@ -45,21 +56,29 @@
             </PasswordField>
          </children>
       </HBox>
-      <HBox alignment="CENTER"  prefHeight="45.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="50.0">
          <VBox.margin>
             <Insets left="15.0" right="15.0" top="20.0" />
          </VBox.margin>
          <children>
-            <Button  mnemonicParsing="false"  textAlignment="CENTER" alignment="CENTER" prefHeight="35.0" prefWidth="120.0" styleClass="pnk_btn" text="Sign in" textFill="WHITE">
+            <Button fx:id="registerBtn" alignment="CENTER" mnemonicParsing="false" onAction="#registerAction" prefHeight="35.0" prefWidth="120.0" styleClass="pnk_btn" text="Register" textAlignment="CENTER">
             <opaqueInsets>
                <Insets />
             </opaqueInsets>
             <HBox.margin>
-               <Insets right="30.0" />
+               <Insets />
             </HBox.margin>
             <font>
-               <Font size="15.0" />
+               <Font name="System Bold" size="15.0" />
             </font>
+            </Button>
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" styleClass="pnk_btn" text="Sign in" textAlignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
             </Button>
          </children>
       </HBox>

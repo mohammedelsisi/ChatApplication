@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.MainController">
+   <children>
+      <BorderPane fx:id="leftBorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+         <center>
+            <ImageView fitHeight="200" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../Pics/Chat-Icon (1).gif" />
+               </image>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <top>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../Pics/1cb2226ca4742187ad382a736591972e.gif" />
+               </image>
+            </ImageView>
+         </top>
+      </BorderPane>
+      <BorderPane fx:id="rightBorderBane" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+   </children>
+</HBox>
