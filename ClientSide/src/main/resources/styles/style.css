@@ -8,11 +8,13 @@
     -fx-text-fill: #395306;
 }
 .background{
-    /*-fx-background-color: linear-gradient(#010157, #1870ca);*/
-    -fx-background-color:
-            linear-gradient(#000022,#263e75, #1870ca);
-            /*radial-gradient(center 50% -40%, radius 150%, #1870ca 45%, #1ba8f0 50%);*/
+     -fx-background-image: url("../pics/azz.jpg");
+    -fx-background-repeat: stretch;
+    /*-fx-background-size: 900 506;*/
+    -fx-background-position: center center;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 
+  
 
 
 }

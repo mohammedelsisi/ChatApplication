@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="526.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.MainController">
+<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="526.0" prefWidth="605.0" style="-fx-border-width: 3; -fx-border-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.MainController">
    <children>
-      <BorderPane fx:id="leftBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@../styles/style.css" HBox.hgrow="ALWAYS">
+      <BorderPane fx:id="leftBorderPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" styleClass="background" stylesheets="@../styles/style.css" HBox.hgrow="ALWAYS">
          <center>
             <Label alignment="CENTER" contentDisplay="BOTTOM" graphicTextGap="15.0" prefHeight="285.0" prefWidth="264.0" text="Long Talk Chat" textFill="#eeeeee" BorderPane.alignment="CENTER">
                <font>

@@ -39,7 +39,7 @@ public class StageCoordinator {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/MainScene2.fxml"));
                 Parent main = fxmlLoader.load();
-                Scene mainScene = new Scene(main,655,620);
+                Scene mainScene = new Scene(main,655,610);
                 SceneData MainSceneData = new SceneData(fxmlLoader, main, mainScene);
                 scenes.put("MainScene", MainSceneData);
                 primaryStage.setScene(mainScene);
@@ -64,7 +64,7 @@ public class StageCoordinator {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/MainScene.fxml"));
                 Parent SignUP = fxmlLoader.load();
-                Scene SignUPScene = new Scene(SignUP,655,620);
+                Scene SignUPScene = new Scene(SignUP,655,610);
                 SceneData SignUPSceneData = new SceneData(fxmlLoader, SignUP, SignUPScene);
                 scenes.put("SignUPScene", SignUPSceneData);
                 primaryStage.setScene(SignUPScene);
