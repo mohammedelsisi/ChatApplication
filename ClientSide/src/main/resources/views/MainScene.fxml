@@ -7,7 +7,9 @@
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
-<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="526.0" prefWidth="605.0" style="-fx-border-width: 3; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.MainController">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="526.0" prefWidth="605.0" style="-fx-border-width: 3; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.SignUpController">
    <children>
       <BorderPane fx:id="leftBorderPane" styleClass="background" stylesheets="@../styles/style.css" HBox.hgrow="ALWAYS">
          <center>
@@ -47,7 +49,7 @@
                         <VBox spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Phone Number" textFill="WHITE" />
-                              <TextField alignment="CENTER" opacity="0.87" prefHeight="25.0" prefWidth="177.0" promptText="Phone Number" style="-fx-background-color: white;" styleClass="bevel-grey" />
+                              <TextField fx:id="phoneNumber" alignment="CENTER" opacity="0.87" prefHeight="25.0" prefWidth="177.0" promptText="Phone Number" style="-fx-background-color: white;" styleClass="bevel-grey" />
                            </children>
                            <HBox.margin>
                               <Insets left="20.0" top="25.0" />
@@ -63,7 +65,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </ImageView>
-                              <Button contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Change Photo" textAlignment="CENTER" wrapText="true">
+                              <Button onAction="#changePhoto" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Change Photo" textAlignment="CENTER" wrapText="true">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
@@ -81,11 +83,11 @@
                   <VBox prefHeight="50.0" prefWidth="332.0" spacing="8.0">
                      <children>
                         <Label text="Password" textFill="WHITE" />
-                        <PasswordField alignment="CENTER" opacity="0.93" promptText="Enter Password" styleClass="bevel-grey" />
+                        <PasswordField fx:id="password" alignment="CENTER" opacity="0.93" promptText="Enter Password" styleClass="bevel-grey" />
                         <VBox prefHeight="50.0" prefWidth="332.0" spacing="8.0">
                            <children>
                               <Label text="Confrim Password" textFill="WHITE" />
-                              <PasswordField alignment="CENTER" opacity="0.93" promptText="Confrim Password" styleClass="bevel-grey" />
+                              <PasswordField fx:id="confirmedPassword" alignment="CENTER" opacity="0.93" promptText="Confrim Password" styleClass="bevel-grey" />
                            </children>
                         </VBox>
                      </children>
@@ -96,7 +98,7 @@
                   <VBox spacing="8.0">
                      <children>
                         <Label text="Display Name" textFill="WHITE" />
-                        <TextField alignment="CENTER" opacity="0.87" promptText="Display Name" style="-fx-background-color: white;" styleClass="bevel-grey" />
+                        <TextField fx:id="displayName" alignment="CENTER" opacity="0.87" promptText="Display Name" style="-fx-background-color: white;" styleClass="bevel-grey" />
                      </children>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
@@ -105,7 +107,7 @@
                   <VBox spacing="8.0">
                      <children>
                         <Label text="Email Address" textFill="WHITE" />
-                        <TextField alignment="CENTER" opacity="0.87" promptText="Email Address" style="-fx-background-color: white;" styleClass="bevel-grey" />
+                        <TextField fx:id="emailAddress" alignment="CENTER" opacity="0.87" promptText="Email Address" style="-fx-background-color: white;" styleClass="bevel-grey" />
                      </children>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
@@ -116,17 +118,25 @@
                         <VBox prefHeight="100.0" prefWidth="202.0" spacing="4.0">
                            <children>
                               <Label text="Gender" textFill="WHITE" />
-                              <CheckComboBox prefHeight="25.0" prefWidth="130.0" title="Gender">
+                              <ComboBox prefHeight="25.0" prefWidth="130.0"  value="Gender">
                                  <VBox.margin>
                                     <Insets left="15.0" />
                                  </VBox.margin>
-                              </CheckComboBox>
+                                 <items>
+
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:value="Male" />
+                                       <String fx:value="Female" />
+
+                                    </FXCollections>
+                                 </items>
+                              </ComboBox>
                            </children>
                         </VBox>
                         <VBox prefHeight="99.0" prefWidth="225.0" spacing="4.0">
                            <children>
                               <Label text="Date of Birth" textFill="WHITE" />
-                              <DatePicker prefHeight="25.0" prefWidth="199.0">
+                              <DatePicker prefHeight="25.0" prefWidth="199.0" editable="false">
                                  <VBox.margin>
                                     <Insets left="15.0" right="10.0" />
                                  </VBox.margin>

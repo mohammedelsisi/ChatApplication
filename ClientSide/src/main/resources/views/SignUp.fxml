@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #32425b;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #32425b;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mypkg.ui.controllers.SignUpController">
    <children>
       <Label styleClass="Register" text="Register" textFill="WHITE">
          <font>
@@ -30,7 +30,7 @@
             <VBox spacing="20.0">
                <children>
                   <Label text="Phone Number" textFill="WHITE" />
-                  <TextField alignment="CENTER" opacity="0.87" prefHeight="25.0" prefWidth="177.0" promptText="Phone Number" style="-fx-background-color: white;" styleClass="bevel-grey" />
+                  <TextField  alignment="CENTER" opacity="0.87" prefHeight="25.0" prefWidth="177.0" promptText="Phone Number" style="-fx-background-color: white;" styleClass="bevel-grey" />
                </children>
                <HBox.margin>
                   <Insets left="20.0" top="25.0" />

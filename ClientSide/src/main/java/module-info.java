@@ -2,10 +2,10 @@ module ClientSide {
     requires javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
-
+requires libphonenumber;
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
-
+requires commons.validator;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fontawesome5;
