@@ -7,6 +7,15 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
     -fx-text-fill: #395306;
 }
+.background{
+    /*-fx-background-color: linear-gradient(#010157, #1870ca);*/
+    -fx-background-color:
+            linear-gradient(#000022,#263e75, #1870ca);
+            /*radial-gradient(center 50% -40%, radius 150%, #1870ca 45%, #1ba8f0 50%);*/
+
+
+
+}
 .updateBtn{
   -fx-background-color:
       linear-gradient(#f0ff35, #a9ff00),

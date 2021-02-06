@@ -39,7 +39,7 @@ public class StageCoordinator {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/MainScene2.fxml"));
                 Parent main = fxmlLoader.load();
-                Scene mainScene = new Scene(main,650,520);
+                Scene mainScene = new Scene(main,655,620);
                 SceneData MainSceneData = new SceneData(fxmlLoader, main, mainScene);
                 scenes.put("MainScene", MainSceneData);
                 primaryStage.setScene(mainScene);
@@ -55,25 +55,27 @@ public class StageCoordinator {
     }
 
 
-    public Parent getSignInScene() {
+    public void switchToSignUPScene() {
         if (primaryStage == null) {
             throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
         }
-        if (!scenes.containsKey("signIn")) {
+
+        if (!scenes.containsKey("SignUP")) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/SignIn.fxml"));
-                Parent signin = fxmlLoader.load();
-                Scene signinScene = new Scene(signin);
-                SceneData signInData = new SceneData(fxmlLoader, signin, signinScene);
-                scenes.put("signIn", signInData);
-                return signin;
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/MainScene.fxml"));
+                Parent SignUP = fxmlLoader.load();
+                Scene SignUPScene = new Scene(SignUP,655,620);
+                SceneData SignUPSceneData = new SceneData(fxmlLoader, SignUP, SignUPScene);
+                scenes.put("SignUPScene", SignUPSceneData);
+                primaryStage.setScene(SignUPScene);
             } catch (IOException e) {
-                System.out.println("IO Exception: Couldn't load 'Login View' FXML file");
+                System.out.println("IO Exception: Couldn't load 'SignUP View' FXML file");
             }
+        } else {
+            SceneData SignUPSceneData = scenes.get("SignUP");
+            Scene SignUPScene = SignUPSceneData.getScene();
+            primaryStage.setScene(SignUPScene);
         }
-            SceneData loginSceneData = scenes.get("signIn");
-            Parent signin = loginSceneData.getView();
-            return signin;
 
     }
 }
