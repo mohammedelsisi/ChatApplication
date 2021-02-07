@@ -24,7 +24,13 @@
         <tilesfx.version>11.47</tilesfx.version>
     </properties>
 
-
+<dependencies>
+    <dependency>
+        <groupId>com.jets</groupId>
+        <artifactId>Common</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
 
     <build>
 
@@ -36,7 +42,7 @@
                 <configuration>
                     <launcher>hellofx</launcher>
                     <jlinkImageName>hello</jlinkImageName>
-                    <mainClass>ServerSide/mypkg.Main</mainClass>
+                    <mainClass>ServerSide/JETS.ServerMain</mainClass>
 
                 </configuration>
             </plugin>
@@ -54,7 +60,7 @@
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>SimpleJDBC/mypkg.Main</mainClass>
+                                    <mainClass>SimpleJDBC/JETS.ServerMain</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
