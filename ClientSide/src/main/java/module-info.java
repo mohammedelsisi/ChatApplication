@@ -19,4 +19,5 @@ module ClientSide {
 //    opens mypkg to javafx.fxml;
     exports JETS;
     requires Common;
+    requires nv.i18n;
 }
