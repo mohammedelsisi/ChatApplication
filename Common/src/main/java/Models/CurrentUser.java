@@ -1,10 +1,13 @@
 package Models;
+import Models.dto.DataTransferObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CurrentUser {
+public class CurrentUser implements DataTransferObject {
+    private long id;
 
     private String phoneNumber;
+
     private String password;
     private String email ;
     private String gender;
@@ -17,10 +20,12 @@ public class CurrentUser {
     private final StringProperty userPhoto = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
 
-
-
     public String getUserPhoto() {
         return userPhoto.get();
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public StringProperty userPhotoProperty() {
@@ -128,4 +133,9 @@ public class CurrentUser {
         this.displayName.set(displayName);
     }
 
+
+    @Override
+    public long getId() {
+        return id;
+    }
 }

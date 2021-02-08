@@ -1,6 +1,9 @@
 package Models.dto;
 
-public interface DataTransferObject {
+import java.io.Serializable;
+
+public interface DataTransferObject extends Serializable {
 
         long getId();
+
 }
