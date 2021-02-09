@@ -4,7 +4,7 @@ public class ModelsFactory {
 
     private static final ModelsFactory instance = new ModelsFactory();
 
-//    private CurrentUserModel currentUserModel;
+  // private CurrentUserModel currentUserModel;
 
     private ModelsFactory () { }
 
