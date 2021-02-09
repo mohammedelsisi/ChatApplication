@@ -15,10 +15,10 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     private static final String GET_ID = "select id  from user where phone_number = ?";
     private static final String DELETE = "DELETE FROM user WHERE id = ?";
     protected final static String SELECT_ALL = "SELECT * FROM user ";
-    private static final String INSERT = "INSERT INTO user (phone_number,password,first_name,last_name,Display_name, email,gender,country,age,bio,image, status) VALUES (?,?, ?, ?, ?, ?, ?,?,?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio,image, status) VALUES (?,?, ?, ?, ?,?,?,?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE id=?";
     private static final String GET_Friends = "SELECT * FROM user where id = (select friend_id from user_friend where user_id = ?)";
-    private static final String UPDATE = "UPDATE person SET first_name = ?, middle_name =?,last_name=?, email = ?, phone = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE person SET phone_number = ?, password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE id = ?";
 
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
@@ -53,7 +53,21 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     }
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
-        return null;
+        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE);) {
+            statement.setString(1, dto.getPhoneNumber());
+            statement.setString(2, dto.getPassword());
+            statement.setString(3, dto.getDisplayName());
+            statement.setString(4, dto.getEmail());
+            statement.setString(5, dto.getGender());
+            statement.setString(6, dto.getCountry());
+            statement.setInt(7, dto.getAge());
+            statement.setString(8, dto.getBio());
+            statement.setString(9, dto.getUserPhoto());
+            statement.setString(10, dto.getStatus());
+            statement.setLong(11,dto.getId());
+            statement.executeUpdate();
+            return dto;
+        }
     }
 
 
@@ -63,17 +77,15 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         try (PreparedStatement statement = this.connection.prepareStatement(INSERT);) {
             statement.setString(1, dto.getPhoneNumber());
             statement.setString(2, dto.getPassword());
-            statement.setString(3, dto.getFirstName());
-            statement.setString(4, dto.getLastName());
-            statement.setString(5, dto.getDisplayName());
-            statement.setString(6, dto.getEmail());
-            statement.setString(7, dto.getGender());
-            statement.setString(8, dto.getCountry());
-            statement.setInt(9, dto.getAge());
-            statement.setString(10, dto.getBio());
-            statement.setString(11, dto.getUserPhoto());
-            statement.setString(12, dto.getStatus());
-            statement.execute();
+            statement.setString(3, dto.getDisplayName());
+            statement.setString(4, dto.getEmail());
+            statement.setString(5, dto.getGender());
+            statement.setString(6, dto.getCountry());
+            statement.setInt(7, dto.getAge());
+            statement.setString(8, dto.getBio());
+            statement.setString(9, dto.getUserPhoto());
+            statement.setString(10, dto.getStatus());
+            statement.executeUpdate();
             dto.setId(this.getIdByPhone(dto.getPhoneNumber()));
             return dto;
         }
@@ -109,16 +121,14 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
     private CurrentUser createUser(ResultSet rs, CurrentUser user) throws SQLException {
         user.setId(rs.getLong("id"));
-        user.setFirstName(rs.getString("first_name"));
         user.setDisplayName(rs.getString("display_name"));
-        user.setLastName(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
         user.setGender(rs.getString("gender"));
         user.setPhoneNumber(rs.getString("phone_number"));
         user.setAge(rs.getInt("age"));
         user.setBio(rs.getString("bio"));
         user.setStatus(rs.getString("status"));
-        //         user.setUserPhoto(rs.getString("image"));  /*  not confirmed yet */
+        user.setUserPhoto(rs.getString("image"));  /*  not confirmed yet */
         return user;
     }
 }
