@@ -69,6 +69,7 @@ public class StageCoordinator {
                 scenes.put("SignUPScene", SignUPSceneData);
                 primaryStage.setScene(SignUPScene);
             } catch (IOException e) {
+                e.printStackTrace();
                 System.out.println("IO Exception: Couldn't load 'SignUP View' FXML file");
             }
         } else {

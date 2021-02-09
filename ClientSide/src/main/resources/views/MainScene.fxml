@@ -49,7 +49,10 @@
                         <VBox spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Phone Number" textFill="WHITE" />
+                              <HBox>
                               <TextField fx:id="phoneNumber" alignment="CENTER" opacity="0.87" prefHeight="25.0" prefWidth="177.0" promptText="Phone Number" style="-fx-background-color: white;" styleClass="bevel-grey" />
+                               <ComboBox fx:id="countryCode"  prefHeight="25.0" prefWidth="130.0"  value="Country code" />
+                              </HBox>
                            </children>
                            <HBox.margin>
                               <Insets left="20.0" top="25.0" />
@@ -118,7 +121,7 @@
                         <VBox prefHeight="100.0" prefWidth="202.0" spacing="4.0">
                            <children>
                               <Label text="Gender" textFill="WHITE" />
-                              <ComboBox prefHeight="25.0" prefWidth="130.0"  value="Gender">
+                              <ComboBox fx:id="gender" prefHeight="25.0" prefWidth="130.0"  value="Gender">
                                  <VBox.margin>
                                     <Insets left="15.0" />
                                  </VBox.margin>
@@ -136,12 +139,12 @@
                         <VBox prefHeight="99.0" prefWidth="225.0" spacing="4.0">
                            <children>
                               <Label text="Date of Birth" textFill="WHITE" />
-                              <DatePicker prefHeight="25.0" prefWidth="199.0" editable="false">
+                              <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="199.0" editable="false" >
                                  <VBox.margin>
                                     <Insets left="15.0" right="10.0" />
                                  </VBox.margin>
                               </DatePicker>
-                              <Button contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Register" textAlignment="CENTER" wrapText="true">
+                              <Button onAction="#registerHandle" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Register" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="10.0" />
                                  </font>

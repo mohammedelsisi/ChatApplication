@@ -1,21 +1,35 @@
 package JETS.ui.controllers;
-
+import JETS.ui.helpers.ModelsFactory;
+import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.mysql.cj.log.Log;
+import com.neovisionaries.i18n.CountryCode;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Border;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.chrono.Chronology;
+import java.util.*;
 
 public class SignUpController implements Initializable {
-
+    private String code;
+    public static List<CountryCodeData> countryCodesList=new ArrayList<>();
+    @FXML
+    private ComboBox countryCode;
+    @FXML
+    DatePicker datePicker=new DatePicker();
     @FXML
     private TextField phoneNumber;
     PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -27,57 +41,111 @@ public class SignUpController implements Initializable {
     private TextField confirmedPassword;
     @FXML
     private TextField displayName;
+    @FXML
+    private ComboBox gender;
     private boolean firstTimeChkPass=true;
+
+    //REGISTRATION VALIDATION ATTRIBUTES
+    boolean isPhoneNumberCorrect=false;
+    boolean isPasswordCorrect=false;
+    boolean isNameCorrect=false;
+    boolean isEmailCorrect=false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Phone number validation
-        phoneNumber.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+        LocalDate minDate = LocalDate.now().minusYears(80);
+        LocalDate maxDate = LocalDate.now().minusYears(18) ;
+        datePicker.setValue(maxDate);
+        loadCountryCodes();
+        Collections.sort(countryCodesList);
+        countryCode.getItems().addAll(countryCodesList);
+        countryCode.setVisibleRowCount(6);
+        countryCode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                CountryCodeData countryCodeData=(CountryCodeData) t1;
+                code="+"+countryCodeData.getCode();
+                phoneNumber.setText("");
+                isPasswordCorrect=false;
 
-            if (!newValue) { //when focus lost
-                if(!givenPhoneNumber_whenValid_thenOK(phoneNumber.getText())){
-
-                    phoneNumber.setText("");
-                }
             }
+        });
+
+        datePicker.setDayCellFactory(d ->
+                new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setDisable(item.isAfter(maxDate) || item.isBefore(minDate));
+
+                    }});
+        phoneNumber.textProperty().addListener((arg0, oldValue, newValue) -> {
+
+
+                if(!givenPhoneNumber_whenValid_thenOK(code+newValue)){
+                    showError(phoneNumber,"Invalid phone number");
+                    isPhoneNumberCorrect=false;
+                }else{
+                    passValidation(phoneNumber);
+                    isPhoneNumberCorrect=true;
+                }
+
         });
         //Email Address validation
-        emailAddress.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+        emailAddress.textProperty().addListener((arg0, oldValue, newValue) -> {
 
-            if (!newValue) { //when focus lost
-                if(!isValidEmail(emailAddress.getText())){
 
-                    emailAddress.setText("");
+                if(!isValidEmail(newValue)){
+                    showError(emailAddress,"Invalid Email");
+                    isEmailCorrect=false;
+                }else {
+                    passValidation(emailAddress);
+                    isEmailCorrect=true;
                 }
-            }
+
         });
         //DisplayName validation
-        displayName.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+        displayName.textProperty().addListener((arg0, oldValue, newValue) -> {
 
-            if (!newValue) { //when focus lost
-            }
+                if(displayName.getText().length()<3){
+                    showError(displayName,"Password must be at least 3 characters");
+                    isNameCorrect=false;
+                }else{
+                    passValidation(displayName);
+                    isNameCorrect=true;
+                }
+
         });
         //password validation "Enter at least 6 chars"
-        password.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+        password.textProperty().addListener((arg0, oldValue, newValue) -> {
 
-            if (!newValue) { //when focus lost
-                if(password.getText().length()<6){
-                    password.setText("");
+
+                if(newValue.length()<6){
+                    showError(password,"Password must be at least 6 characters");
+                }else {
+                    passValidation(password);
                 }
                 if(!firstTimeChkPass){
                     confirmedPassword.setText("");
+
                 }
-                firstTimeChkPass=false;
-            }
+            firstTimeChkPass=false;
+
         });
         //password validation
-        confirmedPassword.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+        confirmedPassword.textProperty().addListener((arg0, oldValue, newValue) -> {
 
-            if (!newValue) { //when focus lost
-                if(!password.getText().equals(confirmedPassword.getText())){
-                    confirmedPassword.setText("");
 
+                if(!password.getText().equals(newValue)){
+
+                    showError(confirmedPassword,"Password mismatch");
+                    isPasswordCorrect=false;
+                }else{
+                    passValidation(confirmedPassword);
+                    isPasswordCorrect=true;
                 }
-            }
+
         });
     }
     @FXML
@@ -88,9 +156,22 @@ public class SignUpController implements Initializable {
         );
         File file=chooser.showOpenDialog(displayName.getScene().getWindow());
     }
+    @FXML
+    public void registerHandle(ActionEvent e){
+        if (isPhoneNumberCorrect&&isEmailCorrect&&isNameCorrect&&isPasswordCorrect){
+            CurrentUser user=new CurrentUser();
+            user.setPhoneNumber(phoneNumber.getText());
+            user.setEmail(emailAddress.getText());
+            user.setFirstName(displayName.getText());
+            user.setPassword(code+password.getText());
+            ModelsFactory.getInstance().register(user);
+            //change scene
+        }
+    }
     public Boolean givenPhoneNumber_whenValid_thenOK(String phoneNumber)  {
        try {
            Phonenumber.PhoneNumber phone = phoneNumberUtil.parse(phoneNumber,
+
                    Phonenumber.PhoneNumber.CountryCodeSource.UNSPECIFIED.name());
            return phoneNumberUtil.isValidNumber(phone);
        }catch ( NumberParseException e){
@@ -106,4 +187,27 @@ public class SignUpController implements Initializable {
             // check for valid email addresses using isValid method
             return validator.isValid(email);
         }
+
+        private static void showError(TextField textField,String msg){
+            Tooltip t=new Tooltip(msg);
+
+            textField.setStyle("-fx-border-color: red; -fx-border-radius: 4px; -fx-border-width: 2px;");
+
+            textField.setTooltip(t);
+
+        }
+        private static void passValidation(TextField textField){
+            textField.setStyle("-fx-border-color: green; -fx-border-radius: 4px; -fx-border-width: 2px;");
+            textField.setTooltip(null);
+        }
+        public  static void loadCountryCodes(){
+            Set<String> set = PhoneNumberUtil.getInstance().getSupportedRegions();
+
+            String[] arr = set.toArray(new String[set.size()]);
+
+            for (int i = 0; i < arr.length; i++) {
+
+                countryCodesList.add(new CountryCodeData(PhoneNumberUtil.getInstance().getCountryCodeForRegion(arr[i]),CountryCode.getByCode(arr[i]).getName()));
+            }
+         }
 }
