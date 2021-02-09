@@ -1,6 +1,6 @@
 package JETS.ui.controllers;
 
-public class CountryCodeData {
+public class CountryCodeData implements Comparable<CountryCodeData>{
     private int code;
     private String countryName;
     public CountryCodeData(int code, String countryName) {
@@ -23,7 +23,13 @@ public class CountryCodeData {
     public String getCountryName() {
         return countryName;
     }
+
+    @Override
+    public int compareTo(CountryCodeData o) {
+        return countryName.compareTo(o.countryName);
+    }
+
     public String toString(){
-        return "(+"+code+")  "+countryName;
+        return countryName+"(+"+code+")";
     }
 }

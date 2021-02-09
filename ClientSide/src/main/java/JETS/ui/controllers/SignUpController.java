@@ -1,4 +1,6 @@
 package JETS.ui.controllers;
+import JETS.ui.helpers.ModelsFactory;
+import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -28,7 +30,6 @@ public class SignUpController implements Initializable {
     private ComboBox countryCode;
     @FXML
     DatePicker datePicker=new DatePicker();
-
     @FXML
     private TextField phoneNumber;
     PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -40,23 +41,36 @@ public class SignUpController implements Initializable {
     private TextField confirmedPassword;
     @FXML
     private TextField displayName;
+    @FXML
+    private ComboBox gender;
     private boolean firstTimeChkPass=true;
+
+    //REGISTRATION VALIDATION ATTRIBUTES
+    boolean isPhoneNumberCorrect=false;
+    boolean isPasswordCorrect=false;
+    boolean isNameCorrect=false;
+    boolean isEmailCorrect=false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Phone number validation
         LocalDate minDate = LocalDate.now().minusYears(80);
         LocalDate maxDate = LocalDate.now().minusYears(18) ;
         datePicker.setValue(maxDate);
-        foo();
+        loadCountryCodes();
+        Collections.sort(countryCodesList);
         countryCode.getItems().addAll(countryCodesList);
+        countryCode.setVisibleRowCount(6);
         countryCode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 CountryCodeData countryCodeData=(CountryCodeData) t1;
                 code="+"+countryCodeData.getCode();
+                phoneNumber.setText("");
+                isPasswordCorrect=false;
+
             }
         });
-
 
         datePicker.setDayCellFactory(d ->
                 new DateCell() {
@@ -71,8 +85,10 @@ public class SignUpController implements Initializable {
 
                 if(!givenPhoneNumber_whenValid_thenOK(code+newValue)){
                     showError(phoneNumber,"Invalid phone number");
+                    isPhoneNumberCorrect=false;
                 }else{
                     passValidation(phoneNumber);
+                    isPhoneNumberCorrect=true;
                 }
 
         });
@@ -82,8 +98,10 @@ public class SignUpController implements Initializable {
 
                 if(!isValidEmail(newValue)){
                     showError(emailAddress,"Invalid Email");
+                    isEmailCorrect=false;
                 }else {
                     passValidation(emailAddress);
+                    isEmailCorrect=true;
                 }
 
         });
@@ -92,8 +110,10 @@ public class SignUpController implements Initializable {
 
                 if(displayName.getText().length()<3){
                     showError(displayName,"Password must be at least 3 characters");
+                    isNameCorrect=false;
                 }else{
                     passValidation(displayName);
+                    isNameCorrect=true;
                 }
 
         });
@@ -120,8 +140,10 @@ public class SignUpController implements Initializable {
                 if(!password.getText().equals(newValue)){
 
                     showError(confirmedPassword,"Password mismatch");
+                    isPasswordCorrect=false;
                 }else{
                     passValidation(confirmedPassword);
+                    isPasswordCorrect=true;
                 }
 
         });
@@ -133,6 +155,18 @@ public class SignUpController implements Initializable {
           new FileChooser.ExtensionFilter("Image","*.jpg","*.png","*.jpeg")
         );
         File file=chooser.showOpenDialog(displayName.getScene().getWindow());
+    }
+    @FXML
+    public void registerHandle(ActionEvent e){
+        if (isPhoneNumberCorrect&&isEmailCorrect&&isNameCorrect&&isPasswordCorrect){
+            CurrentUser user=new CurrentUser();
+            user.setPhoneNumber(phoneNumber.getText());
+            user.setEmail(emailAddress.getText());
+            user.setFirstName(displayName.getText());
+            user.setPassword(code+password.getText());
+            ModelsFactory.getInstance().register(user);
+            //change scene
+        }
     }
     public Boolean givenPhoneNumber_whenValid_thenOK(String phoneNumber)  {
        try {
@@ -166,7 +200,7 @@ public class SignUpController implements Initializable {
             textField.setStyle("-fx-border-color: green; -fx-border-radius: 4px; -fx-border-width: 2px;");
             textField.setTooltip(null);
         }
-        public  static void foo(){
+        public  static void loadCountryCodes(){
             Set<String> set = PhoneNumberUtil.getInstance().getSupportedRegions();
 
             String[] arr = set.toArray(new String[set.size()]);

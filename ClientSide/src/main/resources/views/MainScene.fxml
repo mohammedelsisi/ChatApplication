@@ -121,7 +121,7 @@
                         <VBox prefHeight="100.0" prefWidth="202.0" spacing="4.0">
                            <children>
                               <Label text="Gender" textFill="WHITE" />
-                              <ComboBox prefHeight="25.0" prefWidth="130.0"  value="Gender">
+                              <ComboBox fx:id="gender" prefHeight="25.0" prefWidth="130.0"  value="Gender">
                                  <VBox.margin>
                                     <Insets left="15.0" />
                                  </VBox.margin>
@@ -144,7 +144,7 @@
                                     <Insets left="15.0" right="10.0" />
                                  </VBox.margin>
                               </DatePicker>
-                              <Button contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Register" textAlignment="CENTER" wrapText="true">
+                              <Button onAction="#registerHandle" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" styleClass="lion-default" text="Register" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="10.0" />
                                  </font>
