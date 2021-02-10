@@ -46,7 +46,7 @@ public class MainController implements Initializable {
         if (currentUser != null) {
             ClientMain.connectionInt.registerAsConnected(ClientServicesFactory.getClientServicesImp());
             StageCoordinator stageCoordinator = StageCoordinator.getInstance();
-            stageCoordinator.switchToSignUPScene();
+            stageCoordinator.switchToChatScene();
         } else {
             System.out.println("Not Valid ");
         }

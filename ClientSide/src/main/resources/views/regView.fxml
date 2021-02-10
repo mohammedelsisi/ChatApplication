@@ -21,6 +21,7 @@
 <?import javafx.scene.text.Font?>
 
 
+
 <BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.SignUpController">
    <center>
       <AnchorPane style="-fx-background-color: #008080;" BorderPane.alignment="CENTER">

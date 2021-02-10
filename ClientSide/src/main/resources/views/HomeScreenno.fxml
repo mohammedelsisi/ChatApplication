@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <TabPane prefHeight="386.0" prefWidth="400.0" side="LEFT" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="30.0" tabMaxWidth="30.0" tabMinHeight="150.0" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab>
+            <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@StyleSheet.css">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@anne.jpg" />
+                                 </image>
+                              </Avatar>
+                              <VBox prefHeight="58.0" prefWidth="150.0">
+                                 <children>
+                                    <Label prefHeight="18.0" prefWidth="57.0" text="Anne">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="19.0" prefWidth="139.0" text="You: Hello, Nice to meet you " textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@StyleSheet.css">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <VBox prefHeight="58.0" prefWidth="150.0">
+                                 <children>
+                                    <Label prefHeight="18.0" prefWidth="57.0" text="MARK">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="19.0" prefWidth="139.0" text="You: Okai great!" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <Pane prefHeight="58.0" prefWidth="97.0">
+                                 <children>
+                                    <Circle fill="RED" layoutX="21.0" layoutY="29.0" radius="9.0" stroke="RED" strokeType="INSIDE" />
+                                    <Label layoutX="17.0" layoutY="19.0" text="3" textFill="#fffdfd">
+                                       <font>
+                                          <Font name="Ebrima" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@StyleSheet.css">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@dou.jpg" />
+                                 </image>
+                              </Avatar>
+                              <VBox prefHeight="58.0" prefWidth="150.0">
+                                 <children>
+                                    <Label prefHeight="18.0" prefWidth="57.0" text="DOU">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="19.0" prefWidth="139.0" text="Thank You so much!" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@StyleSheet.css">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@cartoon-little-girl-rigged-3d-model-rigged-obj-mtl-fbx-ma-mb.jpg" />
+                                 </image>
+                              </Avatar>
+                              <VBox prefHeight="58.0" prefWidth="150.0">
+                                 <children>
+                                    <Label prefHeight="18.0" prefWidth="57.0" text="JOHN">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="19.0" prefWidth="139.0" text="You: Most probably ,Yes." textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@StyleSheet.css">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@elise.jpg" />
+                                 </image>
+                              </Avatar>
+                              <VBox prefHeight="58.0" prefWidth="150.0">
+                                 <children>
+                                    <Label prefHeight="18.0" prefWidth="57.0" text="ELISE">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="19.0" prefWidth="139.0" text="Okai, Let me ask u" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+            </content>
+               <graphic>
+                  <Label minWidth="100.0" prefHeight="18.0" prefWidth="81.0" text="CHATS" textFill="WHITE">
+                     <font>
+                        <Font name="Lemon Regular" size="12.0" />
+                     </font>
+                     <graphic>
+                        <FontIcon iconColor="#807b7b" iconLiteral="fas-comment">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </FontIcon>
+                     </graphic>
+                  </Label>
+               </graphic>
+          </Tab>
+          <Tab>
+            <content>
+                  <VBox>
+                     <children>
+                        <Label prefHeight="28.0" prefWidth="118.0" text="CONTACTS" textFill="#0f6161">
+                           <font>
+                              <Font name="Lemon Regular" size="20.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Available" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                       <graphic>
+                                          <Circle fill="#2dd74f" radius="4.0" stroke="#2dd74f" strokeType="INSIDE" />
+                                       </graphic>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Away" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                       <graphic>
+                                          <Circle fill="#ff6c55" radius="4.0" stroke="#ff6c55" strokeType="INSIDE" />
+                                       </graphic>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Busy" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                       <graphic>
+                                          <Circle fill="RED" radius="4.0" stroke="RED" strokeType="INSIDE" />
+                                       </graphic>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Offline" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                       <graphic>
+                                          <Circle fill="#9da7a7" radius="4.0" stroke="#9da7a7" strokeType="INSIDE" />
+                                       </graphic>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                           <children>
+                              <Avatar radius="25.0">
+                                 <image>
+                                    <Image url="@mark.jpg" />
+                                 </image>
+                              </Avatar>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                       <font>
+                                          <Font name="Ebrima Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Available" textFill="#9da7a7">
+                                       <font>
+                                          <Font name="Ebrima" size="11.0" />
+                                       </font>
+                                       <graphic>
+                                          <Circle fill="#2dd74f" radius="4.0" stroke="#2dd74f" strokeType="INSIDE" />
+                                       </graphic>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+            </content>
+               <graphic>
+                  <Label minWidth="100.0" prefHeight="18.0" prefWidth="108.0" text="CONTACTS" textFill="WHITE">
+                     <graphic>
+                        <FontIcon iconColor="#807b7b" iconLiteral="fas-user" text="">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </FontIcon>
+                     </graphic>
+                     <font>
+                        <Font name="Lemon Regular" size="12.0" />
+                     </font>
+                  </Label>
+               </graphic>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </left>
+   <top>
+      <AnchorPane prefHeight="14.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="100.0" prefWidth="80.0" />
+            <Group layoutX="839.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Pane prefHeight="35.0" prefWidth="250.0" styleClass="upper_rightBar" stylesheets="@StyleSheet.css">
+                     <children>
+                        <Group layoutX="50.0" layoutY="35.0">
+                           <children>
+                              <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE">
+                                 <fill>
+                                    <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                       <stops>
+                                          <Stop>
+                                             <color>
+                                                <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                             </color>
+                                          </Stop>
+                                          <Stop offset="1.0">
+                                             <color>
+                                                <Color green="0.501960813999176" blue="0.501960813999176" />
+                                             </color>
+                                          </Stop>
+                                       </stops>
+                                    </RadialGradient>
+                                 </fill>
+                              </Circle>
+                              <FontIcon iconColor="WHITE" iconLiteral="fas-user-plus" layoutX="-8.0" layoutY="5.0">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </FontIcon>
+                           </children>
+                        </Group>
+                        <Group layoutX="203.0" layoutY="35.0">
+                           <children>
+                              <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE">
+                                 <fill>
+                                    <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                       <stops>
+                                          <Stop>
+                                             <color>
+                                                <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                             </color>
+                                          </Stop>
+                                          <Stop offset="1.0">
+                                             <color>
+                                                <Color green="0.501960813999176" blue="0.501960813999176" />
+                                             </color>
+                                          </Stop>
+                                       </stops>
+                                    </RadialGradient>
+                                 </fill>
+                              </Circle>
+                              <FontIcon iconColor="WHITE" iconLiteral="fas-bell" layoutX="-6.0" layoutY="5.0">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </FontIcon>
+                           </children>
+                        </Group>
+                     </children>
+                  </Pane>
+                  <Group layoutX="125.0" layoutY="35.0">
+                     <children>
+                        <Circle fill="WHITE" radius="17.0" strokeType="INSIDE">
+                           <stroke>
+                              <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                 <stops>
+                                    <Stop>
+                                       <color>
+                                          <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                       </color>
+                                    </Stop>
+                                    <Stop offset="1.0">
+                                       <color>
+                                          <Color green="0.501960813999176" blue="0.501960813999176" />
+                                       </color>
+                                    </Stop>
+                                 </stops>
+                              </RadialGradient>
+                           </stroke>
+                        </Circle>
+                        <FontIcon iconLiteral="fas-comment-alt" layoutX="-7.0" layoutY="7.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <iconColor>
+                              <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                 <stops>
+                                    <Stop>
+                                       <color>
+                                          <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                       </color>
+                                    </Stop>
+                                    <Stop offset="1.0">
+                                       <color>
+                                          <Color green="0.501960813999176" blue="0.501960813999176" />
+                                       </color>
+                                    </Stop>
+                                 </stops>
+                              </RadialGradient>
+                           </iconColor>
+                        </FontIcon>
+                     </children>
+                  </Group>
+               </children>
+            </Group>
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <BorderPane prefHeight="404.0" prefWidth="658.0" style="-fx-background-color: #66B2B2;" stylesheets="@../Desktop/dummy/aaaaaaa/src/main/resources/ax/style.css" BorderPane.alignment="CENTER">
+         <bottom>
+            <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXTextArea fx:id="messageField" labelFloat="true" onKeyPressed="#switchToSecondary" prefHeight="50.0" promptText="Type a message" style="-fx-background-color: white; -fx-background-radius: 15px; -jfx-focus-color: #008080;" wrapText="true" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </JFXTextArea>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <top>
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Mohamed El SISI" textFill="#6f6d6d">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+         <center>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="274.0" prefWidth="346.0" stylesheets="@../Desktop/dummy/aaaaaaa/src/main/resources/ax/style.css">
+               <content>
+                  <VBox fx:id="messagesContainer" />
+               </content>
+            </ScrollPane>
+         </center>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </BorderPane>
+   </center>
+</BorderPane>

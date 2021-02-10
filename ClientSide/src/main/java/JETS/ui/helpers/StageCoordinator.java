@@ -86,7 +86,7 @@ public class StageCoordinator {
 
         if (!scenes.containsKey("Chat")) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/regView.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/HomeScreen.fxml"));
                 Parent Chat = fxmlLoader.load();
                 Scene ChatScene = new Scene(Chat,655,610);
                 SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);

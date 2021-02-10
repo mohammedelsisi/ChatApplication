@@ -29,6 +29,22 @@
     -fx-background-color:  #004C4C;
     -fx-outer-border :    #004C4C;
     -fx-text-box-border: #004C4C;
+	-fx-background-color:transparent;
+ 
+
+}
+
+.profileTab{
+	 -fx-background-color:  #004C4C;
+    -fx-outer-border :    #004C4C;
+    -fx-text-box-border: #004C4C;
+	-fx-background-color:transparent;
+ 
+ -fx-tab-min-width:120px;
+  -fx-tab-max-width:120px;
+  -fx-tab-min-height:50px;
+  -fx-tab-max-height:50px;
+
 }
 
 .scroll-pane

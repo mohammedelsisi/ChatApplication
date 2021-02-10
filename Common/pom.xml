@@ -138,17 +138,6 @@
 
         <plugins>
 
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.5</version>
-                <configuration>
-                    <launcher>hellofx</launcher>
-                    <jlinkImageName>hello</jlinkImageName>
-                    <mainClass>ClientSide/JETS.ServerMain</mainClass>
-
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
