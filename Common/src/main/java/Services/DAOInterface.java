@@ -1,12 +1,13 @@
 package Services;
 import Models.LoginEntity;
-import Models.dto.DataTransferObject;
+
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface DAOInterface <T extends DataTransferObject> extends Remote {
+public interface DAOInterface <T extends Serializable> extends Remote {
 
     T findById(String phoneNumber) throws SQLException, RemoteException;
     T update(T dto) throws SQLException,RemoteException;
