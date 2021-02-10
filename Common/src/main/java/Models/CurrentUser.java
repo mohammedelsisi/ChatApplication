@@ -1,14 +1,17 @@
 package Models;
 
-import Models.dto.DataTransferObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CurrentUser implements DataTransferObject {
-    private long id;
+import java.io.Serializable;
+import java.util.List;
 
+public class CurrentUser implements Serializable {
+
+    transient private final StringProperty displayNameProperty = new SimpleStringProperty();
+    transient private final StringProperty userPhoto = new SimpleStringProperty();
+    transient private final StringProperty status = new SimpleStringProperty();
     private String phoneNumber;
-
     private String password;
     private String email;
     private String gender;
@@ -16,38 +19,31 @@ public class CurrentUser implements DataTransferObject {
     private String country;
     private String Bio;
     private String displayName;
-    transient private final StringProperty displayNameProperty = new SimpleStringProperty();
-    transient private final StringProperty userPhoto = new SimpleStringProperty();
-    transient private final StringProperty status = new SimpleStringProperty();
+    private List<FriendEntity> friends;
 
     public String getUserPhoto() {
         return userPhoto.get();
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public StringProperty userPhotoProperty() {
-        return userPhoto;
     }
 
     public void setUserPhoto(String userPhoto) {
         this.userPhoto.set(userPhoto);
     }
 
-    public String getStatus() {
-        return status.get();
+    public StringProperty userPhotoProperty() {
+        return userPhoto;
     }
 
-    public StringProperty statusProperty() {
-        return status;
+    public String getStatus() {
+        return status.get();
     }
 
     public void setStatus(String status) {
         this.status.set(status);
     }
 
+    public StringProperty statusProperty() {
+        return status;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -114,17 +110,20 @@ public class CurrentUser implements DataTransferObject {
         return displayNameProperty;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayNameProperty.set(displayName);
-        this.displayName=displayName;
-    }
     public String getDisplayName() {
         return displayName;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayNameProperty.set(displayName);
+        this.displayName = displayName;
+    }
 
-    @Override
-    public long getId() {
-        return id;
+    public List<FriendEntity> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<FriendEntity> friends) {
+        this.friends = friends;
     }
 }
