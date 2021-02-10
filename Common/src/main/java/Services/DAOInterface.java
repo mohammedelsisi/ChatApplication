@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface DAOInterface <T extends DataTransferObject> extends Remote {
 
-    T findById(long id) throws SQLException, RemoteException;
+    T findById(String phoneNumber) throws SQLException, RemoteException;
     T update(T dto) throws SQLException,RemoteException;
     T create(T dto) throws  RemoteException, SQLException;
-    int delete(long id) throws RemoteException;
+    int delete(String phoneNumber) throws RemoteException;
 //    boolean isEmpty() throws SQLException, RemoteException;
-    List<T> getFriends (long id) throws RemoteException, SQLException;
+    List<T> getFriends (String phoneNumber) throws RemoteException, SQLException;
     T findByPhoneAndPassword(LoginEntity l) throws RemoteException;
 
 }

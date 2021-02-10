@@ -34,7 +34,7 @@ public class ClientMain extends Application {
     @Override
     public void init() {
         try {
-            Registry registry = LocateRegistry.getRegistry(6252);
+            Registry registry = LocateRegistry.getRegistry(6253);
             userDAO = (DAOInterface<CurrentUser>)registry.lookup("UserRegistrationService");
             connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
 
