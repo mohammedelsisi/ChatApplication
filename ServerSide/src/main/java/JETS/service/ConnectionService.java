@@ -36,4 +36,9 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
     public boolean isConnected(String clientPhoneNumber) {
         return connectedClients.containsKey(clientPhoneNumber);
     }
+
+    @Override
+    public ClientServices getClientService(String clientPhoneNumber) {
+      return connectedClients.get(clientPhoneNumber);
+    }
 }
