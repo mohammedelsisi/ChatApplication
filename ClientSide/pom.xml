@@ -77,7 +77,7 @@
                 <configuration>
                     <launcher>hellofx</launcher>
                     <jlinkImageName>hello</jlinkImageName>
-                    <mainClass>ClientSide/JETS.ServerMain</mainClass>
+                    <mainClass>ClientSide/JETS.ClientMain</mainClass>
 
                 </configuration>
             </plugin>

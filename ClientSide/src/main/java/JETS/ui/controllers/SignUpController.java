@@ -36,7 +36,7 @@ public class SignUpController implements Initializable {
     DatePicker datePicker;
     @FXML
     private TextField phoneNumber;
-    PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+    private PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     @FXML
     private TextField emailAddress;
     @FXML
@@ -65,6 +65,7 @@ public class SignUpController implements Initializable {
         Collections.sort(countryCodesList);
         countryCode.getItems().addAll(countryCodesList);
         countryCode.setVisibleRowCount(6);
+        countryCode.getSelectionModel().select(63);
         countryCode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
