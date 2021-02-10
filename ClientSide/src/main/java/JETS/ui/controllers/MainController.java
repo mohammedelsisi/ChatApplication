@@ -2,25 +2,18 @@ package JETS.ui.controllers;
 
 import JETS.ClientMain;
 import JETS.ClientServices.ClientServicesFactory;
-import JETS.ClientServices.ClientServicesImp;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import JETS.ui.helpers.StageCoordinator;
 
 import java.net.URL;
 import java.rmi.RemoteException;

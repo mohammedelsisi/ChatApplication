@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConnectionService extends UnicastRemoteObject implements ConnectionInt {
+public class ConnectionService extends UnicastRemoteObject implements ConnectionInt,Connector {
     private final Map<String, ClientServices> connectedClients = new ConcurrentHashMap<>();
 
     public ConnectionService() throws RemoteException {
@@ -25,10 +25,15 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
     public boolean disconnect(ClientServices client) throws RemoteException {
         boolean isSucceed = false;
         String clientPhoneNumber = client.getPhoneNumber();
-        if (connectedClients.keySet().contains(clientPhoneNumber)) {
+        if (connectedClients.containsKey(clientPhoneNumber)) {
             connectedClients.remove(clientPhoneNumber);
             isSucceed = true;
         }
         return isSucceed;
+    }
+
+    @Override
+    public boolean isConnected(String clientPhoneNumber) {
+        return connectedClients.containsKey(clientPhoneNumber);
     }
 }

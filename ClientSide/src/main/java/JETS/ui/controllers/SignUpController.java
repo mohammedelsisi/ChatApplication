@@ -209,8 +209,8 @@ public class SignUpController implements Initializable {
             textField.setStyle("-fx-border-color: green; -fx-border-radius: 4px; -fx-border-width: 2px;");
             textField.setTooltip(null);
         }
-        public  static void loadCountryCodes(){
-            Set<String> set = PhoneNumberUtil.getInstance().getSupportedRegions();
+        private void loadCountryCodes(){
+            Set<String> set = phoneNumberUtil.getSupportedRegions();
 
             String[] arr = set.toArray(new String[set.size()]);
 
