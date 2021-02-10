@@ -14,12 +14,11 @@ public class ChatController {
     public void switchToSecondary(KeyEvent keyEvent) {
     }
 
-    public void requestFriend(MouseEvent mouseEvent){
+    public void requestFriend(){
         Alert a1 = new Alert(Alert.AlertType.NONE,
                 "Here is the info about Notepad", ButtonType.OK);
-
-        a1.setGraphic(new ImageView(new Image("download.png")));
         a1.setTitle("About Us");
+        
         a1.show();
     }
 }
