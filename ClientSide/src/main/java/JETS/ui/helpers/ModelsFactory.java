@@ -16,7 +16,6 @@ public class ModelsFactory {
     private CurrentUser currentUser;
 //    private DAOInterface<CurrentUser> userDAO;
     private ModelsFactory () {
-
     }
 
     public static ModelsFactory getInstance() {
@@ -24,19 +23,23 @@ public class ModelsFactory {
     }
 
     public CurrentUser getCurrentUser() {
+        if (currentUser == null) {
+            currentUser = new CurrentUser();
+        }
         return currentUser;
     }
-    public CurrentUser register(CurrentUser user){
 
+
+    public CurrentUser register(CurrentUser user){
         try {
             currentUser=  ClientMain.userDAO.create(user);
         }catch (RemoteException | SQLException e){
             e.printStackTrace();
         }
         return  currentUser;
-
     }
+
     public void signIn(String phoneNumber,String password){
-
     }
+
 }

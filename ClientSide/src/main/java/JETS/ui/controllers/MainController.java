@@ -29,10 +29,7 @@ public class MainController implements Initializable {
 
     }
 
-    public void registerAction(ActionEvent actionEvent) {
 
-
-    }
 
     public void signUpAction(MouseEvent mouseEvent) {
         StageCoordinator stageCoordinator=StageCoordinator.getInstance();
