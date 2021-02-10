@@ -21,4 +21,5 @@ module ClientSide {
     requires Common;
     requires nv.i18n;
     requires java.rmi;
+    requires com.jfoenix;
 }

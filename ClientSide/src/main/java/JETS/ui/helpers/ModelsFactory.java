@@ -1,5 +1,6 @@
 package JETS.ui.helpers;
 
+import JETS.ClientMain;
 import Models.CurrentUser;
 import Services.DAOInterface;
 
@@ -13,14 +14,9 @@ public class ModelsFactory {
     private static final ModelsFactory instance = new ModelsFactory();
 
     private CurrentUser currentUser;
-    private DAOInterface<CurrentUser> userDAO;
+//    private DAOInterface<CurrentUser> userDAO;
     private ModelsFactory () {
-        try {
-            Registry registry = LocateRegistry.getRegistry(1234);
-            DAOInterface<CurrentUser> userDAO = (DAOInterface<CurrentUser>)registry.lookup("DAOService");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     public static ModelsFactory getInstance() {
@@ -30,14 +26,15 @@ public class ModelsFactory {
     public CurrentUser getCurrentUser() {
         return currentUser;
     }
-    public void register(CurrentUser user){
+    public CurrentUser register(CurrentUser user){
+
         try {
-           currentUser=userDAO.create(user);
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }catch (SQLException e){
+            currentUser=  ClientMain.userDAO.create(user);
+        }catch (RemoteException | SQLException e){
             e.printStackTrace();
         }
+        return  currentUser;
+
     }
     public void signIn(String phoneNumber,String password){
 

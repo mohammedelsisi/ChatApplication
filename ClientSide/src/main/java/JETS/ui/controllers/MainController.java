@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,8 +31,12 @@ public class MainController implements Initializable {
 
     public void registerAction(ActionEvent actionEvent) {
 
-        StageCoordinator stageCoordinator=StageCoordinator.getInstance();
-        stageCoordinator.switchToSignUPScene();
+
     }
 
+    public void signUpAction(MouseEvent mouseEvent) {
+        StageCoordinator stageCoordinator=StageCoordinator.getInstance();
+        stageCoordinator.switchToSignUPScene();
+
+    }
 }

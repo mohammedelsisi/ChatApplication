@@ -1,4 +1,5 @@
 package Models;
+
 import Models.dto.DataTransferObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,14 +10,15 @@ public class CurrentUser implements DataTransferObject {
     private String phoneNumber;
 
     private String password;
-    private String email ;
+    private String email;
     private String gender;
     private int age;
     private String country;
     private String Bio;
-    private final StringProperty displayName = new SimpleStringProperty();
-    private final StringProperty userPhoto = new SimpleStringProperty();
-    private final StringProperty status = new SimpleStringProperty();
+    private String displayName;
+    transient private final StringProperty displayNameProperty = new SimpleStringProperty();
+    transient private final StringProperty userPhoto = new SimpleStringProperty();
+    transient private final StringProperty status = new SimpleStringProperty();
 
     public String getUserPhoto() {
         return userPhoto.get();
@@ -104,16 +106,20 @@ public class CurrentUser implements DataTransferObject {
         Bio = bio;
     }
 
-    public String getDisplayName() {
-        return displayName.get();
+    public String getDisplayNameProperty() {
+        return displayNameProperty.get();
     }
 
     public StringProperty displayNameProperty() {
-        return displayName;
+        return displayNameProperty;
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName.set(displayName);
+        this.displayNameProperty.set(displayName);
+        this.displayName=displayName;
+    }
+    public String getDisplayName() {
+        return displayName;
     }
 
 

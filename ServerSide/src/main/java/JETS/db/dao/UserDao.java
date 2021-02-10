@@ -15,7 +15,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     private static final String GET_ID = "select id  from user where phone_number = ?";
     private static final String DELETE = "DELETE FROM user WHERE id = ?";
     protected final static String SELECT_ALL = "SELECT * FROM user ";
-    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio,image, status) VALUES (?,?, ?, ?, ?,?,?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio) VALUES (?,?, ?, ?, ?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE id=?";
     private static final String GET_Friends = "SELECT * FROM user where id = (select friend_id from user_friend where user_id = ?)";
     private static final String UPDATE = "UPDATE person SET phone_number = ?, password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE id = ?";
@@ -83,8 +83,8 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(6, dto.getCountry());
             statement.setInt(7, dto.getAge());
             statement.setString(8, dto.getBio());
-            statement.setString(9, dto.getUserPhoto());
-            statement.setString(10, dto.getStatus());
+//            statement.setString(9, dto.getUserPhoto());
+//            statement.setString(10, dto.getStatus());
             statement.executeUpdate();
             dto.setId(this.getIdByPhone(dto.getPhoneNumber()));
             return dto;

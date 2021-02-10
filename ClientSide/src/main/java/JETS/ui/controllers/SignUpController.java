@@ -1,9 +1,11 @@
 package JETS.ui.controllers;
+import JETS.ClientMain;
 import JETS.ui.helpers.ModelsFactory;
 import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.jfoenix.controls.JFXTextArea;
 import com.mysql.cj.log.Log;
 import com.neovisionaries.i18n.CountryCode;
 import javafx.beans.value.ChangeListener;
@@ -20,16 +22,18 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.chrono.Chronology;
 import java.util.*;
 
 public class SignUpController implements Initializable {
+    public JFXTextArea bio;
     private String code;
     public static List<CountryCodeData> countryCodesList=new ArrayList<>();
     @FXML
     private ComboBox countryCode;
     @FXML
-    DatePicker datePicker=new DatePicker();
+    DatePicker datePicker;
     @FXML
     private TextField phoneNumber;
     PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -158,13 +162,17 @@ public class SignUpController implements Initializable {
     }
     @FXML
     public void registerHandle(ActionEvent e){
-        if (isPhoneNumberCorrect&&isEmailCorrect&&isNameCorrect&&isPasswordCorrect){
+        if (isPhoneNumberCorrect&&isEmailCorrect&&isNameCorrect&&isPasswordCorrect&&!gender.getValue().toString().equals("Gender")){
             CurrentUser user=new CurrentUser();
-            user.setPhoneNumber(phoneNumber.getText());
+            user.setPhoneNumber(code+phoneNumber.getText());
             user.setEmail(emailAddress.getText());
-            user.setFirstName(displayName.getText());
-            user.setPassword(code+password.getText());
+            user.setDisplayName(displayName.getText());
+            user.setPassword(password.getText());
+            user.setGender(gender.getValue().toString().toUpperCase());
+            user.setAge(Period.between(datePicker.getValue(),LocalDate.now()).getYears());
+            user.setBio(bio.getText());
             ModelsFactory.getInstance().register(user);
+//            ClientMain.userDAO.create(user);
             //change scene
         }
     }
