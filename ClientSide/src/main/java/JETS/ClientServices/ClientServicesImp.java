@@ -4,20 +4,11 @@ import JETS.ui.helpers.ModelsFactory;
 import Services.ClientServices;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class ClientServicesImp implements ClientServices {
+public class ClientServicesImp extends UnicastRemoteObject implements ClientServices {
 
-    private static ClientServices clientServices;
-
-    public static ClientServices getInstatnce (){
-        if (clientServices == null){
-            clientServices = new ClientServicesImp();
-        }
-        return clientServices;
-    }
-
-    private ClientServicesImp (){
-
+    protected ClientServicesImp() throws RemoteException {
     }
 
     @Override

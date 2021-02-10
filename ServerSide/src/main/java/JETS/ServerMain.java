@@ -2,6 +2,7 @@ package JETS;
 
 import JETS.db.DataSourceFactory;
 import JETS.db.dao.UserDao;
+import JETS.service.ConnectionService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -23,8 +24,10 @@ public class ServerMain extends Application {
         try {
             Connection conn = DataSourceFactory.getConnection();
             UserDao userDao = new UserDao(conn);
+            ConnectionService connectionService = new ConnectionService();
             Registry reg = LocateRegistry.createRegistry(6252);
             reg.rebind("UserRegistrationService",userDao);
+            reg.rebind("ConnectionService",connectionService);
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();
         }

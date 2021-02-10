@@ -50,7 +50,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="263.0" prefHeight="45.0" prefWidth="200.0">
                      <children>
-                        <PasswordField fx:id="Password" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="450.0" promptText="password" styleClass="tf" HBox.hgrow="ALWAYS">
+                        <PasswordField fx:id="password" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="450.0" promptText="password" styleClass="tf" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="15.0" />
                            </font>

@@ -28,7 +28,9 @@ public class ModelsFactory {
         }
         return currentUser;
     }
-
+    public void setCurrentUser( CurrentUser currentUser) {
+        this.currentUser=currentUser;
+    }
 
     public CurrentUser register(CurrentUser user){
         try {

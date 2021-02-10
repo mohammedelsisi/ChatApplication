@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.ClientServices.ClientServicesFactory;
 import JETS.ClientServices.ClientServicesImp;
 import JETS.ui.helpers.ModelsFactory;
 import Models.CurrentUser;
@@ -39,24 +40,22 @@ public class MainController implements Initializable {
     }
 
 
-
     public void signUpAction(MouseEvent mouseEvent) {
-        StageCoordinator stageCoordinator=StageCoordinator.getInstance();
+        StageCoordinator stageCoordinator = StageCoordinator.getInstance();
         stageCoordinator.switchToSignUPScene();
 
     }
 
     public void signInAction(ActionEvent actionEvent) throws RemoteException {
-        LoginEntity loginEntity = new LoginEntity(phoneNumber.getText(),password.getText());
-     CurrentUser currentUser= ModelsFactory.getInstance().getCurrentUser();
-     currentUser =ClientMain.userDAO.findByPhoneAndPassword(loginEntity);
-     if (currentUser!=null){
-         ClientMain.connectionInt.registerAsConnected(ClientServicesImp.getInstatnce());
-         StageCoordinator stageCoordinator=StageCoordinator.getInstance();
-         stageCoordinator.switchToSignUPScene();
-     }
-     else {
-         System.out.println("Not Valid ");
-     }
+        LoginEntity loginEntity = new LoginEntity(phoneNumber.getText(), password.getText());
+        CurrentUser currentUser = ClientMain.userDAO.findByPhoneAndPassword(loginEntity);
+        ModelsFactory.getInstance().setCurrentUser(currentUser);
+        if (currentUser != null) {
+            ClientMain.connectionInt.registerAsConnected(ClientServicesFactory.getClientServicesImp());
+            StageCoordinator stageCoordinator = StageCoordinator.getInstance();
+            stageCoordinator.switchToSignUPScene();
+        } else {
+            System.out.println("Not Valid ");
+        }
     }
 }
