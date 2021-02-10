@@ -14,37 +14,24 @@ import java.util.List;
 public class UserDao extends UnicastRemoteObject implements DAOInterface<CurrentUser> {
 
     protected final Connection connection;
-    private static final String GET_ID = "select id  from user where phone_number = ?";
-    private static final String DELETE = "DELETE FROM user WHERE id = ?";
-    protected final static String SELECT_ALL = "SELECT * FROM user ";
+    private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
     private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio) VALUES (?,?, ?, ?, ?,?,?,?)";
-    private static final String GET_ONE = "SELECT * FROM user WHERE id=?";
-    private static final String GET_Friends = "SELECT * FROM user where id = (select friend_id from user_friend where user_id = ?)";
-    private static final String UPDATE = "UPDATE person SET phone_number = ?, password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE id = ?";
+    private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
+    private static final String GET_Friends = "SELECT * FROM user where phone_number = (select friend_number from user_friend where user_phone_number = ?)";
+    private static final String UPDATE = "UPDATE person SET  password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE phone_number = ?";
     private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
 
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
     }
 
-    public long getIdByPhone(String phoneNumber) {
-        try (PreparedStatement statement = this.connection.prepareStatement(GET_ID)) {
-            statement.setString(1, phoneNumber);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                return rs.getLong("id");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+
 
     @Override
-    public CurrentUser findById(long id) throws SQLException, RemoteException {
+    public CurrentUser findById(String phoneNumber) throws SQLException, RemoteException {
         CurrentUser user = new CurrentUser();
         try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE);) {
-            statement.setLong(1, id);
+            statement.setString(1, phoneNumber);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 user = createUser(rs, user);
@@ -54,6 +41,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         }
         return user;
     }
+
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
         try (PreparedStatement statement = this.connection.prepareStatement(UPDATE);) {
@@ -67,7 +55,6 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(8, dto.getBio());
             statement.setString(9, dto.getUserPhoto());
             statement.setString(10, dto.getStatus());
-            statement.setLong(11,dto.getId());
             statement.executeUpdate();
             return dto;
         }
@@ -89,16 +76,15 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 //            statement.setString(9, dto.getUserPhoto());
 //            statement.setString(10, dto.getStatus());
             statement.executeUpdate();
-            dto.setId(this.getIdByPhone(dto.getPhoneNumber()));
             return dto;
         }
     }
 
 
 
-    public int delete(long id) {
+    public int delete(String phoneNumber) {
         try (PreparedStatement statement = this.connection.prepareStatement(DELETE)) {
-            statement.setLong(1, id);
+            statement.setString(1, phoneNumber);
             return statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,9 +94,9 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
 
     @Override
-    public List<CurrentUser> getFriends(long id) throws RemoteException, SQLException {
+    public List<CurrentUser> getFriends(String phoneNumber) throws RemoteException, SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_Friends);) {
-            preparedStatement.setLong(1, id);
+            preparedStatement.setString(1, phoneNumber);
             List<CurrentUser> friends = new ArrayList<>();
             ResultSet rs = preparedStatement.executeQuery();
             CurrentUser user = new CurrentUser();
@@ -141,7 +127,6 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
 
     private CurrentUser createUser(ResultSet rs, CurrentUser user) throws SQLException {
-        user.setId(rs.getLong("id"));
         user.setDisplayName(rs.getString("display_name"));
         user.setEmail(rs.getString("email"));
         user.setGender(rs.getString("gender"));

@@ -25,7 +25,7 @@ public class ServerMain extends Application {
             Connection conn = DataSourceFactory.getConnection();
             UserDao userDao = new UserDao(conn);
             ConnectionService connectionService = new ConnectionService();
-            Registry reg = LocateRegistry.createRegistry(6252);
+            Registry reg = LocateRegistry.createRegistry(6253);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
         } catch (SQLException | RemoteException throwables) {

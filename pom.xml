@@ -185,12 +185,18 @@
                             <!--                        Opening Controls-->
                             <option>--add-opens</option>
                             <option>javafx.controls/javafx.scene.control.skin=org.controlsfx.controls</option>
+                            <option>--add-opens</option>
+                            <option>java.base/java.lang.reflect=com.jfoenix</option>
                             <!--                        Table Row expander Column-->
                             <option>--add-opens</option>
                             <option>javafx.controls/javafx.scene.control.skin=org.controlsfx.controls</option>
                             <!--                        Notification Pane Adding-->
                             <option>--add-exports</option>
                             <option>javafx.graphics/com.sun.javafx.scene=org.controlsfx.controls</option>
+
+                            <option>--add-exports</option>
+                            <option>java.base/java.lang.reflect=com.jfoenix</option>
+
                             <option>--add-exports</option>
                             <option>javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls</option>
                             <!--                        Auto complete binding adding-->

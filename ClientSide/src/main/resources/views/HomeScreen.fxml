@@ -24,14 +24,26 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
+
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <TabPane prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="70.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+            <TabPane prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
               <tabs>
-                  <Tab style="-fx-padding: 0 120 0 0;" text="Untitled Tab">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
+                  <Tab style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
+                     <graphic>
+                        <Label contentDisplay="TOP" graphicTextGap="10.0" prefHeight="180.0" prefWidth="151.0" text="Dalia" textFill="RED">
+                           <graphic>
+                              <ImageView fitHeight="142.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Pics/RegPPic.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </graphic>
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                     </content>
                   </Tab>
                   <Tab style="-fx-background-color: #004C4C;">
                      <graphic>
@@ -165,7 +177,6 @@
                                           <Image url="@../Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
-
                                     <VBox prefHeight="58.0" prefWidth="150.0">
                                        <children>
                                           <Label prefHeight="18.0" prefWidth="57.0" text="ELISE">

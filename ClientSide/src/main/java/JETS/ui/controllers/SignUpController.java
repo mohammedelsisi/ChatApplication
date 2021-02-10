@@ -199,9 +199,7 @@ public class SignUpController implements Initializable {
 
         private static void showError(TextField textField,String msg){
             Tooltip t=new Tooltip(msg);
-
             textField.setStyle("-fx-border-color: red; -fx-border-radius: 4px; -fx-border-width: 2px;");
-
             textField.setTooltip(t);
 
         }
