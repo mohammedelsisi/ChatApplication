@@ -41,7 +41,7 @@
                         <Insets left="15.0" right="15.0" top="20.0" />
                      </VBox.margin>
                      <children>
-                        <TextField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Email" styleClass="tf" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="phoneNumber" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Phone Number" styleClass="tf" text="+20" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -50,7 +50,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="263.0" prefHeight="45.0" prefWidth="200.0">
                      <children>
-                        <PasswordField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="450.0" promptText="Password" styleClass="tf" HBox.hgrow="ALWAYS">
+                        <PasswordField fx:id="Password" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="450.0" promptText="password" styleClass="tf" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -65,7 +65,7 @@
                         <Insets left="15.0" right="15.0" top="20.0" />
                      </VBox.margin>
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="385.0" styleClass="side_bar" stylesheets="@../styles/StyleSheet.css" text="Sign In" textAlignment="CENTER" textFill="WHITE">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#signInAction" prefHeight="30.0" prefWidth="385.0" styleClass="side_bar" stylesheets="@../styles/StyleSheet.css" text="Sign In" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="Arial Rounded MT Bold" size="17.0" />
                            </font>

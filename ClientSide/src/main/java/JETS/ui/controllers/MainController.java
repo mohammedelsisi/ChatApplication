@@ -1,5 +1,10 @@
 package JETS.ui.controllers;
 
+import JETS.ClientMain;
+import JETS.ClientServices.ClientServicesImp;
+import JETS.ui.helpers.ModelsFactory;
+import Models.CurrentUser;
+import Models.LoginEntity;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import javafx.event.ActionEvent;
@@ -8,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -16,6 +22,7 @@ import javafx.scene.layout.VBox;
 import JETS.ui.helpers.StageCoordinator;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -23,6 +30,8 @@ public class MainController implements Initializable {
     public BorderPane rightBorderBane;
     public HBox hbox;
     public Button registerBtn;
+    public TextField phoneNumber;
+    public PasswordField password;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -35,5 +44,19 @@ public class MainController implements Initializable {
         StageCoordinator stageCoordinator=StageCoordinator.getInstance();
         stageCoordinator.switchToSignUPScene();
 
+    }
+
+    public void signInAction(ActionEvent actionEvent) throws RemoteException {
+        LoginEntity loginEntity = new LoginEntity(phoneNumber.getText(),password.getText());
+     CurrentUser currentUser= ModelsFactory.getInstance().getCurrentUser();
+     currentUser =ClientMain.userDAO.findByPhoneAndPassword(loginEntity);
+     if (currentUser!=null){
+         ClientMain.connectionInt.registerAsConnected(ClientServicesImp.getInstatnce());
+         StageCoordinator stageCoordinator=StageCoordinator.getInstance();
+         stageCoordinator.switchToSignUPScene();
+     }
+     else {
+         System.out.println("Not Valid ");
+     }
     }
 }

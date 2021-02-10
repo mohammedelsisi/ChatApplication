@@ -77,6 +77,29 @@ public class StageCoordinator {
             Scene SignUPScene = SignUPSceneData.getScene();
             primaryStage.setScene(SignUPScene);
         }
+    }
 
+    public void switchToChatScene() {
+        if (primaryStage == null) {
+            throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
+        }
+
+        if (!scenes.containsKey("Chat")) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/regView.fxml"));
+                Parent Chat = fxmlLoader.load();
+                Scene ChatScene = new Scene(Chat,655,610);
+                SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);
+                scenes.put("ChatScene", ChatSceneData);
+                primaryStage.setScene(ChatScene);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("IO Exception: Couldn't load 'Chat View' FXML file");
+            }
+        } else {
+            SceneData ChatSceneData = scenes.get("Chat");
+            Scene ChatScene = ChatSceneData.getScene();
+            primaryStage.setScene(ChatScene);
+        }
     }
 }

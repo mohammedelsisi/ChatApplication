@@ -1,6 +1,7 @@
 package JETS.db.dao;
 
 import Models.CurrentUser;
+import Models.LoginEntity;
 import Services.DAOInterface;
 
 import java.rmi.RemoteException;
@@ -19,6 +20,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     private static final String GET_ONE = "SELECT * FROM user WHERE id=?";
     private static final String GET_Friends = "SELECT * FROM user where id = (select friend_id from user_friend where user_id = ?)";
     private static final String UPDATE = "UPDATE person SET phone_number = ?, password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE id = ?";
+    private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
 
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
@@ -116,6 +118,24 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             }
             return friends;
         }
+    }
+
+    @Override
+    public CurrentUser findByPhoneAndPassword(LoginEntity l) throws RemoteException {
+        CurrentUser user = new CurrentUser();
+        try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE_WITH_Pass);) {
+           statement.setString(1,l.getPhoneNumber());
+           statement.setString(2,l.getPassword());
+            ResultSet rs = statement.executeQuery();
+
+           if (rs.next()) {
+                user = createUser(rs, user);
+               return user;
+           }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
