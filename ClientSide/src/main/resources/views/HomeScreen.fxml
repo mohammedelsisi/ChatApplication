@@ -445,7 +445,7 @@
                                           </FontIcon>
                                        </children>
                                     </Group>
-                                    <Group fx:id="getRequests" layoutX="203.0" layoutY="35.0">
+                                    <Group onMouseClicked="#requestsHandle" layoutX="203.0" layoutY="35.0">
                                        <children>
                                           <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE">
                                              <fill>

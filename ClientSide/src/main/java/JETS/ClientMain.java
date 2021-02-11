@@ -26,7 +26,7 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) throws SQLException {
         StageCoordinator stageCoordinator = StageCoordinator.getInstance();
         stageCoordinator.initStage(primaryStage);
-        stageCoordinator.switchToLoginScene();
+        stageCoordinator.switchToChatScene();
         primaryStage.show();
 
     }
