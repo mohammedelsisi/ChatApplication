@@ -142,6 +142,12 @@
             <artifactId>ikonli-fontawesome5-pack</artifactId>
             <version>${ikonli.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>5.8.2</version>
+        </dependency>
     </dependencies>
 
 
