@@ -1,6 +1,7 @@
 package JETS.ClientServices;
 
 import JETS.ui.helpers.ModelsFactory;
+import Models.MessageEntity;
 import Services.ClientServices;
 
 import java.rmi.RemoteException;
@@ -14,5 +15,10 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     @Override
     public String getPhoneNumber() throws RemoteException {
        return ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+    }
+
+    @Override
+    public void receive(MessageEntity messageEntity) throws RemoteException {
+
     }
 }

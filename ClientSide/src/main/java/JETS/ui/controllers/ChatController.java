@@ -23,9 +23,9 @@ public class ChatController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        String phone= ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-        list.add(phone);
-        list.add("+201012123112");
-        list.add("+201012123113");
+//        list.add(phone);
+//        list.add("+201012123112");
+//        list.add("+201012123113");
 
         textHolder.textProperty().bind(messageField.textProperty());
         textHolder.setWrappingWidth(600);
@@ -47,11 +47,11 @@ public class ChatController implements Initializable {
                     String text = messageField.getText().trim();
                     /* has old chat ID */
                     ChatEntitiy chatEntitiy = new ChatEntitiy();
-                    chatEntitiy.setParticipantsPhoneNumbers();
+//                    chatEntitiy.setParticipantsPhoneNumbers();
 //                   .initiateChat(chatEntitiy);
                     messageField.setText("");
                 }
-                sPane.vvalueProperty().bind(vBox.heightProperty());
+//                sPane.vvalueProperty().bind(vBox.heightProperty());
 
             } else {
                 messageField.setText("");
