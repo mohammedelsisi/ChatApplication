@@ -34,9 +34,6 @@ public class ChatController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        String phone= ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-        list.add(phone);
-        list.add("+201012123112");
-        list.add("+201012123113");
 
         textHolder.textProperty().bind(messageField.textProperty());
         textHolder.setWrappingWidth(600);
