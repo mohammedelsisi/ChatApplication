@@ -21,4 +21,9 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     public String getPhoneNumber() throws RemoteException {
        return ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
     }
+
+    @Override
+    public void receive(MessageEntity messageEntity) throws RemoteException {
+
+    }
 }
