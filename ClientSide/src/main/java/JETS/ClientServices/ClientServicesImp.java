@@ -1,5 +1,6 @@
 package JETS.ClientServices;
 
+import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.ModelsFactory;
 import Models.MessageEntity;
 import Services.ClientServices;
@@ -19,6 +20,6 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
 
     @Override
     public void receive(MessageEntity messageEntity) throws RemoteException {
-
+        ChatManager.getInstance().receiveResponse(messageEntity);
     }
 }
