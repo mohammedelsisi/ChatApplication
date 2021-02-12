@@ -13,10 +13,6 @@ public class ChatServiceImp extends UnicastRemoteObject implements ChatServiceIn
 
     @Override
     public void sendMessage(MessageEntity messageEntity) throws RemoteException {
-//        if (!chatsMap.containsKey(messageEntity.getChatEntitiy().getId())) {
-//            ChatEntitiy chatEntitiy = messageEntity.getChatEntitiy();
-//            chatsMap.put(chatEntitiy.getId(), chatEntitiy);
-//        }
 
         messageEntity.getChatEntitiy().getParticipantsPhoneNumbers().stream()
                 .filter((e) -> !e.equals(messageEntity.getSenderPhone()))

@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FriendsManager {
+
   public   static FriendsManager instance = new FriendsManager();
-    public  Map<String, FriendEntity> friendList = new HashMap<>();
+  public   Map<String, FriendEntity> friendList = new HashMap<>();
 
     public  String getFriendName (String phoneNumber){
         return friendList.get(phoneNumber).getDisplayName();

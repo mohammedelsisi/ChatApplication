@@ -25,12 +25,12 @@ public class ChatManager {
     }
 
     public void receiveResponse(MessageEntity message) {
-        System.out.println("message.getMsgContent()");
         Long chatID = message.getChatEntitiy().getId();
         if (RESPONSES.containsKey(chatID)) {
             RESPONSES.get(chatID).set(message);
         } else {
-            //notify Scene Coordinator about incoming new chat
+            StageCoordinator.getInstance().createChatLayout(message.getChatEntitiy());
+            createNewChatResponse(chatID);
         }
     }
 }

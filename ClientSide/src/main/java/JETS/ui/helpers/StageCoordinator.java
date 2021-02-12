@@ -116,33 +116,23 @@ public class StageCoordinator {
         }
     }
 
-    public  HBox  createSingleChatLayout (ChatEntitiy chatEntitiy){
-
-        List<String> participants =chatEntitiy.getParticipantsPhoneNumbers()
-                . stream().filter((e)->!e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
-                .collect(Collectors.toList());
-        String friendPhone = participants.get(0);
-       Label name = new Label(FriendsManager.instance.getFriendName(friendPhone ));
-       Circle circle = new Circle(25);
-       circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(friendPhone)))));
-       HBox hBox = new HBox(circle,name);
-        return hBox;
+    public  HBox createChatLayout(ChatEntitiy chatEntitiy){
+        if(chatEntitiy.getParticipantsPhoneNumbers().size()==2) {
 
 
-    }
-    public void addGroupChatLayout (ChatEntitiy chatEntitiy){
-
-//        List<String> participants =chatEntitiy.getParticipantsPhoneNumbers()
-//                . stream().filter((e)->!e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
-////
-//                .collect(Collectors.toList());
-//        VBox photos= new VBox();
-//        VBox names= new VBox();
-//        participants.forEach((e)->{
-//            names.getChildren().add(new Label(FriendsManager.instance.getFriendName(e)));
-//            photos.getChildren().add(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(e)))));
-//        });
-//        HBox hBox = new HBox(photos,names);
+            List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                    .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                    .collect(Collectors.toList());
+            String friendPhone = participants.get(0);
+            Label name = new Label(FriendsManager.instance.getFriendName(friendPhone));
+            Circle circle = new Circle(25);
+            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(friendPhone)))));
+            HBox hBox = new HBox(circle, name);
+            return hBox;
+        }else{
+            return null;
+        }
 
     }
+
 }

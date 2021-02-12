@@ -19,7 +19,7 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
     long id;
     protected final Connection connection;
     private static final String INSERTChat = "INSERT INTO chat (chat_id,chat_name) VALUES (?,?)";
-    private static final String INSERTParticipant = "INSERT INTO user_chat (user_phone_number,chat_chat_id) VALUES (?,?,?)";
+    private static final String INSERTParticipant = "INSERT INTO user_chat (user_phone_number,chat_chat_id) VALUES (?,?)";
 
     public ChatDaoImp( Connection connection, long x) throws RemoteException {
         this.connection = connection;
@@ -30,9 +30,9 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
     @Override
     public ChatEntitiy initiateChat(ChatEntitiy dto) throws RemoteException {
         try (PreparedStatement statement = this.connection.prepareStatement(INSERTChat);) {
-
             statement.setLong(1, id);
             statement.setString(2, dto.getChatName());
+            statement.executeUpdate();
             dto.getParticipantsPhoneNumbers().forEach((e)->{
                 try {
                     insertParticipant(e,id);
@@ -40,7 +40,7 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
                     remoteException.printStackTrace();
                 }
             });
-
+        id++;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
 
             statement.setString(1, phoneNumber);
             statement.setLong(2, chatId);
-
+            statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class CurrentUser implements Serializable {
 
@@ -19,7 +20,7 @@ public class CurrentUser implements Serializable {
     private String country;
     private String Bio;
     private String displayName;
-    private List<FriendEntity> friends;
+    private Map<String,FriendEntity> friends;
 
     public String getUserPhoto() {
         return userPhoto.get();
@@ -119,11 +120,12 @@ public class CurrentUser implements Serializable {
         this.displayName = displayName;
     }
 
-    public List<FriendEntity> getFriends() {
+    public Map<String,FriendEntity> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<FriendEntity> friends) {
+    public void setFriends( Map<String,FriendEntity> friends) {
         this.friends = friends;
+
     }
 }
