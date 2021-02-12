@@ -1,6 +1,10 @@
 package JETS.ui.controllers;
 
 
+import JETS.ClientMain;
+import Models.CurrentUser;
+import Services.UserFriendDaoInterface;
+import com.jfoenix.controls.JFXButton;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,10 +21,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
 
 
 public class ChatController implements Initializable {
@@ -28,6 +36,7 @@ public class ChatController implements Initializable {
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
     List<String> list;
+
 
 
     @Override
@@ -78,26 +87,47 @@ public class ChatController implements Initializable {
             }
         }
 
-    public void requestFriend(){
-        //string -->> userFriend
-        Dialog<String> dialog = new Dialog<>();
-       // dialog.setTitle();
+    public void requestFriend() throws SQLException, RemoteException {
+
+        Dialog dialog = new Dialog();
+      //  dialog.setTitle();
         dialog.setResizable(false);
 
         Label label1 = new Label("Enter Your Friend's Phone Number: ");
         TextField text1 = new TextField();
-
         GridPane grid = new GridPane();
         grid.add(label1, 1, 1);
         grid.add(text1, 2, 1);
 
         dialog.getDialogPane().setContent(grid);
 
-        ButtonType buttonAddFriend = new ButtonType("Add Friend", OTHER);
-        dialog.getDialogPane().getButtonTypes().add(buttonAddFriend);
+        ButtonType buttonTypeOk = new ButtonType("Add Friend", OTHER);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
 
-        dialog.show();
+        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
+        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
+        String myFriendphoneNo = text1.getText();
+
+        if (resultOfAddFriend.get()==buttonTypeOk)
+        {
+            AddFriend(myFriendphoneNo);
+        }
+
+
 
 
     }
+
+    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
+        //String myphoneNumber = new CurrentUser().getPhoneNumber();
+        String myphoneNumber = ("+201122344444");
+        String myfriendPhoneNo = myfriendNum;
+
+      int x =  ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber,myfriendPhoneNo);
+     System.out.println(myphoneNumber);
+     System.out.println(myfriendPhoneNo);
+      System.out.println(x);
+      return x;
+    }
+
 }
