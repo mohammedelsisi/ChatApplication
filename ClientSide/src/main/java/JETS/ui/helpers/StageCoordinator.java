@@ -1,14 +1,27 @@
 package JETS.ui.helpers;
 
+import Models.ChatEntitiy;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StageCoordinator {
 
@@ -101,5 +114,35 @@ public class StageCoordinator {
             Scene ChatScene = ChatSceneData.getScene();
             primaryStage.setScene(ChatScene);
         }
+    }
+
+    public  HBox  createSingleChatLayout (ChatEntitiy chatEntitiy){
+
+        List<String> participants =chatEntitiy.getParticipantsPhoneNumbers()
+                . stream().filter((e)->!e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList());
+        String friendPhone = participants.get(0);
+       Label name = new Label(FriendsManager.instance.getFriendName(friendPhone ));
+       Circle circle = new Circle(25);
+       circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(friendPhone)))));
+       HBox hBox = new HBox(circle,name);
+        return hBox;
+
+
+    }
+    public void addGroupChatLayout (ChatEntitiy chatEntitiy){
+
+//        List<String> participants =chatEntitiy.getParticipantsPhoneNumbers()
+//                . stream().filter((e)->!e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+////
+//                .collect(Collectors.toList());
+//        VBox photos= new VBox();
+//        VBox names= new VBox();
+//        participants.forEach((e)->{
+//            names.getChildren().add(new Label(FriendsManager.instance.getFriendName(e)));
+//            photos.getChildren().add(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(e)))));
+//        });
+//        HBox hBox = new HBox(photos,names);
+
     }
 }

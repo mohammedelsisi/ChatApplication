@@ -1,5 +1,6 @@
 package Models;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -7,7 +8,20 @@ import java.io.Serializable;
 
 public class FriendEntity implements Serializable {
     transient private final StringProperty status = new SimpleStringProperty();
-    transient private final StringProperty userPhoto = new SimpleStringProperty();
+
+    public byte[] getUserPhoto() {
+        return userPhoto.get();
+    }
+
+    public SimpleObjectProperty<byte[]> userPhotoProperty() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(byte[] userPhoto) {
+        this.userPhoto.set(userPhoto);
+    }
+
+    transient private final SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
     private String phoneNumber;
     private String displayName;
     private String Bio;
