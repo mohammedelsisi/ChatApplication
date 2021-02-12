@@ -33,7 +33,6 @@ public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoI
     public int  SearchbyPhoneno (String MyPoneNumber,String FriendPhoneNo){
         int find =0;
         try (PreparedStatement stmt = this.connection.prepareStatement(SearchByPhoneno) ; PreparedStatement stmt2 = this.connection.prepareStatement(AddFriend)){
-            this.connection.setAutoCommit(false);
             stmt.setString(1, FriendPhoneNo);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()){
