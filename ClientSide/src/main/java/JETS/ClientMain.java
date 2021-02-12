@@ -1,16 +1,26 @@
 package JETS;
 
+import JETS.ClientServices.ClientServicesFactory;
+import JETS.ClientServices.ClientServicesImp;
+import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
+import Models.ChatEntitiy;
 import Models.CurrentUser;
+import Models.MessageEntity;
+import Services.ChatServiceInt;
 import Services.ConnectionInt;
 import Services.DAOInterface;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClientMain extends Application {
@@ -28,7 +38,7 @@ public class ClientMain extends Application {
         stageCoordinator.initStage(primaryStage);
         stageCoordinator.switchToLoginScene();
         primaryStage.show();
-
+        
     }
 
     @Override

@@ -27,6 +27,7 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
         String clientPhoneNumber = client.getPhoneNumber();
         if (connectedClients.containsKey(clientPhoneNumber)) {
             connectedClients.remove(clientPhoneNumber);
+            UnicastRemoteObject.unexportObject(client, true);
             isSucceed = true;
         }
         return isSucceed;
