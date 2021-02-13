@@ -32,6 +32,9 @@ public class FriendEntity implements Serializable {
         Bio = bio;
         this.status.set(status);
     }
+    public FriendEntity(String displayName){
+        this.displayName = displayName;
+    }
 
     public FriendEntity() {
     }

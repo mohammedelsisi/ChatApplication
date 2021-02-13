@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class CurrentUser implements Serializable {
     private String country;
     private String Bio;
     private String displayName;
-    private Map<String,FriendEntity> friends;
+    private Map<String,FriendEntity> friends=new HashMap<>();
 
     public String getUserPhoto() {
         return userPhoto.get();
@@ -124,8 +125,7 @@ public class CurrentUser implements Serializable {
         return friends;
     }
 
-    public void setFriends( Map<String,FriendEntity> friends) {
+    public void setFriends(Map<String,FriendEntity> friends) {
         this.friends = friends;
-
     }
 }

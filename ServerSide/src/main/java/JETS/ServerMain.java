@@ -2,6 +2,7 @@ package JETS;
 
 import JETS.db.DataSourceFactory;
 import JETS.db.dao.UserDao;
+import JETS.db.dao.UserFriendDao;
 import JETS.service.ChatDaoImp;
 import JETS.service.ChatServiceImp;
 import JETS.service.ConnectionService;
@@ -29,13 +30,17 @@ public class ServerMain extends Application {
             Connection conn = DataSourceFactory.getConnection();
             UserDao userDao = new UserDao(conn);
             ConnectionService connectionService = ConnectionServiceFactory.getConnectionService();
+
+            UserFriendDao userFriendDao = new UserFriendDao(conn);
             ChatServiceInt chatService = new ChatServiceImp();
-           /*             method to get the last chat Id from database */
+            /*             method to get the last chat Id from database */
             ChatDaoImp chatDaoImp = new ChatDaoImp(conn ,10);
             Registry reg = LocateRegistry.createRegistry(6258);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
             reg.rebind("ChatService", chatService);
+
+            reg.rebind("UserFriendDao", userFriendDao);
             reg.rebind("ChatDao",chatDaoImp);
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();

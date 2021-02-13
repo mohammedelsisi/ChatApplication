@@ -20,39 +20,35 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
+import javafx.util.Callback;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
+
 
 public class ChatController implements Initializable {
     public JFXTextArea messageField;
-    public VBox chatsVbox;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
-    List<String> list = new ArrayList<>();
-    @FXML
-    private Label receiverName;
-    @FXML
-    private TabPane tabPane;
-    ChatEntitiy chatEntitiy;
-   CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
+    List<String> list;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+       String phone= ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+//        list.add(phone);
+//        list.add("+201012123112");
+//        list.add("+201012123113");
 
-//        FriendsManager.instance.setFriendList(ModelsFactory.getInstance().getCurrentUser().getFriends());
-        FriendEntity freind1 = new FriendEntity("+201012123112","ahmedsaasd","asdasd","Available");
-        try {
-            freind1.setUserPhoto(new BufferedInputStream( new FileInputStream("RegPPic.png")).readAllBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        FriendsManager.instance.friendList.put(freind1.getPhoneNumber(),freind1);
         textHolder.textProperty().bind(messageField.textProperty());
         textHolder.setWrappingWidth(600);
         textHolder.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -85,25 +81,103 @@ public class ChatController implements Initializable {
                     messageField.setText("");
                 }
 
-
             } else {
                 messageField.setText("");
             }
         }
+
+
+    public void requestFriend() throws SQLException, RemoteException {
+
+        Dialog dialog = new Dialog();
+      //  dialog.setTitle();
+        dialog.setResizable(false);
+
+        Label label1 = new Label("Enter Your Friend's Phone Number: ");
+        TextField text1 = new TextField();
+        GridPane grid = new GridPane();
+        grid.add(label1, 1, 1);
+        grid.add(text1, 2, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        ButtonType buttonTypeOk = new ButtonType("Add Friend", OTHER);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
+        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
+        String myFriendphoneNo = text1.getText();
+
+        if (resultOfAddFriend.get()==buttonTypeOk)
+        {
+            AddFriend(myFriendphoneNo);
+        }
+
+
+
+
     }
 
-    public void startChatAction(ActionEvent actionEvent) {
+    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
+        //String myphoneNumber = new CurrentUser().getPhoneNumber();
+        String myphoneNumber = ("+201122344444");
+        String myfriendPhoneNo = myfriendNum;
 
-        list.add(currentUser.getPhoneNumber());
-        list.add("+201012123112");
-        ChatEntitiy createdEntity = new ChatEntitiy(0,list,null);
-       HBox hBox= StageCoordinator.getInstance().createChatLayout(createdEntity);
-       hBox.addEventHandler(MouseEvent.MOUSE_CLICKED,(e)->{
-        receiverName.setText( FriendsManager.instance.getFriendName(   createdEntity.getParticipantsPhoneNumbers().get(1)));
-        chatEntitiy= createdEntity;
-       });
-
-       chatsVbox.getChildren().add(hBox);
-        tabPane.getSelectionModel().selectPrevious();
+      int x =  ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber,myfriendPhoneNo);
+     System.out.println(myphoneNumber);
+     System.out.println(myfriendPhoneNo);
+      System.out.println(x);
+      return x;
     }
+
+    @FXML
+    public void requestsHandle(){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+
+        DialogPane dialogPane = alert.getDialogPane();
+
+
+
+        dialogPane.setContent(listView);
+        dialogPane.setPrefWidth(400);
+        dialogPane.setPrefHeight(400);
+
+        alert.initStyle(StageStyle.TRANSPARENT);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.initOwner(messageField.getScene().getWindow());
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.CLOSE);
+        alert.showAndWait();
+    }
+    public static void loadRequestList(){
+        try {
+            requestLists.setAll((ArrayList)ClientMain.userFriendDaoInterface.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }catch (SQLException e){
+            //e.printStackTrace();
+            requestLists.clear();
+        }
+    }
+    public static void loadFriendList(){
+        try {
+            root.getChildren().addAll(available);
+
+            friendsList.addAll((ArrayList)ClientMain.userFriendDaoInterface.getFriendList(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            for (FriendEntity friendEntity:friendsList){
+                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(),friendEntity);
+                available.getChildren().add(new TreeItem<>(friendEntity));
+               System.out.println(friendEntity.getDisplayName());
+
+            }
+            treeViewFriends.setRoot(root);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }catch (SQLException e){
+            e.printStackTrace();
+            // requestLists.clear();
+        }
+    }
+
 }

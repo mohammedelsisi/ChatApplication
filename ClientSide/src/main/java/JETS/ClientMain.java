@@ -6,6 +6,7 @@ import Services.ChatDao;
 import Services.ChatServiceInt;
 import Services.ConnectionInt;
 import Services.DAOInterface;
+import Services.UserFriendDaoInterface;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -20,6 +21,8 @@ public class ClientMain extends Application {
     public static ConnectionInt connectionInt;
     public static ChatServiceInt chatServiceInt;
     public static ChatDao chatDao;
+
+    public static UserFriendDaoInterface userFriendDaoInterface;
 
     public static void main(String[] args) {
         launch(args);
@@ -43,6 +46,8 @@ public class ClientMain extends Application {
             connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
             chatServiceInt= (ChatServiceInt) registry.lookup("ChatService");
             chatDao= (ChatDao) registry.lookup("ChatDao");
+
+            userFriendDaoInterface=(UserFriendDaoInterface) registry.lookup("UserFriendDao");
 
         }catch (Exception e){
             e.printStackTrace();
