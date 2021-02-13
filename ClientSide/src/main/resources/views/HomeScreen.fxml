@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -20,6 +24,9 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+<?import org.controlsfx.control.SearchableComboBox?>
+<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
@@ -27,7 +34,7 @@
 
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <TabPane prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+            <TabPane prefHeight="570.0" prefWidth="426.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
               <tabs>
                   <Tab disable="true" style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
                      <content>
@@ -57,11 +64,11 @@
                                     <Font name="Lemon Regular" size="20.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <VBox prefHeight="58.0" prefWidth="150.0">
@@ -84,7 +91,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <VBox prefHeight="58.0" prefWidth="150.0">
@@ -113,11 +120,11 @@
                                     </Pane>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <VBox prefHeight="58.0" prefWidth="150.0">
@@ -136,11 +143,11 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <VBox prefHeight="58.0" prefWidth="150.0">
@@ -159,11 +166,11 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" styleClass="border_chats" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <VBox prefHeight="58.0" prefWidth="150.0">
@@ -216,7 +223,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <Pane prefHeight="200.0" prefWidth="200.0">
@@ -242,7 +249,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <Pane prefHeight="200.0" prefWidth="200.0">
@@ -268,7 +275,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <Pane prefHeight="200.0" prefWidth="200.0">
@@ -294,7 +301,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <Pane prefHeight="200.0" prefWidth="200.0">
@@ -320,7 +327,7 @@
                                  <children>
                                     <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../Pics/RegPPic.png" />
+                                          <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                                        </image>
                                     </ImageView>
                                     <Pane prefHeight="200.0" prefWidth="200.0">
@@ -349,7 +356,7 @@
                         </VBox>
                      </content>
                   </Tab>
-                  <Tab style="-fx-background-color: #004040;">
+                  <Tab fx:id="MIuserInfo" onSelectionChanged="#showUserData" style="-fx-background-color: #004040;">
                      <graphic>
                         <Label graphicTextGap="13.0" minWidth="100.0" prefHeight="18.0" prefWidth="108.0" text="USER INFO" textFill="WHITE">
                            <graphic>
@@ -365,17 +372,169 @@
                         </Label>
                      </graphic>
                      <content>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="118.0" text="User Info" textFill="#0f6161">
-                                 <font>
-                                    <Font name="Lemon Regular" size="20.0" />
-                                 </font>
-                              </Label>
-                           </children>
+                        <VBox alignment="CENTER" spacing="5.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="238.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="3.0" layoutY="-1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="96.0" text="Edit Profile" textFill="#12646f">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <HBox fx:id="HBDisplayName" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="199.0" spacing="5.0">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2dbbf" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFDisplayName" focusColor="#2383bf" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Display Name" unFocusColor="#407907" HBox.hgrow="SOMETIMES">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" focusTraversable="true" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <JFXPasswordField fx:id="pfPassword" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Password" HBox.hgrow="SOMETIMES">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXPasswordField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <JFXPasswordField fx:id="pfConfirmPassword" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Confirm Password" HBox.hgrow="SOMETIMES">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXPasswordField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <SearchableComboBox fx:id="countryCode" prefHeight="23.0" prefWidth="80.0" HBox.hgrow="SOMETIMES" />
+                                    <JFXTextField fx:id="tfPhoneNumber" labelFloat="true" prefHeight="30.0" prefWidth="110.0" promptText="Phone Number" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFEmailAddress" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Email Address" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <DatePicker fx:id="tfdatePicker" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="190.0" promptText="Date of Birth" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="159.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <CheckComboBox fx:id="tfGender" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="190.0" title="Gender" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../../../../../../Users/Muhammed%20E.%20Wafa/Documents/GitHub/ChatAppProject/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
+                                 <children>
+                                    <Group HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextArea fx:id="TABio" labelFloat="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="190.0" promptText="Update Your Bio" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <Panel prefHeight="50.0" prefWidth="238.0">
+                                 <right>
+                                    <JFXButton fx:id="btnUpdateInfo11" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#SaveUpdateChanges" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #70c1b3;" text="Save changes" textFill="WHITE" BorderPane.alignment="CENTER" />
+                                 </right>
+                              </Panel>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-background-color: #004040;">
+                     <graphic>
+                        <Label graphicTextGap="13.0" minWidth="100.0" prefHeight="18.0" prefWidth="108.0" text="Update" textFill="WHITE">
+                           <graphic>
+                              <FontIcon fill="#f5e2e2" iconColor="WHITE" iconLiteral="mdi2a-account-cog-outline" iconSize="25" selectionFill="#e11717" tabSize="19">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </FontIcon>
+                           </graphic>
+                           <font>
+                              <Font name="Lemon Regular" size="12.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                     <content>
+                        <VBox alignment="CENTER">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <JFXButton fx:id="btnUpdateInfo" onAction="#openUpdateinfoPage" prefHeight="35.0 " prefWidth="114.0" text="Update User Info" />
+                           </children>
                         </VBox>
                      </content>
                   </Tab>
@@ -383,7 +542,7 @@
             </TabPane>
             <BorderPane>
                <center>
-                  <BorderPane prefHeight="430.0" prefWidth="400.0" style="-fx-background-color: #008080;" stylesheets="@../styles/StyleSheet.css">
+                  <BorderPane prefHeight="430.0" prefWidth="400.0" style="-fx-background-color: #008080;" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                      <bottom>
                         <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
                            <children>
@@ -419,7 +578,7 @@
                         </HBox>
                      </top>
                      <center>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="370.0" prefWidth="398.0" stylesheets="@../styles/StyleSheet.css">
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="370.0" prefWidth="398.0" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css" BorderPane.alignment="TOP_CENTER">
                            <content>
                               <VBox fx:id="messagesContainer" />
                            </content>
@@ -435,7 +594,7 @@
                      <children>
                         <Group layoutX="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Pane prefHeight="35.0" prefWidth="250.0" styleClass="upper_rightBar" stylesheets="@../styles/StyleSheet.css">
+                              <Pane prefHeight="35.0" prefWidth="250.0" styleClass="upper_rightBar" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css">
                                  <children>
                                     <Group layoutX="50.0" layoutY="35.0">
                                        <children>
@@ -548,7 +707,7 @@
          <graphic>
             <ImageView fitHeight="121.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Pics/RegPPic.png" />
+                  <Image url="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/Pics/RegPPic.png" />
                </image>
             </ImageView>
          </graphic>
