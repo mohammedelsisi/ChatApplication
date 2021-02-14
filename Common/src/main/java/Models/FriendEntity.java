@@ -4,13 +4,32 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class FriendEntity implements Serializable {
     transient private final StringProperty status = new SimpleStringProperty();
 
-    public byte[] getUserPhoto() {
-        return userPhoto.get();
+    transient private final SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
+    private String phoneNumber;
+    private String displayName;
+    private String Bio;
+//    private  String status;
+
+
+
+
+    public byte[] getUserPhoto()  {
+//        return userPhoto.get();
+        try {
+
+            return (new FileInputStream("RegPPic.png").readAllBytes());
+        }catch ( Exception e){
+
+        }
+        return null;
     }
 
     public SimpleObjectProperty<byte[]> userPhotoProperty() {
@@ -21,10 +40,6 @@ public class FriendEntity implements Serializable {
         this.userPhoto.set(userPhoto);
     }
 
-    transient private final SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
-    private String phoneNumber;
-    private String displayName;
-    private String Bio;
 
     public FriendEntity(String phoneNumber, String displayName, String bio, String status) {
         this.phoneNumber = phoneNumber;

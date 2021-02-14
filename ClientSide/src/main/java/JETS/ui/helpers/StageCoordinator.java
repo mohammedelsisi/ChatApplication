@@ -116,7 +116,7 @@ public class StageCoordinator {
         }
     }
 
-    public  HBox createChatLayout(ChatEntitiy chatEntitiy){
+    public  HBox createChatLayout(ChatEntitiy chatEntitiy)  {
         if(chatEntitiy.getParticipantsPhoneNumbers().size()==2) {
 
 

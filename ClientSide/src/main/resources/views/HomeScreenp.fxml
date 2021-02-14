@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -91,7 +90,140 @@
                               </Label>
                            </top>
                            <center>
-                              <VBox fx:id="contacts" BorderPane.alignment="CENTER" />
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                                       <children>
+                                          <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Pics/RegPPic.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                                   <font>
+                                                      <Font name="Ebrima Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Available" textFill="#9da7a7">
+                                                   <font>
+                                                      <Font name="Ebrima" size="11.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Circle fill="#2dd74f" radius="4.0" stroke="#2dd74f" strokeType="INSIDE" />
+                                                   </graphic>
+                                                </Label>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                                       <children>
+                                          <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Pics/RegPPic.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                                   <font>
+                                                      <Font name="Ebrima Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Away" textFill="#9da7a7">
+                                                   <font>
+                                                      <Font name="Ebrima" size="11.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Circle fill="#ff6c55" radius="4.0" stroke="#ff6c55" strokeType="INSIDE" />
+                                                   </graphic>
+                                                </Label>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                                       <children>
+                                          <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Pics/RegPPic.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                                   <font>
+                                                      <Font name="Ebrima Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Busy" textFill="#9da7a7">
+                                                   <font>
+                                                      <Font name="Ebrima" size="11.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Circle fill="RED" radius="4.0" stroke="RED" strokeType="INSIDE" />
+                                                   </graphic>
+                                                </Label>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                                       <children>
+                                          <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Pics/RegPPic.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                                   <font>
+                                                      <Font name="Ebrima Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Offline" textFill="#9da7a7">
+                                                   <font>
+                                                      <Font name="Ebrima" size="11.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Circle fill="#9da7a7" radius="4.0" stroke="#9da7a7" strokeType="INSIDE" />
+                                                   </graphic>
+                                                </Label>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0">
+                                       <children>
+                                          <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Pics/RegPPic.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <Label layoutX="9.0" layoutY="9.0" prefHeight="19.0" prefWidth="90.0" text="Mark Malak">
+                                                   <font>
+                                                      <Font name="Ebrima Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="9.0" layoutY="28.0" prefHeight="19.0" prefWidth="90.0" text="Available" textFill="#9da7a7">
+                                                   <font>
+                                                      <Font name="Ebrima" size="11.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Circle fill="#2dd74f" radius="4.0" stroke="#2dd74f" strokeType="INSIDE" />
+                                                   </graphic>
+                                                </Label>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </center>
                            <bottom>
                               <JFXButton buttonType="RAISED" defaultButton="true" onAction="#startChatAction" ripplerFill="#c68787" styleClass="btn-success" stylesheets="@../styles/bootstrapfx.css" text="Start Chat" BorderPane.alignment="CENTER">
@@ -238,61 +370,58 @@
                                                 </RadialGradient>
                                              </fill>
                                           </Circle>
-                                          <FontIcon iconColor="WHITE" iconLiteral="fas-bell" layoutX="-6.0" layoutY="5.0" onMouseClicked="#requestsHandle">
+                                          <FontIcon iconColor="WHITE" iconLiteral="fas-bell" layoutX="-6.0" layoutY="5.0">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </FontIcon>
-                                       </children>
-                                    </Group>
-                                    <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
-                                       <children>
-                                          <Circle fill="WHITE" radius="17.0" strokeType="INSIDE">
-                                             <stroke>
-                                                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                                                   <stops>
-                                                      <Stop>
-                                                         <color>
-                                                            <Color green="0.2980392277240753" blue="0.2980392277240753" />
-                                                         </color>
-                                                      </Stop>
-                                                      <Stop offset="1.0">
-                                                         <color>
-                                                            <Color green="0.501960813999176" blue="0.501960813999176" />
-                                                         </color>
-                                                      </Stop>
-                                                   </stops>
-                                                </RadialGradient>
-                                             </stroke>
-                                          </Circle>
-                                          <FontIcon iconLiteral="fas-comment-alt" layoutX="-7.0" layoutY="7.0">
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                             <iconColor>
-                                                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                                                   <stops>
-                                                      <Stop>
-                                                         <color>
-                                                            <Color green="0.2980392277240753" blue="0.2980392277240753" />
-                                                         </color>
-                                                      </Stop>
-                                                      <Stop offset="1.0">
-                                                         <color>
-                                                            <Color green="0.501960813999176" blue="0.501960813999176" />
-                                                         </color>
-                                                      </Stop>
-                                                   </stops>
-                                                </RadialGradient>
-                                             </iconColor>
                                           </FontIcon>
                                        </children>
                                     </Group>
                                  </children>
                               </Pane>
+                              <Group layoutX="125.0" layoutY="35.0">
+                                 <children>
+                                    <Circle fill="WHITE" radius="17.0" strokeType="INSIDE">
+                                       <stroke>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                             <stops>
+                                                <Stop>
+                                                   <color>
+                                                      <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                                   </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                   <color>
+                                                      <Color green="0.501960813999176" blue="0.501960813999176" />
+                                                   </color>
+                                                </Stop>
+                                             </stops>
+                                          </RadialGradient>
+                                       </stroke>
+                                    </Circle>
+                                    <FontIcon iconLiteral="fas-comment-alt" layoutX="-7.0" layoutY="7.0">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                       <iconColor>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                             <stops>
+                                                <Stop>
+                                                   <color>
+                                                      <Color green="0.2980392277240753" blue="0.2980392277240753" />
+                                                   </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                   <color>
+                                                      <Color green="0.501960813999176" blue="0.501960813999176" />
+                                                   </color>
+                                                </Stop>
+                                             </stops>
+                                          </RadialGradient>
+                                       </iconColor>
+                                    </FontIcon>
+                                 </children>
+                              </Group>
                            </children>
                         </Group>
                      </children>

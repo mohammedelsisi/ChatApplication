@@ -3,19 +3,20 @@ package JETS.ui.helpers;
 import Models.FriendEntity;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FriendsManager {
 
   public   static FriendsManager instance = new FriendsManager();
-  public   Map<String, FriendEntity> friendList = new HashMap<>();
+  public   Map<String, FriendEntity> friendList = ModelsFactory.getInstance().getCurrentUser().getFriends();
 
     public  String getFriendName (String phoneNumber){
         return friendList.get(phoneNumber).getDisplayName();
     }
 
-    public byte[] getFriendPhoto (String phoneNumber){
+    public byte[] getFriendPhoto (String phoneNumber) {
         return friendList.get(phoneNumber).getUserPhoto();
     }
 

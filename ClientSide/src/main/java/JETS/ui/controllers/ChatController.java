@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.ui.helpers.FriendsManager;
 import Services.UserFriendDaoInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,10 +56,14 @@ import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
 public class ChatController implements Initializable {
     public JFXTextArea messageField;
     @FXML
+    private Label receiverName;
+    @FXML
+    private TabPane tabPane;
+    @FXML
     public VBox contacts;
+    public VBox chatsVbox;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
-    List<String> list;
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
 
@@ -77,35 +82,123 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
         loadRequestList();
         loadFriendList();
         treeViewFriends.setShowRoot(false);
-
         treeViewFriends.setCellFactory(new Callback<TreeView<FriendEntity>, TreeCell<FriendEntity>>() {
             @Override
             public TreeCell<FriendEntity> call(TreeView<FriendEntity> friendEntityTreeView) {
-
                 return new TreeCell<FriendEntity>() {
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
                         super.updateItem(friendEntity, b);
                         if (!b) {
 
-                            textHolder.textProperty().bind(messageField.textProperty());
-                            textHolder.setWrappingWidth(600);
-                            textHolder.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
-                                if (oldMessageFieldHigh != newValue.getHeight() && newValue.getHeight() < 100) {
-                                    oldMessageFieldHigh = newValue.getHeight();
-                                    messageField.setPrefHeight(Math.max(oldMessageFieldHigh + 15, 50));
-                                }
-                            });
+                            this.setText(friendEntity.getDisplayName());
+                            if (friendEntity.getPhoneNumber() != null) {
+                                try {
 
+                                    Image img = new Image(new FileInputStream("RegPPic.png"));
+                                    ImageView imageView = new ImageView(img);
+
+                                    imageView.setFitWidth(50);
+                                    imageView.setFitHeight(50);
+                                    setGraphic(imageView);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            setText(null);
+                            setGraphic(null);
                         }
                     }
                 };
             }
         });
+
+        contacts.getChildren().add(treeViewFriends);
+
+
+        listView = new ListView(requestLists);
+        listView.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
+            @Override
+            public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
+                ListCell<FriendEntity> cell = new ListCell<>() {
+                    Button acceptButton = new Button("Accept");
+                    Button rejectButton = new Button("Reject");
+
+                    @Override
+                    protected void updateItem(FriendEntity friendEntity, boolean b) {
+                        super.updateItem(friendEntity, b);
+                        if (!b) {
+
+                            try {
+                                HBox hBox = new HBox(10);
+
+
+                                rejectButton.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        try {
+                                            ClientMain.userFriendDaoInterface.deleteRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            requestLists.remove(friendEntity);
+                                        } catch (RemoteException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                acceptButton.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        try {
+                                            ClientMain.userFriendDaoInterface.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            requestLists.remove(friendEntity);
+                                        } catch (RemoteException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                                Pane pane = new Pane();
+                                Image img = new Image(new FileInputStream("RegPPic.png"));
+                                ImageView imageView = new ImageView(img);
+
+                                imageView.setFitWidth(50);
+                                imageView.setFitHeight(50);
+                                Label label = new Label();
+                                label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getPhoneNumber());
+                                label.setGraphic(imageView);
+                                hBox.getChildren().addAll(label, pane, acceptButton, rejectButton);
+                                hBox.setHgrow(pane, Priority.ALWAYS);
+                                hBox.setFillHeight(true);
+                                hBox.setAlignment(Pos.CENTER_LEFT);
+                                this.setGraphic(hBox);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            setGraphic(null);
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+        textHolder.textProperty().bind(messageField.textProperty());
+        textHolder.setWrappingWidth(600);
+        textHolder.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (oldMessageFieldHigh != newValue.getHeight() && newValue.getHeight() < 100) {
+                oldMessageFieldHigh = newValue.getHeight();
+                messageField.setPrefHeight(Math.max(oldMessageFieldHigh + 15, 50));
+            }
+        });
+
+
     }
 
     public void sendMessage(KeyEvent keyEvent) throws RemoteException {
@@ -190,11 +283,13 @@ public class ChatController implements Initializable {
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.CLOSE);
         alert.showAndWait();
+
     }
 
-    public static void loadRequestList() {
+    public void loadRequestList() {
+
         try {
-            requestLists.setAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            requestLists.setAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendRequests(currentUser.getPhoneNumber()));
 
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -204,13 +299,13 @@ public class ChatController implements Initializable {
         }
     }
 
-    public static void loadFriendList() {
+    public void loadFriendList() {
         try {
             root.getChildren().addAll(available);
 
-            friendsList.addAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendList(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            friendsList.addAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendList(currentUser.getPhoneNumber()));
             for (FriendEntity friendEntity : friendsList) {
-                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
+                currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
                 available.getChildren().add(new TreeItem<>(friendEntity));
                 System.out.println(friendEntity.getDisplayName());
 
@@ -224,4 +319,22 @@ public class ChatController implements Initializable {
         }
     }
 
+    public void startChatAction(ActionEvent actionEvent) {
+        List<String> choosenFriends = new ArrayList<>();
+        choosenFriends.add(currentUser.getPhoneNumber());
+        choosenFriends.add(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber());
+        System.out.println(FriendsManager.instance.getFriendName(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber()));
+        // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        ChatEntitiy createdEntity = new ChatEntitiy(0, choosenFriends, null);
+        HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
+        System.out.println("dasdas");
+            hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            receiverName.setText(FriendsManager.instance.getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+            chatEntitiy = createdEntity;
+        });
+
+        chatsVbox.getChildren().add(hBox);
+        tabPane.getSelectionModel().selectPrevious();
+
+    }
 }
