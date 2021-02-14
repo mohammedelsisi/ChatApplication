@@ -14,13 +14,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.chrono.Chronology;
@@ -28,6 +33,7 @@ import java.util.*;
 
 public class SignUpController implements Initializable {
     public JFXTextArea bio;
+    public Circle circlePP;
     private String code;
     public static List<CountryCodeData> countryCodesList=new ArrayList<>();
     @FXML
@@ -54,6 +60,7 @@ public class SignUpController implements Initializable {
     boolean isPasswordCorrect=false;
     boolean isNameCorrect=false;
     boolean isEmailCorrect=false;
+    byte [] photoBytes;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -159,10 +166,17 @@ public class SignUpController implements Initializable {
         chooser.getExtensionFilters().add(
           new FileChooser.ExtensionFilter("Image","*.jpg","*.png","*.jpeg")
         );
-        File file=chooser.showOpenDialog(displayName.getScene().getWindow());
+      File selectedPhoto=chooser.showOpenDialog(displayName.getScene().getWindow());
+        try(BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(selectedPhoto))){
+            photoBytes = bufferedInputStream.readAllBytes();
+            circlePP.setFill(new ImagePattern(new Image(new ByteArrayInputStream(photoBytes))));
+        } catch (IOException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+
     }
     @FXML
-    public void registerHandle(ActionEvent e){
+    public void registerHandle(ActionEvent e) throws RemoteException, SQLException {
         if (isPhoneNumberCorrect&&isEmailCorrect&&isNameCorrect&&isPasswordCorrect&&!gender.getValue().toString().equals("Gender")){
             CurrentUser user=new CurrentUser();
             user.setPhoneNumber(code+phoneNumber.getText());
@@ -172,9 +186,9 @@ public class SignUpController implements Initializable {
             user.setGender(gender.getValue().toString().toUpperCase());
             user.setAge(Period.between(datePicker.getValue(),LocalDate.now()).getYears());
             user.setBio(bio.getText());
-            ModelsFactory.getInstance().register(user);
-//            ClientMain.userDAO.create(user);
-            //change scene
+            user.setUserPhoto(photoBytes);
+            ClientMain.userDAO.create(user);
+
         }
     }
     public Boolean givenPhoneNumber_whenValid_thenOK(String phoneNumber)  {

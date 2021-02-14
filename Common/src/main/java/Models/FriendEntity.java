@@ -4,20 +4,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 
 public class FriendEntity implements Serializable {
     transient private final StringProperty status = new SimpleStringProperty();
 
-    transient private final SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
+    transient private  SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
     private String phoneNumber;
     private String displayName;
     private String Bio;
-//    private  String status;
-
 
 
 
@@ -89,4 +84,20 @@ public class FriendEntity implements Serializable {
     public StringProperty statusProperty() {
         return status;
     }
+
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeObject(userPhoto.get());
+
+
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        userPhoto = new SimpleObjectProperty<>((byte [])s.readObject());
+
+    }
+
 }
+

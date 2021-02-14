@@ -1,18 +1,42 @@
 package Models;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.apache.commons.lang3.SerializationUtils;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CurrentUser implements Serializable {
 
-    transient private final StringProperty displayNameProperty = new SimpleStringProperty();
-    transient private final StringProperty userPhoto = new SimpleStringProperty();
-    transient private final StringProperty status = new SimpleStringProperty();
+    transient private StringProperty displayNameProperty = new SimpleStringProperty();
+
+    public StringProperty displayNamePropertyProperty() {
+        return displayNameProperty;
+    }
+
+    public void setDisplayNameProperty(String displayNameProperty) {
+        this.displayNameProperty.set(displayNameProperty);
+    }
+
+    public byte[] getUserPhoto() {
+        return userPhoto.get();
+    }
+
+    public SimpleObjectProperty<byte[]> userPhotoProperty() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(byte[] userPhoto) {
+        this.userPhoto.set(userPhoto);
+    }
+
+    transient private SimpleObjectProperty<byte[]> userPhoto = new SimpleObjectProperty<>();
+    transient private StringProperty status = new SimpleStringProperty();
     private String phoneNumber;
     private String password;
     private String email;
@@ -21,19 +45,8 @@ public class CurrentUser implements Serializable {
     private String country;
     private String Bio;
     private String displayName;
-    private Map<String,FriendEntity> friends=new HashMap<>();
+    private Map<String, FriendEntity> friends = new HashMap<>();
 
-    public String getUserPhoto() {
-        return userPhoto.get();
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto.set(userPhoto);
-    }
-
-    public StringProperty userPhotoProperty() {
-        return userPhoto;
-    }
 
     public String getStatus() {
         return status.get();
@@ -121,11 +134,24 @@ public class CurrentUser implements Serializable {
         this.displayName = displayName;
     }
 
-    public Map<String,FriendEntity> getFriends() {
+    public Map<String, FriendEntity> getFriends() {
         return friends;
     }
 
-    public void setFriends(Map<String,FriendEntity> friends) {
+    public void setFriends(Map<String, FriendEntity> friends) {
         this.friends = friends;
     }
+
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeObject(userPhoto.get());
+
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        userPhoto = new SimpleObjectProperty<>((byte [])s.readObject());
+    }
+
 }

@@ -35,11 +35,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -54,6 +57,10 @@ import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
 
 
 public class ChatController implements Initializable {
+    @FXML
+    private ImageView imgView;
+    @FXML
+    private Circle circleView;
     public JFXTextArea messageField;
     @FXML
     private Label receiverName;
@@ -82,6 +89,15 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
+
+        currentUser.userPhotoProperty().addListener((obs,oldVal,newVal)->{
+
+          circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(newVal))));
+
+        });
+
+
 
         String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
         loadRequestList();

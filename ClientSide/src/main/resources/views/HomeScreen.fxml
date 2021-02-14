@@ -10,8 +10,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -301,17 +299,13 @@
             </BorderPane>
          </items>
       </SplitPane>
-      <Label alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" prefHeight="174.0" prefWidth="162.0" text="Dalia" textFill="RED">
-         <graphic>
-            <ImageView fitHeight="121.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Pics/RegPPic.png" />
-               </image>
-            </ImageView>
-         </graphic>
+      <Label alignment="CENTER" contentDisplay="TOP" graphicTextGap="8.0" prefHeight="174.0" prefWidth="162.0" text="Dalia" textFill="RED">
          <padding>
             <Insets top="5.0" />
          </padding>
+         <graphic>
+            <Circle fx:id="circleView" fill="WHITE" radius="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+         </graphic>
       </Label>
    </children>
 </AnchorPane>
