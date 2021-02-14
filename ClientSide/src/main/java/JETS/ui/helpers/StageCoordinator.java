@@ -124,9 +124,9 @@ public class StageCoordinator {
                     .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
                     .collect(Collectors.toList());
             String friendPhone = participants.get(0);
-            Label name = new Label(FriendsManager.instance.getFriendName(friendPhone));
+            Label name = new Label(FriendsManager.getInstance().getFriendName(friendPhone));
             Circle circle = new Circle(25);
-            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.instance.getFriendPhoto(friendPhone)))));
+            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(friendPhone)))));
             HBox hBox = new HBox(circle, name);
             return hBox;
         }else{

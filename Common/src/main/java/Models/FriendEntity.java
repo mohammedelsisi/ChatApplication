@@ -7,46 +7,56 @@ import javafx.beans.property.StringProperty;
 import java.io.*;
 
 public class FriendEntity implements Serializable {
-    transient private final StringProperty status = new SimpleStringProperty();
 
-    transient private  SimpleObjectProperty<byte []> userPhoto = new SimpleObjectProperty<>();
+    private transient final StringProperty status = new SimpleStringProperty();
+    private transient SimpleObjectProperty<byte[]> userPhoto = new SimpleObjectProperty<>();
+    private transient SimpleStringProperty displayName = new SimpleStringProperty();
     private String phoneNumber;
-    private String displayName;
-    private String Bio;
+    private String bio;
 
+    public FriendEntity(String phoneNumber, String displayName, String bio, String status) {
+        this.phoneNumber = phoneNumber;
+        setDisplayName(displayName);
+        this.bio = bio;
+        setStatus(status);
+    }
 
+    public FriendEntity(String displayName) {
+        setDisplayName(displayName);
+    }
 
-    public byte[] getUserPhoto()  {
+    public FriendEntity() {
+    }
+
+    public String getDisplayName() {
+        return displayName.get();
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName.set(displayName);
+    }
+
+    public SimpleStringProperty displayNameProperty() {
+        return displayName;
+    }
+
+    public byte[] getUserPhoto() {
 //        return userPhoto.get();
         try {
 
             return (new FileInputStream("RegPPic.png").readAllBytes());
-        }catch ( Exception e){
+        } catch (Exception e) {
 
         }
         return null;
-    }
-
-    public SimpleObjectProperty<byte[]> userPhotoProperty() {
-        return userPhoto;
     }
 
     public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto.set(userPhoto);
     }
 
-
-    public FriendEntity(String phoneNumber, String displayName, String bio, String status) {
-        this.phoneNumber = phoneNumber;
-        this.displayName = displayName;
-        Bio = bio;
-        this.status.set(status);
-    }
-    public FriendEntity(String displayName){
-        this.displayName = displayName;
-    }
-
-    public FriendEntity() {
+    public SimpleObjectProperty<byte[]> userPhotoProperty() {
+        return userPhoto;
     }
 
     public String getPhoneNumber() {
@@ -57,20 +67,12 @@ public class FriendEntity implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public String getBio() {
-        return Bio;
+        return bio;
     }
 
     public void setBio(String bio) {
-        Bio = bio;
+        this.bio = bio;
     }
 
     public String getStatus() {
@@ -89,14 +91,13 @@ public class FriendEntity implements Serializable {
     private void writeObject(ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();
         s.writeObject(userPhoto.get());
-
-
+        s.writeUTF(displayName.get());
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
-        userPhoto = new SimpleObjectProperty<>((byte [])s.readObject());
-
+        userPhoto = new SimpleObjectProperty<>((byte[]) s.readObject());
+        displayName = new SimpleStringProperty(s.readUTF());
     }
 
 }

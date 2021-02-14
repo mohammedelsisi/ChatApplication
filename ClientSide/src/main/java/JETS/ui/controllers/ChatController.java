@@ -2,25 +2,6 @@ package JETS.ui.controllers;
 
 import JETS.ClientMain;
 import JETS.ui.helpers.FriendsManager;
-import Services.UserFriendDaoInterface;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-
-import JETS.ClientMain;
-import Models.CurrentUser;
-import Services.UserFriendDaoInterface;
-import com.jfoenix.controls.JFXButton;
-
-import javafx.scene.Group;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
 import Models.ChatEntitiy;
@@ -28,12 +9,19 @@ import Models.CurrentUser;
 import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXTextArea;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -57,46 +45,56 @@ import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
 
 
 public class ChatController implements Initializable {
+    public static ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
+    public static List<FriendEntity> friendsList = new ArrayList<>();
+    public static TreeView<FriendEntity> treeViewFriends = new TreeView<>();
+    public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
+    public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
+    public JFXTextArea messageField;
+    @FXML
+    public VBox contacts;
+    public VBox chatsVbox;
+    ChatEntitiy chatEntitiy;
+    CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
+    ListView<FriendEntity> listView;
     @FXML
     private ImageView imgView;
     @FXML
     private Circle circleView;
-    public JFXTextArea messageField;
     @FXML
     private Label receiverName;
     @FXML
     private TabPane tabPane;
     @FXML
-    public VBox contacts;
-    public VBox chatsVbox;
+    private VBox messagesContainer;
+
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
-    ChatEntitiy chatEntitiy;
-    CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
-
-    public static ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
-    public static List<FriendEntity> friendsList = new ArrayList<>();
-    ListView<FriendEntity> listView;
-    public static TreeView<FriendEntity> treeViewFriends = new TreeView<>();
-
-
-    public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
-    public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
 //    public static TreeItem<FriendEntity> busy=new TreeItem("Busy");
 //    public static TreeItem<FriendEntity> away=new TreeItem("Away");
 //    public static TreeItem<FriendEntity> offline=new TreeItem("Offline");
 
+    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
+        //String myphoneNumber = new CurrentUser().getPhoneNumber();
+        String myphoneNumber = ("+201122344444");
+        String myfriendPhoneNo = myfriendNum;
+
+        int x = ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber, myfriendPhoneNo);
+        System.out.println(myphoneNumber);
+        System.out.println(myfriendPhoneNo);
+        System.out.println(x);
+        return x;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
-        currentUser.userPhotoProperty().addListener((obs,oldVal,newVal)->{
+        currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
 
-          circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(newVal))));
+            circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(newVal))));
 
         });
-
 
 
         String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
@@ -226,20 +224,15 @@ public class ChatController implements Initializable {
                     String text = messageField.getText().trim();
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
-
-                        MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
-                        ClientMain.chatServiceInt.sendMessage(msg);
-                    } else {
-                        MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
-                        ClientMain.chatServiceInt.sendMessage(msg);
-
                     }
-
-                    messageField.setText("");
+                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
+                    messagesContainer.getChildren().add(new ChatBox(msg));
+                    ClientMain.chatServiceInt.sendMessage(msg);
+                    messageField.clear();
                 }
 
             } else {
-                messageField.setText("");
+                messageField.clear();
             }
         }
 
@@ -271,18 +264,6 @@ public class ChatController implements Initializable {
         }
 
 
-    }
-
-    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
-        //String myphoneNumber = new CurrentUser().getPhoneNumber();
-        String myphoneNumber = ("+201122344444");
-        String myfriendPhoneNo = myfriendNum;
-
-        int x = ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber, myfriendPhoneNo);
-        System.out.println(myphoneNumber);
-        System.out.println(myfriendPhoneNo);
-        System.out.println(x);
-        return x;
     }
 
     @FXML
@@ -339,13 +320,13 @@ public class ChatController implements Initializable {
         List<String> choosenFriends = new ArrayList<>();
         choosenFriends.add(currentUser.getPhoneNumber());
         choosenFriends.add(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber());
-        System.out.println(FriendsManager.instance.getFriendName(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber()));
+        System.out.println(FriendsManager.getInstance().getFriendName(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber()));
         // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         ChatEntitiy createdEntity = new ChatEntitiy(0, choosenFriends, null);
         HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
         System.out.println("dasdas");
-            hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.instance.getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
             chatEntitiy = createdEntity;
         });
 

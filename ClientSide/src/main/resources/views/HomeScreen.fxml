@@ -6,7 +6,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -14,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.RadialGradient?>
@@ -171,11 +171,11 @@
                         </HBox>
                      </top>
                      <center>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="370.0" prefWidth="398.0" stylesheets="@../styles/StyleSheet.css">
-                           <content>
-                              <VBox fx:id="messagesContainer" />
-                           </content>
-                        </ScrollPane>
+                        <StackPane>
+                           <children>
+                              <VBox fx:id="messagesContainer" style="-fx-background-color: #dcdcde;" />
+                           </children>
+                        </StackPane>
                      </center>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
