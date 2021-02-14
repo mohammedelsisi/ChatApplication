@@ -15,4 +15,5 @@ public interface UserFriendDaoInterface extends Remote {
     public  void deleteRequest(String myPhoneNumber,String rejectPhoneNumber) throws RemoteException;
     public  void acceptRequest(String myPhoneNumber,String phoneNumber) throws RemoteException;
     public List<FriendEntity> getFriendList(String myPhoneNumber) throws SQLException , RemoteException;
+    void InsertInUserFriend(String MyPoneNumber,String FriendPhoneNo) throws SQLException, RemoteException;
 }

@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 import JETS.ClientMain;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -14,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
@@ -217,4 +219,9 @@ public class SignUpController implements Initializable {
                 countryCodesList.add(new CountryCodeData(PhoneNumberUtil.getInstance().getCountryCodeForRegion(arr[i]),CountryCode.getByCode(arr[i]).getName()));
             }
          }
+
+    public void SignInAction(MouseEvent mouseEvent) {
+        StageCoordinator stageCoordinator = StageCoordinator.getInstance();
+        stageCoordinator.switchToLoginScene();
+    }
 }
