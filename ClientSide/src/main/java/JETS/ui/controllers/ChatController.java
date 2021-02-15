@@ -238,7 +238,7 @@ public class ChatController implements Initializable {
                         });
                     }
 
-                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
+                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);

@@ -41,7 +41,7 @@ public class ChatBox extends GridPane {
         }
 
         this.getColumnConstraints().addAll(createCommonColumnConstraints(3, new Priority[]{Priority.NEVER, Priority.SOMETIMES, Priority.SOMETIMES}));
-        this.getRowConstraints().addAll(createCommonRowConstraints(3, new float[]{-1.0f, 20.0f, -1.0f}));
+        this.getRowConstraints().addAll(createCommonRowConstraints(3, new float[]{-1.0f, 20.0f, -1.0f}, new Priority[]{Priority.SOMETIMES, Priority.ALWAYS, Priority.SOMETIMES}));
 
         Group imagesContainer = new Group();
         Circle status = createUserStatus();
@@ -87,6 +87,7 @@ public class ChatBox extends GridPane {
         this.setValignment(messageDate, VPos.CENTER);
         this.setMargin(messageDate, new Insets(0, 5, 0, 5));
 
+        this.setMaxHeight(Double.MAX_VALUE);
         this.setPadding(new Insets(5.0));
     }
 
@@ -131,27 +132,29 @@ public class ChatBox extends GridPane {
         return userName;
     }
 
-    private ColumnConstraints[] createCommonColumnConstraints(int number, Priority[] prioritiesHgrow) {
+    private ColumnConstraints[] createCommonColumnConstraints(int number, Priority[] prioritiesHGrow) {
         ColumnConstraints[] constraints = new ColumnConstraints[number];
-        if (prioritiesHgrow.length == number) {
+        if (prioritiesHGrow.length == number) {
             for (int i = 0; i < number; i++) {
                 ColumnConstraints tempConstraint = new ColumnConstraints();
-                tempConstraint.setHgrow(prioritiesHgrow[i]);
+                tempConstraint.setHgrow(prioritiesHGrow[i]);
                 constraints[i] = tempConstraint;
             }
         }
         return constraints;
     }
 
-    private RowConstraints[] createCommonRowConstraints(int number, float[] minHeight) {
+    private RowConstraints[] createCommonRowConstraints(int number, float[] minHeight, Priority[] prioritiesVGrow) {
         RowConstraints[] constraints = new RowConstraints[number];
-        for (int i = 0; i < number; i++) {
-            RowConstraints tempConstraint = new RowConstraints();
-            tempConstraint.setVgrow(Priority.SOMETIMES);
-            if (minHeight[i] != -1.0f) {
-                tempConstraint.setMinHeight(minHeight[i]);
+        if (prioritiesVGrow.length == number) {
+            for (int i = 0; i < number; i++) {
+                RowConstraints tempConstraint = new RowConstraints();
+                tempConstraint.setVgrow(prioritiesVGrow[i]);
+                if (minHeight[i] != -1.0f) {
+                    tempConstraint.setMinHeight(minHeight[i]);
+                }
+                constraints[i] = tempConstraint;
             }
-            constraints[i] = tempConstraint;
         }
         return constraints;
     }
