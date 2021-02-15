@@ -1,19 +1,21 @@
 package Models;
 
-import javafx.beans.property.*;
-import javafx.scene.image.Image;
-import java.io.File;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CurrentUser implements Serializable {
 
-    transient private final StringProperty displayNameProperty = new SimpleStringProperty();
-    transient private final StringProperty userPhoto = new SimpleStringProperty();
-    transient private final StringProperty status = new SimpleStringProperty();
+    final transient private StringProperty status = new SimpleStringProperty();
+    transient private StringProperty displayNameProperty = new SimpleStringProperty();
+    transient private SimpleObjectProperty<byte[]> userPhoto = new SimpleObjectProperty<>();
     private String phoneNumber;
     private String password;
     private String email;
@@ -21,37 +23,26 @@ public class CurrentUser implements Serializable {
     private int age;
     private String country;
     private String Bio;
-    private String displayName;
-    private String statusVal;
-    private File photoPath;
+    private Map<String, FriendEntity> friends = new HashMap<>();
 
-    public File getPhotoPath() {
-        return photoPath;
+    public StringProperty displayNamePropertyProperty() {
+        return displayNameProperty;
     }
 
-    public void setPhotoPath(File photoPath) {
-        this.photoPath = photoPath;
-
-    }
-
-
-    private Map<String,FriendEntity> friends=new HashMap<>();
-
-    public String getUserPhoto() {
+    public byte[] getUserPhoto() {
         return userPhoto.get();
     }
 
-    public void setUserPhoto(String userPhoto) {
+    public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto.set(userPhoto);
     }
 
-    public StringProperty userPhotoProperty() {
+    public SimpleObjectProperty<byte[]> userPhotoProperty() {
         return userPhoto;
     }
 
     public String getStatus() {
         return status.get();
-
     }
 
     public void setStatus(String status) {
@@ -94,7 +85,6 @@ public class CurrentUser implements Serializable {
         this.gender = gender;
     }
 
-
     public int getAge() {
         return age;
     }
@@ -119,36 +109,38 @@ public class CurrentUser implements Serializable {
         Bio = bio;
     }
 
-    public String getDisplayNameProperty() {
+    public String getDisplayName() {
         return displayNameProperty.get();
+    }
+
+    public void setDisplayName(String displayNameProperty) {
+        this.displayNameProperty.set(displayNameProperty);
     }
 
     public StringProperty displayNameProperty() {
         return displayNameProperty;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayNameProperty.set(displayName);
-        this.displayName = displayName;
-    }
-
-    public Map<String,FriendEntity> getFriends() {
+    public Map<String, FriendEntity> getFriends() {
         return friends;
     }
 
-    public void setFriends(Map<String,FriendEntity> friends) {
+    public void setFriends(Map<String, FriendEntity> friends) {
         this.friends = friends;
     }
-    public String getStatusVal() {
-        return statusVal;
+
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeUTF(displayNameProperty.get());
+        s.writeObject(userPhoto.get());
+
     }
 
-    public void setStatusVal(String statusVal) {
-        this.statusVal = statusVal;
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        displayNameProperty = new SimpleStringProperty(s.readUTF());
+        userPhoto = new SimpleObjectProperty<>((byte[]) s.readObject());
     }
 
 }

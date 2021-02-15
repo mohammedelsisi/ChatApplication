@@ -32,14 +32,7 @@ public class ModelsFactory {
         this.currentUser=currentUser;
     }
 
-    public CurrentUser register(CurrentUser user){
-        try {
-            currentUser=  ClientMain.userDAO.create(user);
-        }catch (RemoteException | SQLException e){
-            e.printStackTrace();
-        }
-        return  currentUser;
-    }
+
 
     public void signIn(String phoneNumber,String password){
     }

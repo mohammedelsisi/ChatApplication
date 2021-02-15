@@ -19,9 +19,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-
-
 <?import javafx.scene.Cursor?>
+
 <BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.SignUpController">
    <center>
       <AnchorPane style="-fx-background-color: #008080;" BorderPane.alignment="CENTER">
@@ -89,16 +88,13 @@
                <children>
                   <StackPane>
                      <children>
-                        <Circle fill="WHITE" radius="49.0" stroke="WHITE" strokeType="INSIDE">
+                        <Circle fx:id="circlePP" fill="WHITE" radius="49.0" stroke="WHITE" strokeType="INSIDE">
                            <StackPane.margin>
                               <Insets />
                            </StackPane.margin>
                         </Circle>
-                        <ImageView fx:id="photoImageView" fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../Pics/RegPPic.png" />
-                           </image>
-                        </ImageView>
+
+
                      </children>
                      <VBox.margin>
                         <Insets top="8.0" />

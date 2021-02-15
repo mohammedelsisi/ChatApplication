@@ -1,13 +1,8 @@
 package JETS.db.dao;
 
-import Models.CurrentUser;
 import Models.FriendEntity;
 import Services.UserFriendDaoInterface;
-
-import javax.sql.RowSet;
-import java.io.*;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -138,26 +133,10 @@ public class UserFriendDao  implements UserFriendDaoInterface {
             request.setDisplayName(rs.getString("display_name"));
             request.setPhoneNumber(rs.getString("phone_number"));
             request.setBio(rs.getString("bio"));
-            request.setStatusVal(rs.getString("status"));
 
-        InputStream inputStream=rs.getBinaryStream("image");
-        if(inputStream!=null) {
-            File file = new File("E://" + request.getPhoneNumber() + ".png");
-            try {
-                OutputStream os = new FileOutputStream(file);
-                byte[] content = new byte[1024];
+            request.setStatus(rs.getString("status"));
+            request.setUserPhoto(rs.getBytes("image"));
 
-                int size = 0;
-                while ((size = inputStream.read(content)) != -1) {
-                    os.write(content, 0, size);
-                }
-                request.setPhotoPath(file);
-            } catch (IOException e) {
-
-            }
-        }
             return request;
         }
-
-
 }

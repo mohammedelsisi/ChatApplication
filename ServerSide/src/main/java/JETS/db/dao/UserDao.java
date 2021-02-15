@@ -5,7 +5,6 @@ import Models.CurrentUser;
 import Models.LoginEntity;
 import Services.DAOInterface;
 
-import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
@@ -54,7 +53,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(6, dto.getCountry());
             statement.setInt(7, dto.getAge());
             statement.setString(8, dto.getBio());
-            statement.setString(9, dto.getUserPhoto());
+            statement.setBytes(9, dto.getUserPhoto());
             statement.setString(10, dto.getStatus());
             statement.executeUpdate();
             return dto;
@@ -74,13 +73,8 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(6, dto.getCountry());
             statement.setInt(7, dto.getAge());
             statement.setString(8, dto.getBio());
-            try {
-                statement.setBinaryStream(9, new FileInputStream(dto.getPhotoPath()));
-            }catch (IOException e){
-                statement.setBinaryStream(9, null);
-                e.printStackTrace();
-            }
-//            statement.setString(10, dto.getStatus());
+            statement.setBytes(9, dto.getUserPhoto());
+            statement.setString(10, dto.getStatus());
             statement.executeUpdate();
             return dto;
         }
@@ -148,24 +142,8 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         user.setPhoneNumber(rs.getString("phone_number"));
         user.setAge(rs.getInt("age"));
         user.setBio(rs.getString("bio"));
-       // user.setStatus(rs.getString("status"));
-        user.setStatusVal(rs.getString("status"));
-        InputStream inputStream=rs.getBinaryStream("image");
-        if(inputStream!=null) {
-            File file = new File("E://" + user.getPhoneNumber() + ".png");
-            try {
-                OutputStream os = new FileOutputStream(file);
-                byte[] content = new byte[1024];
-
-                int size = 0;
-                while ((size = inputStream.read(content)) != -1) {
-                    os.write(content, 0, size);
-                }
-                user.setPhotoPath(file);
-            } catch (IOException e) {
-
-            }
-        }
+        user.setStatus(rs.getString("status"));
+        user.setUserPhoto(rs.getBytes("image"));
         return user;
     }
 }

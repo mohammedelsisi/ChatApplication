@@ -6,5 +6,9 @@ module Common {
     requires javafx.base;
     requires java.sql;
     requires java.rmi;
+
     requires javafx.graphics;
+
+  //  requires commons.lang3;
+
 }

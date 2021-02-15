@@ -1,19 +1,37 @@
 package JETS.ui.helpers;
 
+import Models.ChatEntitiy;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StageCoordinator {
 
     private static Stage primaryStage;
     private static final StageCoordinator stageCoordinator = new StageCoordinator();
+
+    public Map<String, SceneData> getScenes() {
+        return scenes;
+    }
+
     private final Map<String, SceneData> scenes = new HashMap<>();
 
     private StageCoordinator() {
@@ -90,7 +108,7 @@ public class StageCoordinator {
                 Parent Chat = fxmlLoader.load();
                 Scene ChatScene = new Scene(Chat,655,610);
                 SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);
-                scenes.put("ChatScene", ChatSceneData);
+                scenes.put("Chat", ChatSceneData);
                 primaryStage.setScene(ChatScene);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -102,4 +120,24 @@ public class StageCoordinator {
             primaryStage.setScene(ChatScene);
         }
     }
+
+    public  HBox createChatLayout(ChatEntitiy chatEntitiy)  {
+        if(chatEntitiy.getParticipantsPhoneNumbers().size()==2) {
+
+
+            List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                    .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                    .collect(Collectors.toList());
+            String friendPhone = participants.get(0);
+            Label name = new Label(FriendsManager.getInstance().getFriendName(friendPhone));
+            Circle circle = new Circle(25);
+            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(friendPhone)))));
+            HBox hBox = new HBox(circle, name);
+            return hBox;
+        }else{
+            return null;
+        }
+
+    }
+
 }
