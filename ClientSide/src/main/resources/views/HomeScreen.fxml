@@ -22,9 +22,13 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
+<?import javafx.scene.Cursor?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
@@ -489,6 +493,9 @@
                                              </font>
                                           </FontIcon>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Group>
                                     <Group onMouseClicked="#requestsHandle" layoutX="203.0" layoutY="35.0">
                                        <children>
@@ -516,6 +523,9 @@
                                              </font>
                                           </FontIcon>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Group>
                                     <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
                                        <children>

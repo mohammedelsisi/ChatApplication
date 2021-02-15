@@ -1,6 +1,5 @@
 package JETS.ui.controllers;
 
-
 import JETS.ClientMain;
 import JETS.ui.helpers.ClientImp;
 import Services.CallBack;
@@ -14,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+
 
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -33,11 +33,33 @@ import javafx.util.Callback;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
 import java.net.URL;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+
 import java.util.*;
+
+import java.util.ArrayList;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
+
+
+import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
+import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
 
 
 public class ChatController implements Initializable {
@@ -48,27 +70,37 @@ public class ChatController implements Initializable {
     public ComboBox statusComboBox;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
+
     @FXML
     private ImageView profilePicImageView;
+
+    public GridPane grid = new GridPane();
+    public static Label invalidYourself;
+
     public static ObservableList<FriendEntity> requestLists= FXCollections.observableArrayList();
+
     public static ObservableList<FriendEntity> friendsList =FXCollections.observableArrayList();
     ListView<FriendEntity> listViewRequestList;
     ListView<FriendEntity> listViewFriendList=new ListView<>();
 
 
+
+    public static TreeItem<FriendEntity> root=new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
+    public static TreeItem<FriendEntity> available=new TreeItem<>(new FriendEntity("Available"));
+
+
+    public Dialog dialog = new Dialog();
+    public Alert alert;
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       String phone= ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+        String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
 
         loadRequestList();
         loadFriendList();
 
-        try {
-            CallBack clientImp=new ClientImp(this);
-            ClientMain.chatting.register(clientImp, ModelsFactory.getInstance().getCurrentUser().getPhoneNumber());
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
 
 
             listViewRequestList = new ListView(requestLists);
@@ -231,7 +263,7 @@ public class ChatController implements Initializable {
                     /* has old chat ID */
                     ChatEntitiy chatEntitiy = new ChatEntitiy();
 
-   //                 chatEntitiy.setParticipantsPhoneNumbers();
+                    //                 chatEntitiy.setParticipantsPhoneNumbers();
 //                   .initiateChat(chatEntitiy);
                     messageField.setText("");
                 }
@@ -239,19 +271,19 @@ public class ChatController implements Initializable {
 
 //                    chatEntitiy.setParticipantsPhoneNumbers();
 //                   .initiateChat(chatEntitiy);
-                    messageField.setText("");
-                }
+                messageField.setText("");
+            }
 //                sPane.vvalueProperty().bind(vBox.heightProperty());
 
 
-            } else {
-                messageField.setText("");
-            }
+        } else {
+            messageField.setText("");
         }
+    }
 
 
     public void requestFriend() throws SQLException, RemoteException {
-//
+    }
 //        Dialog dialog = new Dialog();
 //      //  dialog.setTitle();
 //        dialog.setResizable(false);
@@ -279,19 +311,84 @@ public class ChatController implements Initializable {
 //
 //
 //
-   }
-
+//    }
+//
 //    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
 //        //String myphoneNumber = new CurrentUser().getPhoneNumber();
 //        String myphoneNumber = ("+201122344444");
 //        String myfriendPhoneNo = myfriendNum;
 //
-//      //int x =  ClientMain.chatting.sendRequest(myphoneNumber,myfriendPhoneNo);
+//      int x =  ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber,myfriendPhoneNo);
 //     System.out.println(myphoneNumber);
 //     System.out.println(myfriendPhoneNo);
 //      System.out.println(x);
 //      return x;
 //    }
+//=======
+//
+//        invalidYourself = new Label();
+//        invalidYourself.setTextFill(Color.RED);
+//        //  dialog.setTitle();
+//        dialog.setResizable(false);
+//
+//        Label label1 = new Label("Enter Your Friend's Phone Number: ");
+//        TextField text1 = new TextField();
+//        grid.add(label1, 1, 1);
+//        grid.add(text1, 2, 1);
+//        grid.add(invalidYourself, 1, 2);
+//
+//        dialog.getDialogPane().setContent(grid);
+//        ButtonType buttonTypeOk = new ButtonType("Add Friend", OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+//        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
+//        dialog.setOnCloseRequest(event -> {
+//            String myFriendphoneNo = text1.getText();
+//            if (AddFriend(myFriendphoneNo) == 0) {
+//                event.consume();
+//            }
+//        });
+//        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
+//        Button btn = (Button) dialog.getDialogPane().lookupButton(buttonTypeOk);
+//        // dialog.setOnCloseRequest();
+////
+////        if (resultOfAddFriend.get()==buttonTypeOk)
+////        {
+////            AddFriend(myFriendphoneNo);
+////        }
+//
+//    }
+//
+//    public int AddFriend(String myfriendNum) {
+//        int x = 0;
+//        String myphoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+//        String myfriendPhoneNo = myfriendNum;
+//
+//        if (myphoneNumber.equals(myfriendPhoneNo)) {
+//            invalidYourself.setText(" Please enter a valid Mobile No.");
+//            System.out.println("You cannot add your account");
+//
+//        }else if (myfriendNum.isEmpty()){
+//            invalidYourself.setText(" Please enter a valid Mobile No.");
+//            System.out.println("  Please enter a valid Mobile Number");
+//        }
+//        else {
+//            try {
+//
+//                x = ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber, myfriendPhoneNo);
+//            } catch (SQLException throwables) {
+//                throwables.printStackTrace();
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//
+//        System.out.println(myphoneNumber);
+//        System.out.println(myfriendPhoneNo);
+//        System.out.println(x);
+//
+//    }
+//        return x;
+//    }
+//
 
     @FXML
     public void requestsHandle(){

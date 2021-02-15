@@ -21,7 +21,7 @@
 <?import javafx.scene.text.Font?>
 
 
-
+<?import javafx.scene.Cursor?>
 <BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.SignUpController">
    <center>
       <AnchorPane style="-fx-background-color: #008080;" BorderPane.alignment="CENTER">
@@ -137,10 +137,13 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Label alignment="CENTER_RIGHT" layoutX="550.0" layoutY="9.0" prefHeight="20.0" prefWidth="47.0" text="Login" textFill="#6f6f6f" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="12.0">
+            <Label alignment="CENTER_RIGHT" layoutX="550.0" layoutY="9.0" prefHeight="20.0" prefWidth="47.0" text="Login" onMouseClicked="#SignInAction" textFill="#6f6f6f" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="12.0">
                <font>
                   <Font name="Berlin Sans FB Demi Bold" size="17.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
             <Label fx:id="registerBtn1" alignment="CENTER_RIGHT" layoutX="536.0" layoutY="9.0" prefHeight="20.0" prefWidth="59.0" text="Sign Up" textFill="TEAL" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="12.0">
                <font>
