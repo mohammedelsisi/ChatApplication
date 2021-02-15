@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #32425b;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.SignUpController">
+<VBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #32425b;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="">
    <children>
       <Label styleClass="Register" text="Register" textFill="WHITE">
          <font>
@@ -38,7 +38,7 @@
             </VBox>
             <VBox alignment="CENTER" spacing="8.0">
                <children>
-                  <ImageView fitHeight="94.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="photoImageView" fitHeight="94.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Pics/ca.png" />
                      </image>

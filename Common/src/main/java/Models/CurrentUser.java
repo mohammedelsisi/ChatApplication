@@ -1,9 +1,10 @@
 package Models;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
+import javafx.beans.property.*;
+import javafx.scene.image.Image;
+import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,19 @@ public class CurrentUser implements Serializable {
     private String country;
     private String Bio;
     private String displayName;
+    private String statusVal;
+    private File photoPath;
+
+    public File getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(File photoPath) {
+        this.photoPath = photoPath;
+
+    }
+
+
     private Map<String,FriendEntity> friends=new HashMap<>();
 
     public String getUserPhoto() {
@@ -37,6 +51,7 @@ public class CurrentUser implements Serializable {
 
     public String getStatus() {
         return status.get();
+
     }
 
     public void setStatus(String status) {
@@ -128,4 +143,12 @@ public class CurrentUser implements Serializable {
     public void setFriends(Map<String,FriendEntity> friends) {
         this.friends = friends;
     }
+    public String getStatusVal() {
+        return statusVal;
+    }
+
+    public void setStatusVal(String statusVal) {
+        this.statusVal = statusVal;
+    }
+
 }

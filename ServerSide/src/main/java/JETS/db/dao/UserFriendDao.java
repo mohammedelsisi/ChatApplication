@@ -5,6 +5,7 @@ import Models.FriendEntity;
 import Services.UserFriendDaoInterface;
 
 import javax.sql.RowSet;
+import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoInterface {
+public class UserFriendDao  implements UserFriendDaoInterface {
 
      private static final String SearchByPhoneno =  " select phone_number from user where phone_number=?";
      private static final String AddFriend = "Insert into user_friend (user_phone_number , friend_number, friendship_status) Values (? , ?, ?)";
@@ -25,7 +26,9 @@ public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoI
              "where user_phone_number=? and  friendship_status=\"ACCEPTED\")";
      private static final String DELETE_FROM_USER_FRIEND="DELETE FROM user_friend WHERE user_phone_number=? and friend_number=?";
     private static final String ACCEPT_USER_FRIEND="update user_friend SET friendship_status=\"ACCEPTED\" WHERE user_phone_number=? and friend_number=?";
-     private final Connection connection;
+    private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
+
+    private final Connection connection;
     public UserFriendDao(Connection connection) throws RemoteException {
         this.connection = connection;
     }
@@ -105,14 +108,43 @@ public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoI
             e.printStackTrace();
         }
     }
+   public FriendEntity findFriendByPhoneNumber(String searchByPhoneno) {
+       FriendEntity user = new FriendEntity();
+           try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE)) {
 
-    private FriendEntity createUser(ResultSet rs, FriendEntity request) throws SQLException {
+               statement.setString(1, searchByPhoneno);
+               ResultSet rs = statement.executeQuery();
+               if (rs.next()) {
+                   user = createUser(rs, user);
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+           return user;
+       }
+
+    public FriendEntity createUser(ResultSet rs, FriendEntity request) throws SQLException {
             request.setDisplayName(rs.getString("display_name"));
             request.setPhoneNumber(rs.getString("phone_number"));
             request.setBio(rs.getString("bio"));
-            request.setStatus(rs.getString("status"));
-            //request.setUserPhoto(rs.getString("image"));  /*  not confirmed yet */
+            request.setStatusVal(rs.getString("status"));
 
+        InputStream inputStream=rs.getBinaryStream("image");
+        if(inputStream!=null) {
+            File file = new File("E://" + request.getPhoneNumber() + ".png");
+            try {
+                OutputStream os = new FileOutputStream(file);
+                byte[] content = new byte[1024];
+
+                int size = 0;
+                while ((size = inputStream.read(content)) != -1) {
+                    os.write(content, 0, size);
+                }
+                request.setPhotoPath(file);
+            } catch (IOException e) {
+
+            }
+        }
             return request;
         }
 

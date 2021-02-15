@@ -14,12 +14,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -48,7 +51,9 @@ public class SignUpController implements Initializable {
     @FXML
     private ComboBox gender;
     private boolean firstTimeChkPass=true;
-
+    @FXML
+     private ImageView photoImageView;
+    File photoPath;
     //REGISTRATION VALIDATION ATTRIBUTES
     boolean isPhoneNumberCorrect=false;
     boolean isPasswordCorrect=false;
@@ -152,6 +157,8 @@ public class SignUpController implements Initializable {
                 }
 
         });
+
+
     }
     @FXML
     public void changePhoto(ActionEvent e){
@@ -159,7 +166,15 @@ public class SignUpController implements Initializable {
         chooser.getExtensionFilters().add(
           new FileChooser.ExtensionFilter("Image","*.jpg","*.png","*.jpeg")
         );
-        File file=chooser.showOpenDialog(displayName.getScene().getWindow());
+         photoPath=chooser.showOpenDialog(displayName.getScene().getWindow());
+         try {
+
+             if (photoPath!=null) {
+                 photoImageView.setImage(new Image(photoPath.toURI().toURL().toExternalForm()));
+             }
+         }catch (MalformedURLException ex){
+
+         }
     }
     @FXML
     public void registerHandle(ActionEvent e){
@@ -172,6 +187,7 @@ public class SignUpController implements Initializable {
             user.setGender(gender.getValue().toString().toUpperCase());
             user.setAge(Period.between(datePicker.getValue(),LocalDate.now()).getYears());
             user.setBio(bio.getText());
+            user.setPhotoPath(photoPath);
             ModelsFactory.getInstance().register(user);
 //            ClientMain.userDAO.create(user);
             //change scene

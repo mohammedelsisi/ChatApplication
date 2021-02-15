@@ -22,6 +22,9 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
@@ -363,6 +366,7 @@
                               <Font name="Lemon Regular" size="12.0" />
                            </font>
                         </Label>
+
                      </graphic>
                      <content>
                         <VBox alignment="CENTER">
@@ -372,6 +376,8 @@
                                     <Font name="Lemon Regular" size="20.0" />
                                  </font>
                               </Label>
+
+
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -379,8 +385,28 @@
                         </VBox>
                      </content>
                   </Tab>
+                 <Tab style="-fx-background-color: #004040;">
+                 <graphic>
+                    <ComboBox fx:id="statusComboBox" prefHeight="25.0" prefWidth="130.0" value="My Status">
+                       <VBox.margin>
+                          <Insets left="15.0" />
+                       </VBox.margin>
+                       <items>
+
+                          <FXCollections fx:factory="observableArrayList">
+                             <String fx:value="AVAILABLE" />
+                             <String fx:value="BUSY" />
+                             <String fx:value="AWAY" />
+                             <String fx:value="OFFLINE" />
+                          </FXCollections>
+                       </items>
+                    </ComboBox>
+
+                 </graphic>
+                 </Tab>
               </tabs>
             </TabPane>
+
             <BorderPane>
                <center>
                   <BorderPane prefHeight="430.0" prefWidth="400.0" style="-fx-background-color: #008080;" stylesheets="@../styles/StyleSheet.css">
@@ -546,7 +572,7 @@
       </SplitPane>
       <Label alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" prefHeight="174.0" prefWidth="162.0" text="Dalia" textFill="RED">
          <graphic>
-            <ImageView fitHeight="121.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="profilePicImageView" fitHeight="121.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Pics/RegPPic.png" />
                </image>

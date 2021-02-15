@@ -94,7 +94,7 @@
                               <Insets />
                            </StackPane.margin>
                         </Circle>
-                        <ImageView fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="photoImageView" fitHeight="69.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../Pics/RegPPic.png" />
                            </image>

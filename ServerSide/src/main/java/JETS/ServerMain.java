@@ -3,6 +3,7 @@ package JETS;
 import JETS.db.DataSourceFactory;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
+import JETS.service.ChattingImp;
 import JETS.service.ConnectionService;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -26,11 +27,11 @@ public class ServerMain extends Application {
             Connection conn = DataSourceFactory.getConnection();
             UserDao userDao = new UserDao(conn);
             ConnectionService connectionService = new ConnectionService();
-            UserFriendDao userFriendDao = new UserFriendDao(conn);
+            ChattingImp chattingImp = new ChattingImp(conn);
             Registry reg = LocateRegistry.createRegistry(6253);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
-            reg.rebind("UserFriendDao", userFriendDao);
+            reg.rebind("ChattingService", chattingImp);
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();
         }

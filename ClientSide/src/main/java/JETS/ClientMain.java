@@ -1,7 +1,9 @@
 package JETS;
 
+import JETS.ui.helpers.ClientImp;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
+import Services.Chatting;
 import Services.ConnectionInt;
 import Services.DAOInterface;
 import Services.UserFriendDaoInterface;
@@ -18,7 +20,7 @@ public class ClientMain extends Application {
     public static DAOInterface<CurrentUser> userDAO;
     public static ConnectionInt connectionInt;
 
-    public static UserFriendDaoInterface userFriendDaoInterface;
+    public static Chatting chatting;
 
     public static void main(String[] args) {
         launch(args);
@@ -41,7 +43,7 @@ public class ClientMain extends Application {
             userDAO = (DAOInterface<CurrentUser>)registry.lookup("UserRegistrationService");
             connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
 
-            userFriendDaoInterface=(UserFriendDaoInterface) registry.lookup("UserFriendDao");
+            chatting=(Chatting) registry.lookup("ChattingService");
 
         }catch (Exception e){
             e.printStackTrace();

@@ -5,6 +5,7 @@ import Models.CurrentUser;
 import Models.LoginEntity;
 import Services.DAOInterface;
 
+import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
@@ -15,12 +16,12 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
     protected final Connection connection;
     private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
-    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio) VALUES (?,?, ?, ?, ?,?,?,?)";
+    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
     private static final String GET_Friends = "SELECT * FROM user where phone_number = (select friend_number from user_friend where user_phone_number = ?)";
     private static final String UPDATE = "UPDATE person SET  password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE phone_number = ?";
     private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
-
+    private static final String UPDATE_USER_STATUS="UPDATE user SET STATUS=? where phone_number=?";
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
     }
@@ -73,7 +74,12 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(6, dto.getCountry());
             statement.setInt(7, dto.getAge());
             statement.setString(8, dto.getBio());
-//            statement.setString(9, dto.getUserPhoto());
+            try {
+                statement.setBinaryStream(9, new FileInputStream(dto.getPhotoPath()));
+            }catch (IOException e){
+                statement.setBinaryStream(9, null);
+                e.printStackTrace();
+            }
 //            statement.setString(10, dto.getStatus());
             statement.executeUpdate();
             return dto;
@@ -125,6 +131,15 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         return null;
     }
 
+    public void updateUserStatus(String phoneNumber,String status){
+        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE_USER_STATUS);) {
+            statement.setString(1, status);
+            statement.setString(2, phoneNumber);
+            statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     private CurrentUser createUser(ResultSet rs, CurrentUser user) throws SQLException {
         user.setDisplayName(rs.getString("display_name"));
@@ -133,8 +148,24 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         user.setPhoneNumber(rs.getString("phone_number"));
         user.setAge(rs.getInt("age"));
         user.setBio(rs.getString("bio"));
-        user.setStatus(rs.getString("status"));
-        user.setUserPhoto(rs.getString("image"));  /*  not confirmed yet */
+       // user.setStatus(rs.getString("status"));
+        user.setStatusVal(rs.getString("status"));
+        InputStream inputStream=rs.getBinaryStream("image");
+        if(inputStream!=null) {
+            File file = new File("E://" + user.getPhoneNumber() + ".png");
+            try {
+                OutputStream os = new FileOutputStream(file);
+                byte[] content = new byte[1024];
+
+                int size = 0;
+                while ((size = inputStream.read(content)) != -1) {
+                    os.write(content, 0, size);
+                }
+                user.setPhotoPath(file);
+            } catch (IOException e) {
+
+            }
+        }
         return user;
     }
 }
