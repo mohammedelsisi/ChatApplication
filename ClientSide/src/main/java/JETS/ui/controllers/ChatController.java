@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
@@ -9,6 +10,7 @@ import Models.CurrentUser;
 import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXTextArea;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,6 +37,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.security.Policy;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -224,12 +227,19 @@ public class ChatController implements Initializable {
                 if (keyEvent.isAltDown()) {
                     messageField.appendText("\n");
                 } else {
-                    String text = messageField.getText().trim();
+                    VBox vBox = addChatToMap(currentIdx);
+
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
+                        SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
+                        msgProperty.addListener((obs,old,newval)->{
+                            vBox.getChildren().add(new ChatBox(newval));
+                            System.out.println("testtest");
+                        });
                     }
-                    VBox vBox = createChatBox(currentIdx);
+
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
+
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
                     messageField.clear();
@@ -330,27 +340,53 @@ public class ChatController implements Initializable {
         // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         ChatEntitiy createdEntity = new ChatEntitiy(0, choosenFriends, null);
-        HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
-        chatsVbox.getChildren().add(hBox);
+        createChatLayout(createdEntity);
         tabPane.getSelectionModel().selectPrevious();
-        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
-        VBox vBox = createChatBox(idx);
-        vBox.setStyle("-fx-background-color: #dcdcde");
-        spChatBoxes.getChildren().add(vBox);
-
-
-        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
-            messageField.setDisable(false);
-            chatEntitiy = createdEntity;
-            vBox.toFront();
-            currentIdx = idx;
-        });
-
 
     }
+public void createChatLayout (ChatEntitiy createdEntity){
 
-    private VBox createChatBox(int id) {
+    HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
+    chatsVbox.getChildren().add(hBox);
+    int idx = chatsVbox.getChildren().lastIndexOf(hBox);
+    VBox vBox = addChatToMap(idx);
+    vBox.setStyle("-fx-background-color: #dcdcde");
+    ScrollPane scrollPane = getScrollPane(vBox);
+    spChatBoxes.getChildren().add(scrollPane);
+
+    hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+        receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+        messageField.setDisable(false);
+        chatEntitiy = createdEntity;
+        scrollPane.toFront();
+        currentIdx = idx;
+    });
+}
+    public void createChatLayout (SimpleObjectProperty<MessageEntity> messageEntity ){
+
+        HBox hBox = StageCoordinator.getInstance().createChatLayout(messageEntity.get().getChatEntitiy());
+        chatsVbox.getChildren().add(hBox);
+        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
+        VBox vBox = addChatToMap(idx);
+        vBox.setStyle("-fx-background-color: #dcdcde");
+        ScrollPane scrollPane = getScrollPane(vBox);
+        spChatBoxes.getChildren().add(scrollPane);
+        vBox.getChildren().add(new ChatBox(messageEntity.get()));
+        System.out.println(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers());
+        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            receiverName.setText(FriendsManager.getInstance().getFriendName(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers().get(0)));
+            messageField.setDisable(false);
+            chatEntitiy = messageEntity.get().getChatEntitiy();
+            scrollPane.toFront();
+            currentIdx = idx;
+        });
+        messageEntity.addListener((obs,old,newval)->{
+            vBox.getChildren().add(new ChatBox(newval));
+            System.out.println("dada");
+        });
+    }
+
+    private VBox addChatToMap(int id) {
         VBox vBox;
         if (!chatBoxesMap.containsKey(id)) {
             vBox = new VBox();
@@ -359,5 +395,14 @@ public class ChatController implements Initializable {
             vBox = chatBoxesMap.get(id);
         }
         return vBox;
+    }
+    private ScrollPane getScrollPane(VBox vBox){
+        ScrollPane scrollPane = new ScrollPane(vBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(false);
+        scrollPane.vvalueProperty().bind(vBox.heightProperty());
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        return scrollPane;
     }
 }

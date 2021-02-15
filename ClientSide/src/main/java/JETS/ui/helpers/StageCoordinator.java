@@ -27,6 +27,11 @@ public class StageCoordinator {
 
     private static Stage primaryStage;
     private static final StageCoordinator stageCoordinator = new StageCoordinator();
+
+    public Map<String, SceneData> getScenes() {
+        return scenes;
+    }
+
     private final Map<String, SceneData> scenes = new HashMap<>();
 
     private StageCoordinator() {
@@ -103,7 +108,7 @@ public class StageCoordinator {
                 Parent Chat = fxmlLoader.load();
                 Scene ChatScene = new Scene(Chat,655,610);
                 SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);
-                scenes.put("ChatScene", ChatSceneData);
+                scenes.put("Chat", ChatSceneData);
                 primaryStage.setScene(ChatScene);
             } catch (IOException e) {
                 e.printStackTrace();

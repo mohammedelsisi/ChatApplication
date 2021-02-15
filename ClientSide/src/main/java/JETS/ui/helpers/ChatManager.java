@@ -1,6 +1,8 @@
 package JETS.ui.helpers;
 
+import JETS.ui.controllers.ChatController;
 import Models.MessageEntity;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.Map;
@@ -25,12 +27,20 @@ public class ChatManager {
     }
 
     public void receiveResponse(MessageEntity message) {
-        Long chatID = message.getChatEntitiy().getId();
-        if (RESPONSES.containsKey(chatID)) {
-            RESPONSES.get(chatID).set(message);
-        } else {
-            StageCoordinator.getInstance().createChatLayout(message.getChatEntitiy());
-            createNewChatResponse(chatID);
-        }
+        Platform.runLater(() -> {
+            Long chatID = message.getChatEntitiy().getId();
+            if (RESPONSES.containsKey(chatID)) {
+
+                RESPONSES.get(chatID).set(message);
+            } else {
+                SimpleObjectProperty<MessageEntity> simpleMsg = createNewChatResponse(chatID);
+                simpleMsg.set(message);
+
+                ChatController chat = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+                chat.createChatLayout(simpleMsg);
+            }
+
+        });
     }
+
 }

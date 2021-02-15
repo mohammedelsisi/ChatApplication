@@ -34,7 +34,7 @@ public class ServerMain extends Application {
             UserFriendDao userFriendDao = new UserFriendDao(conn);
             ChatServiceInt chatService = new ChatServiceImp();
             /*             method to get the last chat Id from database */
-            ChatDaoImp chatDaoImp = new ChatDaoImp(conn ,10);
+            ChatDaoImp chatDaoImp = new ChatDaoImp(conn);
             Registry reg = LocateRegistry.createRegistry(6258);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
