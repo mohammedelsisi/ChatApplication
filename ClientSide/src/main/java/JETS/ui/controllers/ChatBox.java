@@ -40,7 +40,7 @@ public class ChatBox extends GridPane {
             userImage = createUserPhoto(friendsManager.getFriendPhotoProperty(messageEntity.getSenderPhone()));
         }
 
-        this.getColumnConstraints().addAll(createCommonColumnConstraints(3));
+        this.getColumnConstraints().addAll(createCommonColumnConstraints(3, new Priority[]{Priority.NEVER, Priority.SOMETIMES, Priority.SOMETIMES}));
         this.getRowConstraints().addAll(createCommonRowConstraints(3, new float[]{-1.0f, 20.0f, -1.0f}));
 
         Group imagesContainer = new Group();
@@ -131,12 +131,14 @@ public class ChatBox extends GridPane {
         return userName;
     }
 
-    private ColumnConstraints[] createCommonColumnConstraints(int number) {
+    private ColumnConstraints[] createCommonColumnConstraints(int number, Priority[] prioritiesHgrow) {
         ColumnConstraints[] constraints = new ColumnConstraints[number];
-        for (int i = 0; i < number; i++) {
-            ColumnConstraints tempConstraint = new ColumnConstraints();
-            tempConstraint.setHgrow(Priority.SOMETIMES);
-            constraints[i] = tempConstraint;
+        if (prioritiesHgrow.length == number) {
+            for (int i = 0; i < number; i++) {
+                ColumnConstraints tempConstraint = new ColumnConstraints();
+                tempConstraint.setHgrow(prioritiesHgrow[i]);
+                constraints[i] = tempConstraint;
+            }
         }
         return constraints;
     }
