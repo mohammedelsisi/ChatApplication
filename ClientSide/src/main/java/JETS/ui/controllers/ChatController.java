@@ -36,10 +36,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
 
@@ -51,6 +48,10 @@ public class ChatController implements Initializable {
     public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     public JFXTextArea messageField;
+
+    @FXML
+    private StackPane spChatBoxes;
+
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
@@ -65,14 +66,16 @@ public class ChatController implements Initializable {
     private Label receiverName;
     @FXML
     private TabPane tabPane;
+    int currentIdx;
     @FXML
     private VBox messagesContainer;
-
+    private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
 //    public static TreeItem<FriendEntity> busy=new TreeItem("Busy");
 //    public static TreeItem<FriendEntity> away=new TreeItem("Away");
 //    public static TreeItem<FriendEntity> offline=new TreeItem("Offline");
+
 
     public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
         //String myphoneNumber = new CurrentUser().getPhoneNumber();
@@ -225,8 +228,9 @@ public class ChatController implements Initializable {
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
                     }
+                    VBox vBox = createChatBox(currentIdx);
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText(), currentUser.getPhoneNumber());
-                    messagesContainer.getChildren().add(new ChatBox(msg));
+                    vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
                     messageField.clear();
                 }
@@ -317,21 +321,43 @@ public class ChatController implements Initializable {
     }
 
     public void startChatAction(ActionEvent actionEvent) {
+
+
         List<String> choosenFriends = new ArrayList<>();
         choosenFriends.add(currentUser.getPhoneNumber());
         choosenFriends.add(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber());
         System.out.println(FriendsManager.getInstance().getFriendName(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber()));
         // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         ChatEntitiy createdEntity = new ChatEntitiy(0, choosenFriends, null);
         HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
-        System.out.println("dasdas");
-        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
-            chatEntitiy = createdEntity;
-        });
-
         chatsVbox.getChildren().add(hBox);
         tabPane.getSelectionModel().selectPrevious();
+        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
+        VBox vBox = createChatBox(idx);
+        vBox.setStyle("-fx-background-color: #dcdcde");
+        spChatBoxes.getChildren().add(vBox);
 
+
+        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+            messageField.setDisable(false);
+            chatEntitiy = createdEntity;
+            vBox.toFront();
+            currentIdx = idx;
+        });
+
+
+    }
+
+    private VBox createChatBox(int id) {
+        VBox vBox;
+        if (!chatBoxesMap.containsKey(id)) {
+            vBox = new VBox();
+            chatBoxesMap.put(id, vBox);
+        } else {
+            vBox = chatBoxesMap.get(id);
+        }
+        return vBox;
     }
 }

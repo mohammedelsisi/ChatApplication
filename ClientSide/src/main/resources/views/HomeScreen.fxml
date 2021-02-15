@@ -139,7 +139,7 @@
                      <bottom>
                         <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
                            <children>
-                              <JFXTextArea fx:id="messageField" labelFloat="true" onKeyPressed="#sendMessage" prefHeight="50.0" promptText="Type a message" style="-fx-background-color: white; -fx-background-radius: 15px; -jfx-focus-color: #008080;" wrapText="true" HBox.hgrow="ALWAYS">
+                              <JFXTextArea fx:id="messageField" disable="true" labelFloat="true" onKeyPressed="#sendMessage" prefHeight="50.0" promptText="Type a message" style="-fx-background-color: white; -fx-background-radius: 15px; -jfx-focus-color: #008080;" wrapText="true" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
@@ -156,7 +156,7 @@
                      <top>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="receiverName" text="Mohamed El SISI" textFill="#6f6d6d">
+                              <Label fx:id="receiverName" textFill="#6f6d6d">
                                  <font>
                                     <Font name="Calibri Bold" size="14.0" />
                                  </font>
@@ -171,9 +171,13 @@
                         </HBox>
                      </top>
                      <center>
-                        <StackPane>
+                        <StackPane fx:id="spChatBoxes">
                            <children>
-                              <VBox fx:id="messagesContainer" style="-fx-background-color: #dcdcde;" />
+                              <Label alignment="CENTER" layoutX="16.0" layoutY="79.0" prefHeight="183.0" prefWidth="338.0" text="Select friends to start chatting" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Gill Sans MT" size="20.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </StackPane>
                      </center>
