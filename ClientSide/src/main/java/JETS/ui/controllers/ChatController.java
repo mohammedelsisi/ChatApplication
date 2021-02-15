@@ -283,112 +283,68 @@ public class ChatController implements Initializable {
 
 
     public void requestFriend() throws SQLException, RemoteException {
-    }
-//        Dialog dialog = new Dialog();
-//      //  dialog.setTitle();
-//        dialog.setResizable(false);
-//
-//        Label label1 = new Label("Enter Your Friend's Phone Number: ");
-//        TextField text1 = new TextField();
-//        GridPane grid = new GridPane();
-//        grid.add(label1, 1, 1);
-//        grid.add(text1, 2, 1);
-//
-//        dialog.getDialogPane().setContent(grid);
-//
-//        ButtonType buttonTypeOk = new ButtonType("Add Friend", OTHER);
-//        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-//
-//        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
-//        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
-//        String myFriendphoneNo = text1.getText();
+        
+        invalidYourself = new Label();
+        invalidYourself.setTextFill(Color.RED);
+        //  dialog.setTitle();
+        dialog.setResizable(false);
+
+        Label label1 = new Label("Enter Your Friend's Phone Number: ");
+        TextField text1 = new TextField();
+        grid.add(label1, 1, 1);
+        grid.add(text1, 2, 1);
+        grid.add(invalidYourself, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        ButtonType buttonTypeOk = new ButtonType("Add Friend", OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
+        dialog.setOnCloseRequest(event -> {
+            String myFriendphoneNo = text1.getText();
+            if (AddFriend(myFriendphoneNo) == 0) {
+                event.consume();
+            }
+        });
+        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
+        Button btn = (Button) dialog.getDialogPane().lookupButton(buttonTypeOk);
+        // dialog.setOnCloseRequest();
 //
 //        if (resultOfAddFriend.get()==buttonTypeOk)
 //        {
 //            AddFriend(myFriendphoneNo);
 //        }
-//
-//
-//
-//
-//    }
-//
-//    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
-//        //String myphoneNumber = new CurrentUser().getPhoneNumber();
-//        String myphoneNumber = ("+201122344444");
-//        String myfriendPhoneNo = myfriendNum;
-//
-//      int x =  ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber,myfriendPhoneNo);
-//     System.out.println(myphoneNumber);
-//     System.out.println(myfriendPhoneNo);
-//      System.out.println(x);
-//      return x;
-//    }
-//=======
-//
-//        invalidYourself = new Label();
-//        invalidYourself.setTextFill(Color.RED);
-//        //  dialog.setTitle();
-//        dialog.setResizable(false);
-//
-//        Label label1 = new Label("Enter Your Friend's Phone Number: ");
-//        TextField text1 = new TextField();
-//        grid.add(label1, 1, 1);
-//        grid.add(text1, 2, 1);
-//        grid.add(invalidYourself, 1, 2);
-//
-//        dialog.getDialogPane().setContent(grid);
-//        ButtonType buttonTypeOk = new ButtonType("Add Friend", OK_DONE);
-//        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-//        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
-//        dialog.setOnCloseRequest(event -> {
-//            String myFriendphoneNo = text1.getText();
-//            if (AddFriend(myFriendphoneNo) == 0) {
-//                event.consume();
-//            }
-//        });
-//        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
-//        Button btn = (Button) dialog.getDialogPane().lookupButton(buttonTypeOk);
-//        // dialog.setOnCloseRequest();
-////
-////        if (resultOfAddFriend.get()==buttonTypeOk)
-////        {
-////            AddFriend(myFriendphoneNo);
-////        }
-//
-//    }
-//
-//    public int AddFriend(String myfriendNum) {
-//        int x = 0;
-//        String myphoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-//        String myfriendPhoneNo = myfriendNum;
-//
-//        if (myphoneNumber.equals(myfriendPhoneNo)) {
-//            invalidYourself.setText(" Please enter a valid Mobile No.");
-//            System.out.println("You cannot add your account");
-//
-//        }else if (myfriendNum.isEmpty()){
-//            invalidYourself.setText(" Please enter a valid Mobile No.");
-//            System.out.println("  Please enter a valid Mobile Number");
-//        }
-//        else {
-//            try {
-//
-//                x = ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber, myfriendPhoneNo);
-//            } catch (SQLException throwables) {
-//                throwables.printStackTrace();
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//
-//        System.out.println(myphoneNumber);
-//        System.out.println(myfriendPhoneNo);
-//        System.out.println(x);
-//
-//    }
-//        return x;
-//    }
-//
+        }
+
+
+
+    public int AddFriend(String myfriendNum) {
+        int x = 0;
+        String myphoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+        String myfriendPhoneNo = myfriendNum;
+
+        if (myphoneNumber.equals(myfriendPhoneNo)) {
+            invalidYourself.setText(" Please enter a valid Mobile No.");
+            System.out.println("You cannot add your account");
+
+        }else if (myfriendNum.isEmpty()){
+            invalidYourself.setText(" Please enter a valid Mobile No.");
+            System.out.println("  Please enter a valid Mobile Number");
+        }
+        else {
+            try {
+                x = ClientMain.chatting.sendRequest(myphoneNumber, myfriendPhoneNo);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        System.out.println(myphoneNumber);
+        System.out.println(myfriendPhoneNo);
+        System.out.println(x);
+
+    }
+        return x;
+    }
+
 
     @FXML
     public void requestsHandle(){
@@ -432,5 +388,6 @@ public class ChatController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 }

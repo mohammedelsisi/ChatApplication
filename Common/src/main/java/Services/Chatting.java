@@ -12,7 +12,7 @@ public interface Chatting extends Remote {
     public void unRegister(String phoneNumber) throws RemoteException;
     public List<FriendEntity> getFriends(String PhoneNumber)throws RemoteException;
     public List<FriendEntity> getFriendRequests(String myPhoneNumber) throws RemoteException;
-    public void sendRequest(String senderPhoneNumber, String receiverPhoneNumber)throws RemoteException;
+    public int sendRequest(String senderPhoneNumber, String receiverPhoneNumber)throws RemoteException;
     public void acceptRequest(String myphoneNumber,String acceptedphoneNumber)throws RemoteException;
     public void refuseRequest(String myphoneNumber,String rejectedphoneNumber) throws RemoteException;
     public void tellstatus(String phoneNumber,String status)  throws RemoteException;

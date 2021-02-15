@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ChattingImp extends UnicastRemoteObject implements Chatting {
-    Hashtable<String, CallBack> clients = new Hashtable<String, CallBack>();
+    Hashtable<String, CallBack> clients = new Hashtable<>();
     UserFriendDao friendImp;
     UserDao userDao;
     public ChattingImp(Connection connection) throws RemoteException {
@@ -40,9 +40,16 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
         }
         return null;
     }
-    public void sendRequest(String senderPhoneNumber, String receiverPhoneNumber){
+    public int sendRequest(String senderPhoneNumber, String receiverPhoneNumber) throws RemoteException{
           //update DB
           //notify user if he is online
+       int result= friendImp.SearchbyPhoneno(senderPhoneNumber,receiverPhoneNumber);
+       if(result==1){
+           if(clients.containsKey(receiverPhoneNumber)) {
+               clients.get(receiverPhoneNumber).notifyRequest(friendImp.findFriendByPhoneNumber(senderPhoneNumber));
+           }
+       }
+       return result;
     }
     public void acceptRequest(String myphoneNumber,String acceptedphoneNumber)  {
         try {

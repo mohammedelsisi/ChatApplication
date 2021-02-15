@@ -43,6 +43,6 @@ public class ClientImp extends UnicastRemoteObject implements CallBack, Serializ
 
     @Override
     public void notifyRequest(FriendEntity user) throws RemoteException {
-
+         ChatController.requestLists.add(user);
     }
 }
