@@ -47,7 +47,7 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
+        dto.setId(id);
         return dto;
     }
 

@@ -41,14 +41,7 @@ public class FriendEntity implements Serializable {
     }
 
     public byte[] getUserPhoto() {
-//        return userPhoto.get();
-        try {
-
-            return (new FileInputStream("RegPPic.png").readAllBytes());
-        } catch (Exception e) {
-
-        }
-        return null;
+        return userPhoto.get();
     }
 
     public void setUserPhoto(byte[] userPhoto) {

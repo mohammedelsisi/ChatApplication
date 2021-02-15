@@ -50,17 +50,17 @@ public class ChatController implements Initializable {
     public static TreeView<FriendEntity> treeViewFriends = new TreeView<>();
     public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
+    private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
-
-    @FXML
-    private StackPane spChatBoxes;
-
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
     ListView<FriendEntity> listView;
+    int currentIdx;
+    @FXML
+    private StackPane spChatBoxes;
     @FXML
     private ImageView imgView;
     @FXML
@@ -69,10 +69,8 @@ public class ChatController implements Initializable {
     private Label receiverName;
     @FXML
     private TabPane tabPane;
-    int currentIdx;
     @FXML
     private VBox messagesContainer;
-    private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
 //    public static TreeItem<FriendEntity> busy=new TreeItem("Busy");
@@ -118,17 +116,18 @@ public class ChatController implements Initializable {
 
                             this.setText(friendEntity.getDisplayName());
                             if (friendEntity.getPhoneNumber() != null) {
-                                try {
 
-                                    Image img = new Image(new FileInputStream("RegPPic.png"));
-                                    ImageView imageView = new ImageView(img);
+                                    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(friendEntity.getUserPhoto())) {
 
-                                    imageView.setFitWidth(50);
-                                    imageView.setFitHeight(50);
-                                    setGraphic(imageView);
+
+                                    Image img=new Image(byteArrayInputStream);
+                                    Circle circle = new Circle(25);
+                                   circle.setFill(new ImagePattern(img));
+                                   setGraphic(circle);
+
                                 } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                        e.printStackTrace();
+                                    }
                             }
                         } else {
                             setText(null);
@@ -232,8 +231,9 @@ public class ChatController implements Initializable {
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
-                        msgProperty.addListener((obs,old,newval)->{
-                            vBox.getChildren().add(new ChatBox(newval));
+                        VBox vBox2 = addChatToMap(currentIdx);
+                        msgProperty.addListener((obs, old, newval) -> {
+                            vBox2.getChildren().add(new ChatBox(newval));
                             System.out.println("testtest");
                         });
                     }
@@ -344,25 +344,27 @@ public class ChatController implements Initializable {
         tabPane.getSelectionModel().selectPrevious();
 
     }
-public void createChatLayout (ChatEntitiy createdEntity){
 
-    HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
-    chatsVbox.getChildren().add(hBox);
-    int idx = chatsVbox.getChildren().lastIndexOf(hBox);
-    VBox vBox = addChatToMap(idx);
-    vBox.setStyle("-fx-background-color: #dcdcde");
-    ScrollPane scrollPane = getScrollPane(vBox);
-    spChatBoxes.getChildren().add(scrollPane);
+    public void createChatLayout(ChatEntitiy createdEntity) {
 
-    hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-        receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
-        messageField.setDisable(false);
-        chatEntitiy = createdEntity;
-        scrollPane.toFront();
-        currentIdx = idx;
-    });
-}
-    public void createChatLayout (SimpleObjectProperty<MessageEntity> messageEntity ){
+        HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
+        chatsVbox.getChildren().add(hBox);
+        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
+        VBox vBox = addChatToMap(idx);
+        vBox.setStyle("-fx-background-color: #dcdcde");
+        ScrollPane scrollPane = getScrollPane(vBox);
+        spChatBoxes.getChildren().add(scrollPane);
+
+        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+            messageField.setDisable(false);
+            chatEntitiy = createdEntity;
+            scrollPane.toFront();
+            currentIdx = idx;
+        });
+    }
+
+    public void createChatLayout(SimpleObjectProperty<MessageEntity> messageEntity) {
 
         HBox hBox = StageCoordinator.getInstance().createChatLayout(messageEntity.get().getChatEntitiy());
         chatsVbox.getChildren().add(hBox);
@@ -380,7 +382,8 @@ public void createChatLayout (ChatEntitiy createdEntity){
             scrollPane.toFront();
             currentIdx = idx;
         });
-        messageEntity.addListener((obs,old,newval)->{
+        messageEntity.addListener((obs, old, newval) -> {
+
             vBox.getChildren().add(new ChatBox(newval));
             System.out.println("dada");
         });
@@ -396,7 +399,8 @@ public void createChatLayout (ChatEntitiy createdEntity){
         }
         return vBox;
     }
-    private ScrollPane getScrollPane(VBox vBox){
+
+    private ScrollPane getScrollPane(VBox vBox) {
         ScrollPane scrollPane = new ScrollPane(vBox);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);

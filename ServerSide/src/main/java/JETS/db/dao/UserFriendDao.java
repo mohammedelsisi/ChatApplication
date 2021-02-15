@@ -111,7 +111,7 @@ public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoI
             request.setPhoneNumber(rs.getString("phone_number"));
             request.setBio(rs.getString("bio"));
             request.setStatus(rs.getString("status"));
-            //request.setUserPhoto(rs.getString("image"));  /*  not confirmed yet */
+            request.setUserPhoto(rs.getBytes("image"));
 
             return request;
         }

@@ -37,7 +37,7 @@ public class ChatBox extends GridPane {
             FriendsManager friendsManager = FriendsManager.getInstance();
             this.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             createUserNameLabel(friendsManager.getFriendNameProperty(messageEntity.getSenderPhone()));
-//            userImage = createUserPhoto(friendsManager.getFriendPhotoProperty(messageEntity.getSenderPhone()));
+            userImage = createUserPhoto(friendsManager.getFriendPhotoProperty(messageEntity.getSenderPhone()));
         }
 
         this.getColumnConstraints().addAll(createCommonColumnConstraints(3, new Priority[]{Priority.NEVER, Priority.SOMETIMES, Priority.SOMETIMES}));
@@ -45,7 +45,7 @@ public class ChatBox extends GridPane {
 
         Group imagesContainer = new Group();
         Circle status = createUserStatus();
-//        imagesContainer.getChildren().addAll(userImage, status);
+        imagesContainer.getChildren().addAll(userImage, status);
         this.add(imagesContainer, 0, 0, 1, 3);
         this.setValignment(imagesContainer, VPos.TOP);
         this.setHalignment(imagesContainer, HPos.CENTER);
