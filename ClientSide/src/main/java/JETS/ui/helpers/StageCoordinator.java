@@ -102,4 +102,5 @@ public class StageCoordinator {
             primaryStage.setScene(ChatScene);
         }
     }
+
 }

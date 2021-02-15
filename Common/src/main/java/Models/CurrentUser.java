@@ -11,6 +11,10 @@ public class CurrentUser implements Serializable {
     transient private final StringProperty displayNameProperty = new SimpleStringProperty();
     transient private final StringProperty userPhoto = new SimpleStringProperty();
     transient private final StringProperty status = new SimpleStringProperty();
+    transient private final StringProperty emailProperty = new SimpleStringProperty();
+    transient private final StringProperty dateOfBirthProperty = new SimpleStringProperty();
+    transient private final StringProperty genderProperty = new SimpleStringProperty();
+    transient  private final StringProperty bioProperty = new SimpleStringProperty();
     private String phoneNumber;
     private String password;
     private String email;
@@ -111,7 +115,43 @@ public class CurrentUser implements Serializable {
     }
 
     public String getDisplayName() {
-        return displayName;
+        return this.displayName;
+    }
+
+    public StringProperty displayNamePropertyProperty() {
+        return displayNameProperty;
+    }
+
+    public String getEmailProperty() {
+        return emailProperty.get();
+    }
+
+    public StringProperty emailPropertyProperty() {
+        return emailProperty;
+    }
+
+    public String getDateOfBirthProperty() {
+        return dateOfBirthProperty.get();
+    }
+
+    public StringProperty dateOfBirthPropertyProperty() {
+        return dateOfBirthProperty;
+    }
+
+    public String getGenderProperty() {
+        return genderProperty.get();
+    }
+
+    public StringProperty genderPropertyProperty() {
+        return genderProperty;
+    }
+
+    public String getBioProperty() {
+        return bioProperty.get();
+    }
+
+    public StringProperty bioPropertyProperty() {
+        return bioProperty;
     }
 
     public void setDisplayName(String displayName) {

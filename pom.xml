@@ -84,12 +84,6 @@
 
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-media</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
         </dependency>
@@ -115,21 +109,11 @@
             <version>9.0.10</version>
         </dependency>
         <dependency>
-            <groupId>eu.hansolo</groupId>
-            <artifactId>tilesfx</artifactId>
-            <version>${tilesfx.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-materialdesign2-pack</artifactId>
             <version>${ikonli.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>${controlsfx.version}</version>
-        </dependency>
         <!--    MY SQL DEP.-->
         <dependency>
             <groupId>mysql</groupId>
@@ -137,11 +121,6 @@
             <version>${mysql.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-fontawesome5-pack</artifactId>
-            <version>${ikonli.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>

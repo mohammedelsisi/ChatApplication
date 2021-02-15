@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<<<<<<< Updated upstream
 <?import com.jfoenix.controls.JFXPasswordField?>
+=======
+<?import com.jfoenix.controls.JFXComboBox?>
+>>>>>>> Stashed changes
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -24,17 +28,24 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<<<<<<< Updated upstream
 <?import org.controlsfx.control.CheckComboBox?>
 <?import org.controlsfx.control.SearchableComboBox?>
+=======
+>>>>>>> Stashed changes
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
-      <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.5" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
+<<<<<<< Updated upstream
             <TabPane prefHeight="570.0" prefWidth="426.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+=======
+            <TabPane minWidth="-Infinity" prefHeight="570.0" prefWidth="426.0" side="LEFT" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+>>>>>>> Stashed changes
               <tabs>
                   <Tab disable="true" style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
                      <content>
@@ -372,6 +383,7 @@
                         </Label>
                      </graphic>
                      <content>
+<<<<<<< Updated upstream
                         <VBox alignment="CENTER" spacing="5.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -529,11 +541,115 @@
                      </graphic>
                      <content>
                         <VBox alignment="CENTER">
+=======
+                        <VBox alignment="CENTER" prefHeight="570.0" prefWidth="250.0" spacing="10.0" style="-fx-background-color: FDFBF6;">
+>>>>>>> Stashed changes
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <children>
+<<<<<<< Updated upstream
                               <JFXButton fx:id="btnUpdateInfo" onAction="#openUpdateinfoPage" prefHeight="35.0 " prefWidth="114.0" text="Update User Info" />
+=======
+                              <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="68.0" prefWidth="238.0" style="-fx-background-color: F3FAF1; -fx-border-color: E2EEC2;">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="-6.0" layoutY="13.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="143.0" text="Edit Profile" textFill="#12646f">
+                                       <font>
+                                          <Font name="System Bold" size="21.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <HBox fx:id="HBDisplayName" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="199.0" spacing="5.0" style="-fx-border-color: #B9F5A9;">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2dbbf" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="mdi2a-account-circle-outline" iconSize="20" layoutX="-11.0" layoutY="8.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFDisplayName" focusColor="#2e5872" prefHeight="30.0" prefWidth="190.0" promptText="Display Name" unFocusColor="#82d727" HBox.hgrow="SOMETIMES">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" style="-fx-border-color: #B9F5A9;" styleClass="border_chats" stylesheets="../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="mdi2e-email-open-outline" iconSize="20" layoutX="-11.0" layoutY="8.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFEmailAddress" prefHeight="30.0" prefWidth="190.0" promptText="Email Address" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" style="-fx-border-color: #B9F5A9;" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="mdi2c-cake-layered" iconSize="20" layoutX="-11.0" layoutY="4.0" />
+                                       </children>
+                                    </Group>
+                                    <DatePicker fx:id="tfdatePicker" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="190.0" promptText="Date of Birth" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="159.0" spacing="5.0" style="-fx-border-color: #B9F5A9;" styleClass="border_chats" stylesheets="../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="mdi2g-gender-male-female" iconSize="20" layoutX="-11.0" layoutY="7.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXComboBox fx:id="cbGender" prefHeight="34.0" prefWidth="184.0" promptText="Gender" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="186.0" prefWidth="249.0" spacing="5.0" style="-fx-border-color: #B9F5A9;" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="mdi2b-bio" iconSize="20" layoutX="-10.0" layoutY="6.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextArea fx:id="TABio" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="190.0" promptText="Update Your Bio" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <Panel prefHeight="50.0" prefWidth="238.0">
+                                 <right>
+                                    <JFXButton fx:id="btnUpdateInfo11" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#SaveUpdateChanges" prefHeight="30.0" prefWidth="112.0" style="-fx-background-color: #70c1b3;" text="Save changes" textFill="WHITE" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font></JFXButton>
+                                 </right>
+                                 <left>
+                                    <JFXButton fx:id="btnChangePassword" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleChangePassword" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #70c1b3;" text="Change Password" textFill="WHITE" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </JFXButton>
+                                 </left>
+                              </Panel>
+>>>>>>> Stashed changes
                            </children>
                         </VBox>
                      </content>
@@ -578,7 +694,11 @@
                         </HBox>
                      </top>
                      <center>
+<<<<<<< Updated upstream
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="370.0" prefWidth="398.0" stylesheets="@../../../../../../Projects/ChatApplication/ChatApplication/ClientSide/src/main/resources/styles/StyleSheet.css" BorderPane.alignment="TOP_CENTER">
+=======
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="370.0" prefWidth="398.0" stylesheets="@../styles/StyleSheet.css" BorderPane.alignment="TOP_CENTER">
+>>>>>>> Stashed changes
                            <content>
                               <VBox fx:id="messagesContainer" />
                            </content>
