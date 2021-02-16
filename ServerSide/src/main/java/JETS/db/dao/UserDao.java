@@ -74,7 +74,6 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setInt(7, dto.getAge());
             statement.setString(8, dto.getBio());
             statement.setBytes(9, dto.getUserPhoto());
-//            statement.setString(10, dto.getStatus());
             statement.executeUpdate();
             return dto;
         }

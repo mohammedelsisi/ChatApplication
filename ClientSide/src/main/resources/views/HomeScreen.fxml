@@ -30,7 +30,7 @@
 
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <TabPane fx:id="tabPane" prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+            <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
               <tabs>
                   <Tab disable="true" style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
                      <content>

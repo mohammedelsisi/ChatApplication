@@ -43,12 +43,11 @@ public class ClientMain extends Application {
     @Override
     public void init() {
         try {
-            Registry registry = LocateRegistry.getRegistry(6258);
+            Registry registry = LocateRegistry.getRegistry(6270);
             userDAO = (DAOInterface<CurrentUser>)registry.lookup("UserRegistrationService");
             connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
             chatServiceInt= (ChatServiceInt) registry.lookup("ChatService");
             chatDao= (ChatDao) registry.lookup("ChatDao");
-
             chatting=(Chatting) registry.lookup("ChattingService");
 
         }catch (Exception e){

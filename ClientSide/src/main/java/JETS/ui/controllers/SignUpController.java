@@ -208,14 +208,14 @@ public class SignUpController implements Initializable {
             phone = phoneNumber.getText();
             if (phone.length() == 11) phone = phone.substring(1);
             CurrentUser user = new CurrentUser();
-            user.setPhoneNumber(code + phoneNumber.getText());
+            user.setPhoneNumber(code + phone);
             user.setEmail(emailAddress.getText());
             user.setDisplayName(displayName.getText());
             user.setPassword(password.getText());
             user.setGender(gender.getValue().toString().toUpperCase());
             user.setAge(Period.between(datePicker.getValue(), LocalDate.now()).getYears());
             user.setBio(bio.getText());
-
+            user.setStatus("AVAILABLE");
             user.setUserPhoto(photoBytes);
             ClientMain.userDAO.create(user);
 
