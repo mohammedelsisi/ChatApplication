@@ -25,7 +25,8 @@ public class ClientImp extends UnicastRemoteObject implements CallBack, Serializ
     @Override
     public void notifyAcceptance(FriendEntity user) throws RemoteException {
         System.out.println(user.getDisplayName()+" accepted your request");
-        ChatController.friendsList.add(user);
+        Platform.runLater( () -> ChatController.friendsList.add(user));
+        ModelsFactory.getInstance().getCurrentUser().getFriends().put(user.getPhoneNumber(), user);
     }
 
     @Override

@@ -11,8 +11,6 @@ import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -20,10 +18,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -37,7 +35,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -119,7 +116,6 @@ public class ChatController implements Initializable {
         loadRequestList();
         loadFriendList();
 
-
         listViewRequestList = new ListView(requestLists);
         listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
             @Override
@@ -155,6 +151,7 @@ public class ChatController implements Initializable {
                                             ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
                                             friendsList.add(friendEntity);
+                                            currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
                                         } catch (RemoteException e) {
                                             e.printStackTrace();
                                         }
@@ -208,33 +205,54 @@ public class ChatController implements Initializable {
                 return o1.getStatus().compareTo(o2.getStatus());
             }
         });
-        listViewFriendList.setItems(sortedListFriends);
+        listViewFriendList = new ListView<>(sortedListFriends);
         listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
-            HBox hBox = new HBox();
 
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendEntityListView) {
 
 
                 return new ListCell<>() {
+                    {
+                        prefWidthProperty().bind(friendEntityListView.widthProperty().subtract(2));
+                        setMaxWidth(Control.USE_PREF_SIZE);
+                    }
+
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
                         super.updateItem(friendEntity, b);
+
                         if (!b) {
-                            Label label = new Label();
+                            HBox hBox = new HBox();
                             Circle imageCircle = new Circle(20);
-                                byte[] userImage = null;
-                                if ((userImage = friendEntity.getUserPhoto()) != null) {
-                                    try(ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)){
+                            Label label = new Label();
+                            Circle status = new Circle(5);
+                            if (friendEntity.getStatus().equals("AVAILABLE")) {
+                                status.setFill(Color.LIME);
+                            } else if (friendEntity.getStatus().equals("AWAY")) {
+                                status.setFill(Color.GREENYELLOW);
+                            } else if (friendEntity.getStatus().equals("BUSY")) {
+                                status.setFill(Color.RED);
+                            } else {
+                                status.setFill(Color.GRAY);
+                            }
+                            byte[] userImage = null;
+                            if ((userImage = friendEntity.getUserPhoto()) != null) {
+                                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)) {
                                     imageCircle.setFill(new ImagePattern(new Image(byteArrayInputStream)));
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                             label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getStatus());
                             label.setGraphic(imageCircle);
+                            hBox.getChildren().addAll(label, status);
 
-                            this.setGraphic(label);
+
+                            hBox.setAlignment(Pos.CENTER_LEFT);
+                            hBox.setFillHeight(true);
+                            hBox.setPadding(new Insets(10));
+                            this.setGraphic(hBox);
                             //Image
                         } else {
                             setText(null);
@@ -248,16 +266,16 @@ public class ChatController implements Initializable {
         contacts.getChildren().addAll(listViewFriendList);
         statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatus());
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                // notify my friends during termination or sign out
-                ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
-                try {
-                    System.out.println(newValue.toString());
-                    ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+            // notify my friends during termination or sign out
+            ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
+            try {
+                System.out.println(newValue.toString());
+                ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         });
-        try(ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentUser.getUserPhoto())) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentUser.getUserPhoto())) {
             circleView.setFill(new ImagePattern(new Image(byteArrayInputStream)));
         } catch (IOException e) {
             e.printStackTrace();
@@ -296,6 +314,7 @@ public class ChatController implements Initializable {
 
     }
 
+    @FXML
     public void requestFriend() throws SQLException, RemoteException {
 
         invalidYourself = new Label();
