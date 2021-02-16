@@ -85,7 +85,11 @@ public class FriendEntity implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return phoneNumber.equals(((FriendEntity) obj).phoneNumber);
+        boolean isEqual = false;
+        if (obj != null) {
+           isEqual = phoneNumber.equals(((FriendEntity) obj).phoneNumber);
+        }
+        return isEqual;
     }
 
     private void writeObject(ObjectOutputStream s) throws IOException {
