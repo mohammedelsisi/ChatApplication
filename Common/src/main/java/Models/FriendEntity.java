@@ -3,8 +3,10 @@ package Models;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.*;
 
 public class FriendEntity implements Serializable {
 
@@ -18,7 +20,7 @@ public class FriendEntity implements Serializable {
         this.phoneNumber = phoneNumber;
         setDisplayName(displayName);
         this.bio = bio;
-        this.status =status;
+        this.status = status;
     }
 
     public FriendEntity(String displayName) {
@@ -71,16 +73,19 @@ public class FriendEntity implements Serializable {
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String statusVal) {
         this.status = statusVal;
     }
+
     @Override
     public int hashCode() {
         return Integer.parseInt(phoneNumber.substring(1));
     }
+
     @Override
     public boolean equals(Object obj) {
-        return phoneNumber.equals(((FriendEntity)obj).phoneNumber);
+        return phoneNumber.equals(((FriendEntity) obj).phoneNumber);
     }
 
     private void writeObject(ObjectOutputStream s) throws IOException {
@@ -94,6 +99,5 @@ public class FriendEntity implements Serializable {
         userPhoto = new SimpleObjectProperty<>((byte[]) s.readObject());
         displayName = new SimpleStringProperty(s.readUTF());
     }
-
 }
 

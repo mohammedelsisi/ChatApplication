@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CurrentUser implements Serializable {
 
-    final transient private StringProperty status = new SimpleStringProperty();
+    transient private StringProperty status = new SimpleStringProperty();
     transient private StringProperty displayNameProperty = new SimpleStringProperty();
     transient private SimpleObjectProperty<byte[]> userPhoto = new SimpleObjectProperty<>();
     private String phoneNumber;
@@ -134,13 +134,14 @@ public class CurrentUser implements Serializable {
         s.defaultWriteObject();
         s.writeUTF(displayNameProperty.get());
         s.writeObject(userPhoto.get());
-
+        s.writeUTF(status.get());
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
         displayNameProperty = new SimpleStringProperty(s.readUTF());
         userPhoto = new SimpleObjectProperty<>((byte[]) s.readObject());
+        status = new SimpleStringProperty(s.readUTF());
     }
 
 }

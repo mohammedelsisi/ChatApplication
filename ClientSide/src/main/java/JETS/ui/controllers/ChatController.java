@@ -11,6 +11,7 @@ import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,8 +21,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-
-
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -39,50 +39,37 @@ import javafx.util.Callback;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-
 import java.net.URL;
-
 import java.rmi.RemoteException;
-import java.security.Policy;
 import java.sql.SQLException;
-
 import java.util.*;
 
-import java.util.ArrayList;
-
-import java.rmi.RemoteException;
-import java.sql.SQLException;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
-
-
-
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
-import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
-
 
 
 public class ChatController implements Initializable {
+    public static Label invalidYourself;
+    public static ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
+    public static ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
+    public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
+    public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
+    @FXML
+    public ComboBox statusComboBox;
+    public GridPane grid = new GridPane();
+    public Dialog dialog = new Dialog();
+    public Alert alert;
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
-    ListView<FriendEntity> listView;
     int currentIdx;
+    ListView<FriendEntity> listViewRequestList;
+    ListView<FriendEntity> listViewFriendList = new ListView<>();
     @FXML
     private StackPane spChatBoxes;
-    @FXML
-    private ImageView imgView;
     @FXML
     private Circle circleView;
     @FXML
@@ -90,34 +77,34 @@ public class ChatController implements Initializable {
     @FXML
     private TabPane tabPane;
     @FXML
-    public ComboBox statusComboBox;
-    @FXML
     private VBox messagesContainer;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
 
-    @FXML
-    private ImageView profilePicImageView;
+    public static void loadRequestList() {
+        try {
+            requestLists.setAll(ClientMain.chatting.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
 
-    public GridPane grid = new GridPane();
-    public static Label invalidYourself;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public static ObservableList<FriendEntity> requestLists= FXCollections.observableArrayList();
-
-    public static ObservableList<FriendEntity> friendsList =FXCollections.observableArrayList();
-    ListView<FriendEntity> listViewRequestList;
-    ListView<FriendEntity> listViewFriendList=new ListView<>();
-
-
-
-    public static TreeItem<FriendEntity> root=new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
-    public static TreeItem<FriendEntity> available=new TreeItem<>(new FriendEntity("Available"));
+    public static void loadFriendList() {
+        try {
 
 
-    public Dialog dialog = new Dialog();
-    public Alert alert;
+            friendsList.addAll(ClientMain.chatting.getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            for (FriendEntity friendEntity : friendsList) {
+                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
+                System.out.println(friendEntity.getDisplayName() + ":" + friendEntity.getStatus());
 
+            }
 
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -129,37 +116,34 @@ public class ChatController implements Initializable {
 
         });
 
-
-        String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-
         loadRequestList();
         loadFriendList();
-
 
 
         listViewRequestList = new ListView(requestLists);
         listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
-                ListCell<FriendEntity> cell=new ListCell<>(){
-                    Button acceptButton=new Button("Accept");
-                    Button rejectButton=new Button("Reject");
+                ListCell<FriendEntity> cell = new ListCell<>() {
+                    Button acceptButton = new Button("Accept");
+                    Button rejectButton = new Button("Reject");
+
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
-                        super.updateItem(friendEntity,b);
-                        if(!b) {
+                        super.updateItem(friendEntity, b);
+                        if (!b) {
 
                             try {
-                                HBox hBox=new HBox(10);
+                                HBox hBox = new HBox(10);
 
 
                                 rejectButton.setOnAction(new EventHandler<ActionEvent>() {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.chatting.refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
+                                            ClientMain.chatting.refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
-                                        }catch (RemoteException e){
+                                        } catch (RemoteException e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -168,39 +152,40 @@ public class ChatController implements Initializable {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
+                                            ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
                                             friendsList.add(friendEntity);
-                                        }catch (RemoteException e){
+                                        } catch (RemoteException e) {
                                             e.printStackTrace();
                                         }
 
                                     }
                                 });
-                                Pane pane=new Pane();
+                                Pane pane = new Pane();
                                 Image img;
-                                if(friendEntity.getPhotoPath()==null) {
-                                    img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
-                                }else{
-                                    img=new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
+                                Circle imageCircle = new Circle(50);
+                                byte[] userImage = null;
+                                if ((userImage = friendEntity.getUserPhoto()) != null) {
+                                    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)) {
+                                        imageCircle.setFill(new ImagePattern(new Image(byteArrayInputStream)));
+                                    }
                                 }
-                                ImageView imageView=new ImageView(img);
 
-                                imageView.setFitWidth(50);
-                                imageView.setFitHeight(50);
-                                Label label=new Label();
+//                                imageView.setFitWidth(50);
+//                                imageView.setFitHeight(50);
+                                Label label = new Label();
                                 label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getPhoneNumber());
-                                label.setGraphic(imageView);
-                                hBox.getChildren().addAll(label,pane,acceptButton,rejectButton);
+                                label.setGraphic(imageCircle);
+                                hBox.getChildren().addAll(label, pane, acceptButton, rejectButton);
                                 hBox.setHgrow(pane, Priority.ALWAYS);
                                 hBox.setFillHeight(true);
                                 hBox.setAlignment(Pos.CENTER_LEFT);
                                 this.setGraphic(hBox);
 
-                            }catch (IOException e){
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             setGraphic(null);
                             setText(null);
                         }
@@ -217,7 +202,7 @@ public class ChatController implements Initializable {
                 messageField.setPrefHeight(Math.max(oldMessageFieldHigh + 15, 50));
             }
         });
-        SortedList<FriendEntity> sortedListFriends=new SortedList<>(friendsList, new Comparator<FriendEntity>() {
+        SortedList<FriendEntity> sortedListFriends = new SortedList<>(friendsList, new Comparator<FriendEntity>() {
             @Override
             public int compare(FriendEntity o1, FriendEntity o2) {
                 return o1.getStatus().compareTo(o2.getStatus());
@@ -225,37 +210,33 @@ public class ChatController implements Initializable {
         });
         listViewFriendList.setItems(sortedListFriends);
         listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
-            HBox hBox=new HBox();
+            HBox hBox = new HBox();
+
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendEntityListView) {
 
 
-                return new ListCell<>(){
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
                         super.updateItem(friendEntity, b);
-                        if(!b){
+                        if (!b) {
                             Label label = new Label();
-                            Image img;
-                            ImageView imageViewPic = new ImageView();
-                            imageViewPic.setFitWidth(50);
-                            imageViewPic.setFitHeight(50);
-                            try {
-                                if (friendEntity.getPhotoPath() == null) {
-                                    img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
-                                } else {
-                                    img = new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
-                                }
-                                imageViewPic.setImage(img);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                            Circle imageCircle = new Circle(20);
+                                byte[] userImage = null;
+                                if ((userImage = friendEntity.getUserPhoto()) != null) {
+                                    try(ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)){
+                                    imageCircle.setFill(new ImagePattern(new Image(byteArrayInputStream)));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                             }
                             label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getStatus());
-                            label.setGraphic(imageViewPic);
+                            label.setGraphic(imageCircle);
 
                             this.setGraphic(label);
                             //Image
-                        }else{
+                        } else {
                             setText(null);
                             setGraphic(null);
                         }
@@ -266,24 +247,20 @@ public class ChatController implements Initializable {
         });
         contacts.getChildren().addAll(listViewFriendList);
         statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatus());
-        statusComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
+        statusComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
                 // notify my friends during termination or sign out
-                ModelsFactory.getInstance().getCurrentUser().setStatus(t1.toString());
+                ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
                 try {
-                    System.out.println(t1.toString());
-                    ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), t1.toString());
-                }catch (RemoteException e){
+                    System.out.println(newValue.toString());
+                    ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
+                } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-            }
         });
-        try {
-
-            profilePicImageView.setImage(new Image(ModelsFactory.getInstance().getCurrentUser().getPhotoPath().toURI().toURL().toExternalForm()));
-        }catch (Exception ex){
-            ex.printStackTrace();
+        try(ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentUser.getUserPhoto())) {
+            circleView.setFill(new ImagePattern(new Image(byteArrayInputStream)));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -319,7 +296,6 @@ public class ChatController implements Initializable {
 
     }
 
-
     public void requestFriend() throws SQLException, RemoteException {
 
         invalidYourself = new Label();
@@ -353,8 +329,6 @@ public class ChatController implements Initializable {
 //        }
     }
 
-
-
     public int AddFriend(String myfriendNum) {
         int x = 0;
         String myphoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
@@ -364,11 +338,10 @@ public class ChatController implements Initializable {
             invalidYourself.setText(" Please enter a valid Mobile No.");
             System.out.println("You cannot add your account");
 
-        }else if (myfriendNum.isEmpty()){
+        } else if (myfriendNum.isEmpty()) {
             invalidYourself.setText(" Please enter a valid Mobile No.");
             System.out.println("  Please enter a valid Mobile Number");
-        }
-        else {
+        } else {
             try {
                 x = ClientMain.chatting.sendRequest(myphoneNumber, myfriendPhoneNo);
             } catch (RemoteException e) {
@@ -383,13 +356,11 @@ public class ChatController implements Initializable {
         return x;
     }
 
-
     @FXML
-    public void requestsHandle(){
+    public void requestsHandle() {
         Alert alert = new Alert(Alert.AlertType.NONE);
 
         DialogPane dialogPane = alert.getDialogPane();
-
 
 
         dialogPane.setContent(listViewRequestList);
@@ -403,40 +374,17 @@ public class ChatController implements Initializable {
         alert.getButtonTypes().addAll(ButtonType.CLOSE);
         alert.showAndWait();
     }
-    public static void loadRequestList(){
-        try {
-            requestLists.setAll(ClientMain.chatting.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
-    }
-    public static void loadFriendList(){
-        try {
-
-
-            friendsList.addAll(ClientMain.chatting.getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-            for (FriendEntity friendEntity:friendsList){
-                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(),friendEntity);
-                System.out.println(friendEntity.getDisplayName()+":"+friendEntity.getStatus());
-
-            }
-
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
-    }
 
     public void startChatAction(ActionEvent actionEvent) {
 
 
-        List<String> choosenFriends = new ArrayList<>();
-        choosenFriends.add(currentUser.getPhoneNumber());
-        choosenFriends.add(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber());
-        System.out.println(FriendsManager.getInstance().getFriendName(treeViewFriends.getSelectionModel().getSelectedItem().getValue().getPhoneNumber()));
+        List<String> chosenFriends = new ArrayList<>();
+        chosenFriends.add(currentUser.getPhoneNumber());
+        chosenFriends.add(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber());
+        System.out.println(FriendsManager.getInstance().getFriendName(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber()));
         // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        ChatEntitiy createdEntity = new ChatEntitiy(0, choosenFriends, null);
+        ChatEntitiy createdEntity = new ChatEntitiy(0, chosenFriends, null);
         createChatLayout(createdEntity);
         tabPane.getSelectionModel().selectPrevious();
 
