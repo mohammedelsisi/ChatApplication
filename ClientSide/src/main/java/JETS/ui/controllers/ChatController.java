@@ -1,15 +1,17 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
-import javafx.beans.value.ChangeListener;
 import JETS.ui.helpers.ChatManager;
+import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.StageCoordinator;
 import Models.ChatEntitiy;
 import Models.CurrentUser;
 import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -18,10 +20,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -29,41 +35,45 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
 import java.net.URL;
+
+import java.rmi.RemoteException;
+import java.security.Policy;
+import java.sql.SQLException;
+
+import java.util.*;
+
+import java.util.ArrayList;
+
 import java.rmi.RemoteException;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.ArrayList;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
+
+
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
+import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+
+
 
 public class ChatController implements Initializable {
-
-    public static ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
-    public static ObservableList<FriendEntity> friendsList =FXCollections.observableArrayList();
-    public static TreeView<FriendEntity> treeViewFriends = new TreeView<>();
-    public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
-    public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
     @FXML
     public VBox contacts;
-    @FXML
-    public ComboBox statusComboBox;
-    private Text textHolder = new Text();
-    private double oldMessageFieldHigh;
-    @FXML
-    private ImageView profilePicImageView;
-    public GridPane grid = new GridPane();
-    public static Label invalidYourself;
-    ListView<FriendEntity> listViewRequestList;
-    ListView<FriendEntity> listViewFriendList=new ListView<>();
-    public Dialog dialog = new Dialog();
-    public Alert alert;
     public VBox chatsVbox;
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
@@ -80,73 +90,37 @@ public class ChatController implements Initializable {
     @FXML
     private TabPane tabPane;
     @FXML
+    public ComboBox statusComboBox;
+    @FXML
     private VBox messagesContainer;
-//    public static TreeItem<FriendEntity> busy=new TreeItem("Busy");
-//    public static TreeItem<FriendEntity> away=new TreeItem("Away");
-//    public static TreeItem<FriendEntity> offline=new TreeItem("Offline");
+    private Text textHolder = new Text();
+    private double oldMessageFieldHigh;
+
+    @FXML
+    private ImageView profilePicImageView;
+
+    public GridPane grid = new GridPane();
+    public static Label invalidYourself;
+
+    public static ObservableList<FriendEntity> requestLists= FXCollections.observableArrayList();
+
+    public static ObservableList<FriendEntity> friendsList =FXCollections.observableArrayList();
+    ListView<FriendEntity> listViewRequestList;
+    ListView<FriendEntity> listViewFriendList=new ListView<>();
 
 
 
-    public static int AddFriend(String myfriendNum) throws SQLException, RemoteException {
-        //String myphoneNumber = new CurrentUser().getPhoneNumber();
-        String myphoneNumber = ("+201122344444");
-        String myfriendPhoneNo = myfriendNum;
+    public static TreeItem<FriendEntity> root=new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
+    public static TreeItem<FriendEntity> available=new TreeItem<>(new FriendEntity("Available"));
 
-        int x = ClientMain.userFriendDaoInterface.SearchbyPhoneno(myphoneNumber, myfriendPhoneNo);
-        System.out.println(myphoneNumber);
-        System.out.println(myfriendPhoneNo);
-        System.out.println(x);
-        return x;
-    }
+
+    public Dialog dialog = new Dialog();
+    public Alert alert;
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-<<<<<<< HEAD
-        String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-
-        loadRequestList();
-        loadFriendList();
-
-
-
-            listViewRequestList = new ListView(requestLists);
-            listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
-                @Override
-                public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
-                        ListCell<FriendEntity> cell=new ListCell<>(){
-                        Button acceptButton=new Button("Accept");
-                        Button rejectButton=new Button("Reject");
-                        @Override
-                        protected void updateItem(FriendEntity friendEntity, boolean b) {
-                            super.updateItem(friendEntity,b);
-                            if(!b) {
-
-                                try {
-                                    HBox hBox=new HBox(10);
-
-
-                                    rejectButton.setOnAction(new EventHandler<ActionEvent>() {
-                                        @Override
-                                        public void handle(ActionEvent event) {
-                                            try {
-                                                ClientMain.chatting.refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
-                                                requestLists.remove(friendEntity);
-                                            }catch (RemoteException e){
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                                    acceptButton.setOnAction(new EventHandler<ActionEvent>() {
-                                        @Override
-                                        public void handle(ActionEvent event) {
-                                            try {
-                                                ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
-                                                requestLists.remove(friendEntity);
-                                                friendsList.add(friendEntity);
-                                            }catch (RemoteException e){
-                                                e.printStackTrace();
-                                            }
-=======
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
         currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
@@ -157,220 +131,79 @@ public class ChatController implements Initializable {
 
 
         String phone = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+
         loadRequestList();
         loadFriendList();
-        treeViewFriends.setShowRoot(false);
-        treeViewFriends.setCellFactory(new Callback<TreeView<FriendEntity>, TreeCell<FriendEntity>>() {
-            @Override
-            public TreeCell<FriendEntity> call(TreeView<FriendEntity> friendEntityTreeView) {
-                return new TreeCell<FriendEntity>() {
-                    @Override
-                    protected void updateItem(FriendEntity friendEntity, boolean b) {
-                        super.updateItem(friendEntity, b);
-                        if (!b) {
-
-                            this.setText(friendEntity.getDisplayName());
-                            if (friendEntity.getPhoneNumber() != null) {
-
-                                    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(friendEntity.getUserPhoto())) {
 
 
-                                    Image img=new Image(byteArrayInputStream);
-                                    Circle circle = new Circle(25);
-                                   circle.setFill(new ImagePattern(img));
-                                   setGraphic(circle);
 
-                                } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                            }
-                        } else {
-                            setText(null);
-                            setGraphic(null);
-                        }
-                    }
-                };
-            }
-        });
-
-        contacts.getChildren().add(treeViewFriends);
->>>>>>> SelectFriendsToMsg
-
-
-        listView = new ListView(requestLists);
-        listView.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
+        listViewRequestList = new ListView(requestLists);
+        listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
-                ListCell<FriendEntity> cell = new ListCell<>() {
-                    Button acceptButton = new Button("Accept");
-                    Button rejectButton = new Button("Reject");
-
+                ListCell<FriendEntity> cell=new ListCell<>(){
+                    Button acceptButton=new Button("Accept");
+                    Button rejectButton=new Button("Reject");
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
-                        super.updateItem(friendEntity, b);
-                        if (!b) {
+                        super.updateItem(friendEntity,b);
+                        if(!b) {
 
                             try {
-                                HBox hBox = new HBox(10);
+                                HBox hBox=new HBox(10);
 
 
                                 rejectButton.setOnAction(new EventHandler<ActionEvent>() {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.userFriendDaoInterface.deleteRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            ClientMain.chatting.refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
-                                        } catch (RemoteException e) {
+                                        }catch (RemoteException e){
                                             e.printStackTrace();
                                         }
-<<<<<<< HEAD
-                                    });
-                                    Pane pane=new Pane();
-                                    Image img;
-                                    if(friendEntity.getPhotoPath()==null) {
-                                        img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
-                                    }else{
-                                        img=new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
-                                    }
-                                    ImageView imageView=new ImageView(img);
-
-                                    imageView.setFitWidth(50);
-                                    imageView.setFitHeight(50);
-                                    Label label=new Label();
-                                    label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getPhoneNumber());
-                                    label.setGraphic(imageView);
-                                    hBox.getChildren().addAll(label,pane,acceptButton,rejectButton);
-                                    hBox.setHgrow(pane, Priority.ALWAYS);
-                                    hBox.setFillHeight(true);
-                                    hBox.setAlignment(Pos.CENTER_LEFT);
-                                    this.setGraphic(hBox);
-
-                                }catch (IOException e){
-                                    e.printStackTrace();
-                                }
-                            }else {
-                                setGraphic(null);
-                                setText(null);
-=======
                                     }
                                 });
                                 acceptButton.setOnAction(new EventHandler<ActionEvent>() {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.userFriendDaoInterface.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
-                                        } catch (RemoteException e) {
+                                            friendsList.add(friendEntity);
+                                        }catch (RemoteException e){
                                             e.printStackTrace();
                                         }
 
                                     }
                                 });
-                                Pane pane = new Pane();
-                                Image img = new Image(new FileInputStream("RegPPic.png"));
-                                ImageView imageView = new ImageView(img);
+                                Pane pane=new Pane();
+                                Image img;
+                                if(friendEntity.getPhotoPath()==null) {
+                                    img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
+                                }else{
+                                    img=new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
+                                }
+                                ImageView imageView=new ImageView(img);
 
                                 imageView.setFitWidth(50);
                                 imageView.setFitHeight(50);
-                                Label label = new Label();
+                                Label label=new Label();
                                 label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getPhoneNumber());
                                 label.setGraphic(imageView);
-                                hBox.getChildren().addAll(label, pane, acceptButton, rejectButton);
+                                hBox.getChildren().addAll(label,pane,acceptButton,rejectButton);
                                 hBox.setHgrow(pane, Priority.ALWAYS);
                                 hBox.setFillHeight(true);
                                 hBox.setAlignment(Pos.CENTER_LEFT);
                                 this.setGraphic(hBox);
 
-                            } catch (IOException e) {
+                            }catch (IOException e){
                                 e.printStackTrace();
->>>>>>> SelectFriendsToMsg
                             }
-                        } else {
+                        }else {
                             setGraphic(null);
                             setText(null);
                         }
-<<<<<<< HEAD
-                    };
-                    return cell;
-                }
-            });
-            textHolder.textProperty().bind(messageField.textProperty());
-            textHolder.setWrappingWidth(600);
-            textHolder.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
-                if (oldMessageFieldHigh != newValue.getHeight() && newValue.getHeight() < 100) {
-                    oldMessageFieldHigh = newValue.getHeight();
-                    messageField.setPrefHeight(Math.max(oldMessageFieldHigh + 15, 50));
-                }
-            });
-        SortedList<FriendEntity> sortedListFriends=new SortedList<>(friendsList, new Comparator<FriendEntity>() {
-            @Override
-            public int compare(FriendEntity o1, FriendEntity o2) {
-                return o1.getStatus().compareTo(o2.getStatus());
-            }
-        });
-         listViewFriendList.setItems(sortedListFriends);
-         listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
-             HBox hBox=new HBox();
-             @Override
-             public ListCell<FriendEntity> call(ListView<FriendEntity> friendEntityListView) {
-
-
-                 return new ListCell<>(){
-                     @Override
-                     protected void updateItem(FriendEntity friendEntity, boolean b) {
-                         super.updateItem(friendEntity, b);
-                         if(!b){
-                             Label label = new Label();
-                             Image img;
-                             ImageView imageViewPic = new ImageView();
-                             imageViewPic.setFitWidth(50);
-                             imageViewPic.setFitHeight(50);
-                             try {
-                                 if (friendEntity.getPhotoPath() == null) {
-                                     img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
-                                 } else {
-                                     img = new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
-                                 }
-                                 imageViewPic.setImage(img);
-                             } catch (Exception ex) {
-                                 ex.printStackTrace();
-                             }
-                             label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getStatus());
-                             label.setGraphic(imageViewPic);
-
-                             this.setGraphic(label);
-                             //Image
-                         }else{
-                             setText(null);
-                             setGraphic(null);
-                         }
-                     }
-                 };
-
-             }
-         });
-         contacts.getChildren().addAll(listViewFriendList);
-         statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatusVal());
-         statusComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-             @Override
-             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                 // notify my friends during termination or sign out
-                 ModelsFactory.getInstance().getCurrentUser().setStatus(t1.toString());
-                 try {
-                     System.out.println(t1.toString());
-                     ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), t1.toString());
-                 }catch (RemoteException e){
-                     e.printStackTrace();
-                 }
-             }
-         });
-    try {
-
-        profilePicImageView.setImage(new Image(ModelsFactory.getInstance().getCurrentUser().getPhotoPath().toURI().toURL().toExternalForm()));
-    }catch (Exception ex){
-        ex.printStackTrace();
-    }
-=======
                     }
                 };
                 return cell;
@@ -384,9 +217,74 @@ public class ChatController implements Initializable {
                 messageField.setPrefHeight(Math.max(oldMessageFieldHigh + 15, 50));
             }
         });
+        SortedList<FriendEntity> sortedListFriends=new SortedList<>(friendsList, new Comparator<FriendEntity>() {
+            @Override
+            public int compare(FriendEntity o1, FriendEntity o2) {
+                return o1.getStatus().compareTo(o2.getStatus());
+            }
+        });
+        listViewFriendList.setItems(sortedListFriends);
+        listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
+            HBox hBox=new HBox();
+            @Override
+            public ListCell<FriendEntity> call(ListView<FriendEntity> friendEntityListView) {
 
 
->>>>>>> SelectFriendsToMsg
+                return new ListCell<>(){
+                    @Override
+                    protected void updateItem(FriendEntity friendEntity, boolean b) {
+                        super.updateItem(friendEntity, b);
+                        if(!b){
+                            Label label = new Label();
+                            Image img;
+                            ImageView imageViewPic = new ImageView();
+                            imageViewPic.setFitWidth(50);
+                            imageViewPic.setFitHeight(50);
+                            try {
+                                if (friendEntity.getPhotoPath() == null) {
+                                    img = new Image(new FileInputStream("ClientSide/src/main/resources/Pics/ca.png"));
+                                } else {
+                                    img = new Image(friendEntity.getPhotoPath().toURI().toURL().toExternalForm());
+                                }
+                                imageViewPic.setImage(img);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getStatus());
+                            label.setGraphic(imageViewPic);
+
+                            this.setGraphic(label);
+                            //Image
+                        }else{
+                            setText(null);
+                            setGraphic(null);
+                        }
+                    }
+                };
+
+            }
+        });
+        contacts.getChildren().addAll(listViewFriendList);
+        statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatus());
+        statusComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                // notify my friends during termination or sign out
+                ModelsFactory.getInstance().getCurrentUser().setStatus(t1.toString());
+                try {
+                    System.out.println(t1.toString());
+                    ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), t1.toString());
+                }catch (RemoteException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+        try {
+
+            profilePicImageView.setImage(new Image(ModelsFactory.getInstance().getCurrentUser().getPhotoPath().toURI().toURL().toExternalForm()));
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public void sendMessage(KeyEvent keyEvent) throws RemoteException {
@@ -407,23 +305,6 @@ public class ChatController implements Initializable {
                         });
                     }
 
-<<<<<<< HEAD
-                    //                 chatEntitiy.setParticipantsPhoneNumbers();
-//                   .initiateChat(chatEntitiy);
-                    messageField.setText("");
-                }
-                //sPane.vvalueProperty().bind(vBox.heightProperty());
-
-//                    chatEntitiy.setParticipantsPhoneNumbers();
-//                   .initiateChat(chatEntitiy);
-                messageField.setText("");
-            }
-//                sPane.vvalueProperty().bind(vBox.heightProperty());
-
-
-        } else {
-            messageField.setText("");
-=======
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
                     vBox.getChildren().add(new ChatBox(msg));
@@ -434,21 +315,15 @@ public class ChatController implements Initializable {
             } else {
                 messageField.clear();
             }
->>>>>>> SelectFriendsToMsg
         }
-    }
 
     }
+
 
     public void requestFriend() throws SQLException, RemoteException {
-<<<<<<< HEAD
-        
+
         invalidYourself = new Label();
         invalidYourself.setTextFill(Color.RED);
-=======
-
-        Dialog dialog = new Dialog();
->>>>>>> SelectFriendsToMsg
         //  dialog.setTitle();
         dialog.setResizable(false);
 
@@ -469,7 +344,6 @@ public class ChatController implements Initializable {
             }
         });
         Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
-<<<<<<< HEAD
         Button btn = (Button) dialog.getDialogPane().lookupButton(buttonTypeOk);
         // dialog.setOnCloseRequest();
 //
@@ -477,7 +351,7 @@ public class ChatController implements Initializable {
 //        {
 //            AddFriend(myFriendphoneNo);
 //        }
-        }
+    }
 
 
 
@@ -501,36 +375,24 @@ public class ChatController implements Initializable {
                 e.printStackTrace();
             }
 
-        System.out.println(myphoneNumber);
-        System.out.println(myfriendPhoneNo);
-        System.out.println(x);
+            System.out.println(myphoneNumber);
+            System.out.println(myfriendPhoneNo);
+            System.out.println(x);
 
-    }
-        return x;
-=======
-        String myFriendphoneNo = text1.getText();
-
-        if (resultOfAddFriend.get() == buttonTypeOk) {
-            AddFriend(myFriendphoneNo);
         }
-
-
->>>>>>> SelectFriendsToMsg
+        return x;
     }
 
 
     @FXML
-    public void requestsHandle() {
+    public void requestsHandle(){
         Alert alert = new Alert(Alert.AlertType.NONE);
+
         DialogPane dialogPane = alert.getDialogPane();
-<<<<<<< HEAD
 
 
 
         dialogPane.setContent(listViewRequestList);
-=======
-        dialogPane.setContent(listView);
->>>>>>> SelectFriendsToMsg
         dialogPane.setPrefWidth(400);
         dialogPane.setPrefHeight(400);
 
@@ -540,62 +402,28 @@ public class ChatController implements Initializable {
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.CLOSE);
         alert.showAndWait();
-
     }
-
-    public void loadRequestList() {
-
+    public static void loadRequestList(){
         try {
-<<<<<<< HEAD
             requestLists.setAll(ClientMain.chatting.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-=======
-            requestLists.setAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendRequests(currentUser.getPhoneNumber()));
->>>>>>> SelectFriendsToMsg
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-<<<<<<< HEAD
-=======
-        } catch (SQLException e) {
-            //e.printStackTrace();
-            requestLists.clear();
->>>>>>> SelectFriendsToMsg
-        }
-    }
-
-    public void loadFriendList() {
-        try {
-
-<<<<<<< HEAD
-
-            friendsList.addAll(ClientMain.chatting.getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-            for (FriendEntity friendEntity:friendsList){
-                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(),friendEntity);
-               System.out.println(friendEntity.getDisplayName()+":"+friendEntity.getStatus());
-
-            }
 
         }catch (RemoteException e){
             e.printStackTrace();
         }
     }
+    public static void loadFriendList(){
+        try {
 
 
-}
-=======
-            friendsList.addAll((ArrayList) ClientMain.userFriendDaoInterface.getFriendList(currentUser.getPhoneNumber()));
-            for (FriendEntity friendEntity : friendsList) {
-                currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
-                available.getChildren().add(new TreeItem<>(friendEntity));
-                System.out.println(friendEntity.getDisplayName());
+            friendsList.addAll(ClientMain.chatting.getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            for (FriendEntity friendEntity:friendsList){
+                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(),friendEntity);
+                System.out.println(friendEntity.getDisplayName()+":"+friendEntity.getStatus());
 
             }
-            treeViewFriends.setRoot(root);
-        } catch (RemoteException e) {
+
+        }catch (RemoteException e){
             e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // requestLists.clear();
         }
     }
 
@@ -679,4 +507,3 @@ public class ChatController implements Initializable {
         return scrollPane;
     }
 }
->>>>>>> SelectFriendsToMsg
