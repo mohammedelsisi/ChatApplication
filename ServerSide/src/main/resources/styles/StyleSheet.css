@@ -1,0 +1,101 @@
+.side_bar{
+
+    -fx-background-color: radial-gradient( center 50% -40%, radius 50%, #B2D8D8, #008080 );
+
+}
+
+.upper_rightBar{
+    -fx-background-color: linear-gradient( #008080 , #004C4C);
+    -fx-background-radius: 0 0 30 30;
+}
+
+.choicebox_status{
+
+-fx-background-color: transparent;
+}
+
+.border_chats{
+
+-fx-border-color: #edf2f2 ;
+-fx-border-radius: 3px;
+
+}
+
+.logo_background{
+    -fx-background-color: white;
+}
+
+.tab_pane{
+    -fx-background-color:  #004C4C;
+    -fx-outer-border :    #004C4C;
+    -fx-text-box-border: #004C4C;
+	-fx-background-color:transparent;
+ 
+
+}
+
+.profileTab{
+	 -fx-background-color:  #004C4C;
+    -fx-outer-border :    #004C4C;
+    -fx-text-box-border: #004C4C;
+	-fx-background-color:transparent;
+ 
+ -fx-tab-min-width:120px;
+  -fx-tab-max-width:120px;
+  -fx-tab-min-height:50px;
+  -fx-tab-max-height:50px;
+
+}
+
+.scroll-pane
+{
+    -fx-background-color: transparent;
+    /*-fx-border-color: derive(gray, 100%);*/
+    -fx-padding: 0px;
+}
+
+.scroll-pane .scroll-bar:vertical
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+
+}
+
+.scroll-pane .scroll-bar:vertical .track
+{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+.scroll-pane .scroll-bar:horizontal .decrement-button
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+
+}
+
+.scroll-pane .scroll-bar:vertical .decrement-button
+{
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}
+
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow
+{
+    -fx-padding: -2;
+
+
+}
+
+.scroll-pane .scroll-bar:vertical .thumb
+{
+    -fx-background-color: #bab4ae;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
