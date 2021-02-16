@@ -133,15 +133,15 @@ public class CurrentUser implements Serializable {
     private void writeObject(ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();
         s.writeUTF(displayNameProperty.get());
-        s.writeObject(userPhoto.get());
-        s.writeUTF(status.get());
+//        s.writeObject(userPhoto.get());
+
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
         displayNameProperty = new SimpleStringProperty(s.readUTF());
         userPhoto = new SimpleObjectProperty<>((byte[]) s.readObject());
-        status = new SimpleStringProperty(s.readUTF());
+//        status = new SimpleStringProperty(s.readUTF());
     }
 
 }
