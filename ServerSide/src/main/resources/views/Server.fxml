@@ -25,13 +25,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="690.0" stylesheets="@../styles/serverStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ServerController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="690.0" stylesheets="@../styles/serverStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ServerController02">
     <children>
-        <TabPane prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="50.0" tabMinHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <TabPane prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="35.0" tabMinHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
                 <Tab closable="false">
                <graphic>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Controls" textAlignment="CENTER" wrapText="true" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Controls" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
                </graphic>
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;">
@@ -69,25 +69,25 @@
                 </Tab>
                 <Tab closable="false">
                     <content>
-                          <GridPane prefHeight="367.0" prefWidth="600.0">
-                              <children>
-                                  <Pane fx:id="pan1" prefHeight="183.0" prefWidth="289.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                  <Pane fx:id="pan2" prefHeight="184.0" prefWidth="300.0000999999975" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                  <Pane fx:id="pan3" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                  <Pane fx:id="pan4" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                              </children>
-                              <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              </columnConstraints>
-                              <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              </rowConstraints>
-                          </GridPane>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="418.0" prefViewportWidth="583.0">
+                     <content>
+                        <BorderPane fx:id="countryPane" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
+                           <left>
+                                        <Pane fx:id="genderPane" prefHeight="300.0" prefWidth="295.0" BorderPane.alignment="CENTER" />
+                           </left>
+                           <top>
+                              <Label alignment="CENTER" minWidth="360.0" prefHeight="25.0" prefWidth="360.0" style="-fx-background-color: grey; -fx-text-fill: white;" styleClass="labelann" text="LongTalk Chat Users Analysis" textFill="WHITE" BorderPane.alignment="CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="30.0" />
+                                 </BorderPane.margin>
+                              </Label>
+                           </top>
+                        </BorderPane>
+                     </content>
+                  </ScrollPane>
                     </content>
                <graphic>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Analysis" textAlignment="CENTER" wrapText="true" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Analysis" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
                </graphic>
                 </Tab>
                 <Tab closable="false">
@@ -104,7 +104,7 @@
                      <children>
                                 <TableView fx:id="tableView" editable="true" layoutX="11.0" layoutY="47.0" prefHeight="347.0" prefWidth="658.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                                     <columns>
-                                        <TableColumn fx:id="userNameCol" prefWidth="93.0"  text="display name" />
+                                        <TableColumn fx:id="userNameCol" prefWidth="93.0" text="display name" />
                                         <TableColumn fx:id="firstNameCol" prefWidth="88.0" text="phone number" />
                                         <TableColumn fx:id="emailCol" prefWidth="170.0" text="status" />
                                         <TableColumn fx:id="genderCol" prefWidth="59.0" text="Gender" />
@@ -131,7 +131,7 @@
                   </GridPane>
                     </content>
                <graphic>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Users" textAlignment="CENTER" wrapText="true" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="86.0" text="Users" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
                </graphic>
                 </Tab>
             </tabs>
