@@ -1,31 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.net.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="690.0" stylesheets="@../styles/serverStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ServerController02">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="690.0" stylesheets="@../styles/serverStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ServerController02">
     <children>
         <TabPane prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="35.0" tabMinHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
@@ -72,9 +67,6 @@
                   <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="418.0" prefViewportWidth="583.0">
                      <content>
                         <BorderPane fx:id="countryPane" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
-                           <left>
-                                        <Pane fx:id="genderPane" prefHeight="300.0" prefWidth="295.0" BorderPane.alignment="CENTER" />
-                           </left>
                            <top>
                               <Label alignment="CENTER" minWidth="360.0" prefHeight="25.0" prefWidth="360.0" style="-fx-background-color: grey; -fx-text-fill: white;" styleClass="labelann" text="LongTalk Chat Users Analysis" textFill="WHITE" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
@@ -82,6 +74,9 @@
                                  </BorderPane.margin>
                               </Label>
                            </top>
+                           <center>
+                              <HBox fx:id="hBoxAnalysis" alignment="CENTER" BorderPane.alignment="CENTER" />
+                           </center>
                         </BorderPane>
                      </content>
                   </ScrollPane>
