@@ -20,7 +20,10 @@ public class CurrentUser implements Serializable {
     private String password;
     private String email;
     private String gender;
-    private int age;
+
+
+
+    private String DOB;
     private String country;
     private String Bio;
     private Map<String, FriendEntity> friends = new HashMap<>();
@@ -85,13 +88,6 @@ public class CurrentUser implements Serializable {
         this.gender = gender;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public String getCountry() {
         return country;
@@ -128,7 +124,13 @@ public class CurrentUser implements Serializable {
     public void setFriends(Map<String, FriendEntity> friends) {
         this.friends = friends;
     }
+    public String getDOB() {
+        return DOB;
+    }
 
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
 
     private void writeObject(ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();

@@ -24,6 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -47,6 +49,8 @@ import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.sql.Array;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
@@ -118,16 +122,21 @@ public class ChatController implements Initializable {
     @FXML
     void HandleChangePassword(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ChangePassword.fxml"));
-            DialogPane passwordDialogPane = fxmlLoader.load();
-            Dialog<ButtonType> passwordDialog = new Dialog<>();
-            passwordDialog.setDialogPane(passwordDialogPane);
-            Optional<ButtonType> userChoice= passwordDialog.showAndWait();
-            ChangePasswordController cpc = new ChangePasswordController();
-            cpc.handleChangePassword(userChoice);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/changePasswordPane.fxml"));
+            Parent passwordPane = fxmlLoader.load();
+            Scene passwordScene = new Scene(passwordPane, 471, 248);
+            Stage newWindow = new Stage();
+            newWindow.initStyle(StageStyle.UNDECORATED);
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+            newWindow.setTitle("Change Password");
+            newWindow.setScene(passwordScene);
+            newWindow.setResizable(false);
+            newWindow.setX(500);
+            newWindow.setY(200);
+            newWindow.show();
 
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -341,6 +350,9 @@ public class ChatController implements Initializable {
 
         //retrieving current user data and displaying it inside the update info tab
         CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
+        System.out.println(currentUser.getDOB());
+        System.out.println(DPDatePicker.getValue());
+        DPDatePicker.setValue(LocalDate.parse(currentUser.getDOB()));
         tFDisplayName.setText(currentUser.getDisplayName());
         tFEmailAddress.setText(currentUser.getEmail());
         TABio.setText(currentUser.getBio());
@@ -550,6 +562,7 @@ public class ChatController implements Initializable {
         currentUser.setEmail(tFEmailAddress.getText()!=null ?tFEmailAddress.getText():currentUser.getEmail());
         currentUser.setBio(TABio.getText()!=null ?TABio.getText():currentUser.getBio());
         currentUser.setGender(cbGender.getSelectionModel().getSelectedItem()!=null?cbGender.getSelectionModel().getSelectedItem():currentUser.getGender());
+        currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
         //set the date of birth = DPDatePicker.getValue;
 
         ClientMain.userDAO.update(currentUser);
