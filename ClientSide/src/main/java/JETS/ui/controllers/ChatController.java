@@ -356,7 +356,7 @@ public class ChatController implements Initializable {
         tFDisplayName.setText(currentUser.getDisplayName());
         tFEmailAddress.setText(currentUser.getEmail());
         TABio.setText(currentUser.getBio());
-        ObservableList<String> genderOptions  =  FXCollections.observableArrayList("MALE","FEMALE","OTHERS");
+        ObservableList<String> genderOptions  =  FXCollections.observableArrayList("MALE","FEMALE");
         String gender =  currentUser.getGender();
         cbGender.getItems().addAll(genderOptions);
         cbGender.getSelectionModel().select(gender);
