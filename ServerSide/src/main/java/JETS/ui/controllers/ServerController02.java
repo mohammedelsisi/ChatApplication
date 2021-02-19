@@ -182,6 +182,7 @@ public class ServerController02 implements Initializable {
 
                 if (countryMap.containsKey(e)) {
                     countryMap.get(e).setPieValue(s);
+                    System.out.println(s);
                 } else {
                     countryMap.put(e, new PieChart.Data(e, s));
                     usersCountries.add(countryMap.get(e));

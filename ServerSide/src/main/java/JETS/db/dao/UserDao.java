@@ -6,6 +6,7 @@ import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
 import Services.DAOInterface;
+import javafx.application.Platform;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -77,7 +78,10 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setBytes(9, dto.getUserPhoto());
             statement.executeUpdate();
             ServerController02 sc = StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
-            sc.refreshAnalysis();
+            Platform.runLater(()->{
+                sc.refreshAnalysis();
+            });
+
             return dto;
         }
     }

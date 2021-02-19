@@ -98,6 +98,8 @@ public class SignUpController implements Initializable {
 
                 code = "+" + countryCodeData.getCode();
                 phoneNumber.setText("");
+                password.setText("");
+                confirmedPassword.setText("");
                 isPasswordCorrect = false;
 
             }
@@ -217,6 +219,7 @@ public class SignUpController implements Initializable {
             user.setBio(bio.getText());
             user.setStatus("AVAILABLE");
             user.setUserPhoto(photoBytes);
+            user.setCountry(((CountryCodeData)(countryCode.getSelectionModel().getSelectedItem())).getCountryName() );
             ClientMain.userDAO.create(user);
 
         }
