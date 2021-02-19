@@ -9,14 +9,18 @@ import Models.ChatEntitiy;
 import Models.CurrentUser;
 import Models.FriendEntity;
 import Models.MessageEntity;
-import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.*;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ArrayChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,13 +35,17 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javafx.util.Callback;
+import org.w3c.dom.UserDataHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -60,6 +68,8 @@ public class ChatController implements Initializable {
     public GridPane grid = new GridPane();
     public Dialog dialog = new Dialog();
     public Alert alert;
+    public AnchorPane MainAnchorPane;
+
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
     int currentIdx;
@@ -77,6 +87,54 @@ public class ChatController implements Initializable {
     private VBox messagesContainer;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
+
+    @FXML
+    private HBox HBDisplayName;
+
+    @FXML
+    private JFXDatePicker DPDatePicker;
+    @FXML
+    private JFXTextField tFDisplayName;
+
+    @FXML
+    private JFXTextField tFEmailAddress;
+
+    @FXML
+    private JFXComboBox<String> cbGender;
+
+    @FXML
+    private JFXTextArea TABio;
+
+    @FXML
+    private JFXButton btnChangePassword;
+
+    @FXML
+    private JFXButton btnSaveChanges;
+
+
+    /*
+    this method will show the put up for changing password
+     */
+    @FXML
+    void HandleChangePassword(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ChangePassword.fxml"));
+            DialogPane passwordDialogPane = fxmlLoader.load();
+            Dialog<ButtonType> passwordDialog = new Dialog<>();
+            passwordDialog.setDialogPane(passwordDialogPane);
+            Optional<ButtonType> userChoice= passwordDialog.showAndWait();
+            ChangePasswordController cpc = new ChangePasswordController();
+            cpc.handleChangePassword(userChoice);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /*
+    to take the user data from the specified field and store it in the current object
+     */
+
 
     public static void loadRequestList() {
         try {
@@ -280,6 +338,16 @@ public class ChatController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //retrieving current user data and displaying it inside the update info tab
+        CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
+        tFDisplayName.setText(currentUser.getDisplayName());
+        tFEmailAddress.setText(currentUser.getEmail());
+        TABio.setText(currentUser.getBio());
+        ObservableList<String> genderOptions  =  FXCollections.observableArrayList("MALE","FEMALE","OTHERS");
+        String gender =  currentUser.getGender();
+        cbGender.getItems().addAll(genderOptions);
+        cbGender.getSelectionModel().select(gender);
     }
 
     public void sendMessage(KeyEvent keyEvent) throws RemoteException {
@@ -473,4 +541,40 @@ public class ChatController implements Initializable {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return scrollPane;
     }
+
+
+    @FXML
+    void SaveUpdateChanges(ActionEvent event) throws SQLException, RemoteException {
+        //if the user update the value get the value, if not get the value stored in the current object.
+        currentUser.setDisplayName(tFDisplayName.getText()!=null?tFDisplayName.getText():currentUser.getDisplayName());
+        currentUser.setEmail(tFEmailAddress.getText()!=null ?tFEmailAddress.getText():currentUser.getEmail());
+        currentUser.setBio(TABio.getText()!=null ?TABio.getText():currentUser.getBio());
+        currentUser.setGender(cbGender.getSelectionModel().getSelectedItem()!=null?cbGender.getSelectionModel().getSelectedItem():currentUser.getGender());
+        //set the date of birth = DPDatePicker.getValue;
+
+        ClientMain.userDAO.update(currentUser);
+
+        //showing the update alert
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Updated Information");
+        alert.setContentText("Information Updated Successfully");
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+
+
+//this method will show popup then will close the application up on ok button is pressed
+    public void handleSignOut(Event event) {
+        Stage stage = (Stage) MainAnchorPane.getScene().getWindow();
+        Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+        alert1.setTitle("Sign out");
+        alert1.setContentText("Do you really want to Sign out");
+        alert1.setHeaderText(null);
+        if (alert1.showAndWait().get() == ButtonType.OK){
+
+            StageCoordinator.getInstance().switchToLoginScene();
+        }
+    }
+
 }
+

@@ -40,7 +40,6 @@ public class ChatManager {
                 ChatController chat = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
                 chat.createChatLayout(simpleMsg);
             }
-
         });
     }
 

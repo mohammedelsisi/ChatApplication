@@ -18,13 +18,12 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
     private static final String GET_Friends = "SELECT * FROM user where phone_number = (select friend_number from user_friend where user_phone_number = ?)";
-    private static final String UPDATE = "UPDATE person SET  password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE phone_number = ?";
+    private static final String UPDATE = "UPDATE user SET  password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE phone_number = ?";
     private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
     private static final String UPDATE_USER_STATUS="UPDATE user SET STATUS=? where phone_number=?";
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
     }
-
 
 
     @Override
@@ -45,16 +44,16 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
         try (PreparedStatement statement = this.connection.prepareStatement(UPDATE);) {
-            statement.setString(1, dto.getPhoneNumber());
-            statement.setString(2, dto.getPassword());
-            statement.setString(3, dto.getDisplayName());
-            statement.setString(4, dto.getEmail());
-            statement.setString(5, dto.getGender());
-            statement.setString(6, dto.getCountry());
-            statement.setInt(7, dto.getAge());
-            statement.setString(8, dto.getBio());
-            statement.setBytes(9, dto.getUserPhoto());
-            statement.setString(10, dto.getStatus());
+            statement.setString(1, dto.getPassword());
+            statement.setString(2, dto.getDisplayName());
+            statement.setString(3, dto.getEmail());
+            statement.setString(4, dto.getGender());
+            statement.setString(5, dto.getCountry());
+            statement.setInt(6, dto.getAge());
+            statement.setString(7, dto.getBio());
+            statement.setBytes(8, dto.getUserPhoto());
+            statement.setString(9, dto.getStatus());
+            statement.setString(10, dto.getPhoneNumber());
             statement.executeUpdate();
             return dto;
         }
@@ -136,6 +135,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
     private CurrentUser createUser(ResultSet rs, CurrentUser user) throws SQLException {
         user.setDisplayName(rs.getString("display_name"));
+        user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
         user.setGender(rs.getString("gender"));
         user.setPhoneNumber(rs.getString("phone_number"));

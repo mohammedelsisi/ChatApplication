@@ -35,6 +35,7 @@ public class StageCoordinator {
     private final Map<String, SceneData> scenes = new HashMap<>();
 
     private StageCoordinator() {
+
     }
 
     public void initStage(Stage stage) {
@@ -71,7 +72,6 @@ public class StageCoordinator {
         }
 
     }
-
 
     public void switchToSignUPScene() {
         if (primaryStage == null) {

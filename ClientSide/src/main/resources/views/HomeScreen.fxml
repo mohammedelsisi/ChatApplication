@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
@@ -23,14 +26,15 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
+<AnchorPane fx:id="MainAnchorPane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="300.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+            <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="409.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
               <tabs>
                   <Tab disable="true" style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
                      <content>
@@ -121,13 +125,103 @@
 
                      </graphic>
                      <content>
-                        <VBox alignment="CENTER">
+                        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="118.0" text="User Info" textFill="#0f6161">
-                                 <font>
-                                    <Font name="Lemon Regular" size="20.0" />
-                                 </font>
-                              </Label>
+                              <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="49.0" prefWidth="238.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="3.0" layoutY="-1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="96.0" text="Edit Profile" textFill="#12646f">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <HBox fx:id="HBDisplayName" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="199.0" spacing="5.0">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2dbbf" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="far-user-circle" iconSize="20" layoutX="-11.0" layoutY="7.0" wrappingWidth="11.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFDisplayName" focusColor="#2383bf" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Display Name" unFocusColor="#407907" HBox.hgrow="SOMETIMES">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <FontIcon />
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="far-envelope" iconSize="15" layoutX="-8.0" layoutY="6.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXTextField fx:id="tFEmailAddress" labelFloat="true" prefHeight="30.0" prefWidth="190.0" promptText="Email Address" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="186.0" spacing="5.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="fas-birthday-cake" iconSize="18" layoutX="-9.0" layoutY="6.0" />
+                                          <FontIcon />
+                                       </children>
+                                    </Group>
+                                    <JFXDatePicker fx:id="DPDatePicker" prefHeight="30.0" prefWidth="193.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="159.0" spacing="5.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group>
+                                       <children>
+                                          <FontIcon />
+                                          <Circle fill="#b2d9be" layoutX="-1.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconLiteral="fas-transgender-alt" iconSize="20" layoutX="-9.0" layoutY="9.0" />
+                                       </children>
+                                    </Group>
+                                    <JFXComboBox fx:id="cbGender" prefHeight="30.0" prefWidth="190.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="162.0" prefWidth="238.0" spacing="5.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <children>
+                                    <Group HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Circle fill="#b2d9be" layoutX="-6.0" radius="13.0" strokeType="INSIDE" />
+                                          <FontIcon iconColor="#1c4d22" iconLiteral="fas-info" iconSize="20" layoutX="-10.0" layoutY="7.0" selectionFill="#0e5106" />
+                                          <FontIcon />
+                                       </children>
+                                    </Group>
+                                    <JFXTextArea fx:id="TABio" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="85.0" prefWidth="190.0" promptText="Update Your Bio" HBox.hgrow="SOMETIMES" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <Panel prefHeight="50.0" prefWidth="300.0" VBox.vgrow="SOMETIMES">
+                                 <left>
+                                    <JFXButton fx:id="btnChangePassword" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#HandleChangePassword" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #70c1b3;" text="Change Password" textFill="WHITE" BorderPane.alignment="CENTER" />
+                                 </left>
+                                 <center>
+                                    <JFXButton fx:id="btnSaveChanges" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#SaveUpdateChanges" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #70c1b3;" text="Save changes" textFill="WHITE" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </Panel>
 
 
                            </children>
@@ -139,7 +233,7 @@
                   </Tab>
                  <Tab style="-fx-background-color: #004040;">
                  <graphic>
-                    <ComboBox fx:id="statusComboBox" prefHeight="25.0" prefWidth="130.0" value="My Status">
+                    <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" value="My Status">
                        <VBox.margin>
                           <Insets left="15.0" />
                        </VBox.margin>
@@ -156,6 +250,29 @@
 
                  </graphic>
                  </Tab>
+                  <Tab fx:id="tabSignOUt" onSelectionChanged="#handleSignOut" style="-fx-background-color: #004040;">
+                     <graphic>
+                        <Label graphicTextGap="15.0" minWidth="100.0" prefHeight="22.0" prefWidth="90.0" text="Sign Out" textFill="WHITE">
+                           <font>
+                              <Font name="Lemon Regular" size="12.0" />
+                           </font>
+                           <graphic>
+                              <FontIcon fill="#d7d2d2" iconColor="WHITE" iconLiteral="fas-sign-out-alt" iconSize="22" tabSize="19">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </FontIcon>
+                           </graphic>
+                        </Label>
+                     </graphic>
+                     <content>
+                        <BorderPane>
+                           <center>
+                              <VBox fx:id="contacts1" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                     </content>
+                  </Tab>
               </tabs>
             </TabPane>
 
