@@ -15,10 +15,10 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
 
     protected final Connection connection;
     private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
-    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,age,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,DOB,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
     private static final String GET_Friends = "SELECT * FROM user where phone_number = (select friend_number from user_friend where user_phone_number = ?)";
-    private static final String UPDATE = "UPDATE user SET  password =?,Display_name=?, email = ?, gender = ?,country =?, age=?,bio =?,image =?,status=?  WHERE phone_number = ?";
+    private static final String UPDATE = "UPDATE user SET  password =?,Display_name=?, email = ?, gender = ?,country =?, DOB=?,bio =?,image =?,status=?  WHERE phone_number = ?";
     private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
     private static final String UPDATE_USER_STATUS="UPDATE user SET STATUS=? where phone_number=?";
     public UserDao(Connection connection) throws RemoteException {
@@ -49,7 +49,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(3, dto.getEmail());
             statement.setString(4, dto.getGender());
             statement.setString(5, dto.getCountry());
-            statement.setInt(6, dto.getAge());
+            statement.setDate(6, Date.valueOf(dto.getDOB()));
             statement.setString(7, dto.getBio());
             statement.setBytes(8, dto.getUserPhoto());
             statement.setString(9, dto.getStatus());
@@ -70,7 +70,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(4, dto.getEmail());
             statement.setString(5, dto.getGender());
             statement.setString(6, dto.getCountry());
-            statement.setInt(7, dto.getAge());
+            statement.setDate(7,Date.valueOf(dto.getDOB()));
             statement.setString(8, dto.getBio());
             statement.setBytes(9, dto.getUserPhoto());
             statement.executeUpdate();
@@ -139,7 +139,8 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
         user.setEmail(rs.getString("email"));
         user.setGender(rs.getString("gender"));
         user.setPhoneNumber(rs.getString("phone_number"));
-        user.setAge(rs.getInt("age"));
+        user.setDOB(rs.getDate("DOB").toString());
+        System.out.println(rs.getDate("DOB").toString());
         user.setBio(rs.getString("bio"));
         user.setStatus(rs.getString("status"));
         user.setUserPhoto(rs.getBytes("image"));

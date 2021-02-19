@@ -27,6 +27,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class SignUpController implements Initializable {
@@ -213,7 +214,7 @@ public class SignUpController implements Initializable {
             user.setDisplayName(displayName.getText());
             user.setPassword(password.getText());
             user.setGender(gender.getValue().toString().toUpperCase());
-            user.setAge(Period.between(datePicker.getValue(), LocalDate.now()).getYears());
+            user.setDOB(datePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
             user.setBio(bio.getText());
             user.setStatus("AVAILABLE");
             user.setUserPhoto(photoBytes);

@@ -1,14 +1,19 @@
 package JETS.ui.controllers;
 
+import JETS.ClientMain;
 import JETS.ui.helpers.ModelsFactory;
 import Models.CurrentUser;
 import com.jfoenix.controls.JFXPasswordField;
+
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.NumberValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -16,25 +21,19 @@ import javafx.scene.layout.AnchorPane;
 
 public class ChangePasswordController {
 
+    public CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private AnchorPane chPassRoot;
-
     @FXML
-    private  JFXPasswordField pfOldPassword ;
-
+    private JFXPasswordField pfOldPassword;
     @FXML
-    private  JFXPasswordField pfNewPassword;
-
+    private JFXPasswordField pfNewPassword;
     @FXML
-    private  JFXPasswordField pfConfirmedNewPassword;
-
-   public CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
+    private JFXPasswordField pfConfirmedNewPassword;
 
     @FXML
     void initialize() {
@@ -57,7 +56,7 @@ public class ChangePasswordController {
 
 
         pfConfirmedNewPassword.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.equals(pfNewPassword.getText())){
+            if (!newValue.equals(pfNewPassword.getText())) {
                 RequiredFieldValidator validator = new RequiredFieldValidator();
                 validator.setMessage("Password doesn't Match");
                 pfConfirmedNewPassword.getValidators().add(requiredInputField);
@@ -70,53 +69,46 @@ public class ChangePasswordController {
 
     }
 
-    public  void handleChangePassword(Optional<ButtonType> clickedButton) {
+    public void handleChangePassword() throws SQLException, RemoteException {
 
-        String oldPassword = null;
-        String newPassword = null;
-        String confirmNewPassword = null;
+        String oldPassword = pfOldPassword.getText();
+        String newPassword = pfNewPassword.getText();
+        String confirmNewPassword = pfConfirmedNewPassword.getText();
 
-        if (clickedButton.get() == ButtonType.CANCEL) {
-            return;
-        } else if (clickedButton.get() == ButtonType.APPLY) {
-
-            System.out.println( currentUser.getPassword());
-
-            oldPassword = pfOldPassword.getText();
-            System.out.println(oldPassword);
-            if (!checkOldPassword(oldPassword)) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Entered Password Doesn't match the old one.");
-                alert.showAndWait();
-            } else if (newPassword != confirmNewPassword) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("Password Values must Be identical");
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Change Password ");
-                alert.setHeaderText(null);
-                alert.setContentText("Password Updated Successfully!");
-                alert.showAndWait();
-            }
-
-//            //regex to match the old password
-//            validator.setRegexPattern("[1-5](\\.[0-9]{1,2}){0,1}|6(\\.0{1,2}){0,1}");
-//            validator.setMessage("Please enter proper value");
-//            validationField.getValidators().add(validator);
-//            validationField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-//                if (!newValue)
-//                    validationField.validate();
-//            });
-
-        }
-        }
-        public boolean checkOldPassword (String oldPassword){
-            String oldPasswordValue = ModelsFactory.getInstance().getCurrentUser().getPassword();
-            if (oldPassword.equals(oldPasswordValue)) return true;
-            return false;
+        if (!checkOldPassword(oldPassword)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Wrong old password");
+            alert.setHeaderText(null);
+            alert.setContentText("Entered Password Doesn't match the old one.");
+            alert.showAndWait();
+        } else if (!newPassword.equals(confirmNewPassword)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Password Values must Be identical");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Change Password ");
+            alert.setHeaderText(null);
+            alert.setContentText("Password Updated Successfully!");
+            currentUser.setPassword(newPassword);
+            ClientMain.userDAO.update(currentUser);
+            alert.showAndWait();
+            pfOldPassword.getScene().getWindow().hide();
         }
 
+    }
 
+
+
+    public boolean checkOldPassword(String oldPassword) {
+        String oldPasswordValue = ModelsFactory.getInstance().getCurrentUser().getPassword();
+        if (oldPassword.equals(oldPasswordValue)) return true;
+        return false;
+    }
+
+
+    public void cancelPane(ActionEvent actionEvent) {
+        pfOldPassword.getScene().getWindow().hide();
+    }
 }
