@@ -41,9 +41,9 @@ import javafx.stage.Window;
 import javafx.util.Callback;
 import org.w3c.dom.UserDataHandler;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.sql.Array;
 import java.sql.SQLException;
@@ -573,8 +573,30 @@ public class ChatController implements Initializable {
         if (alert1.showAndWait().get() == ButtonType.OK){
 
             StageCoordinator.getInstance().switchToLoginScene();
+
+            //write to the property file so the user can  not open the application without login
+            rememberMe("","");
         }
     }
+
+
+    //upon closing the window, store the user info in a property file(basiony)
+    public void rememberMe(String phone, String password){
+
+        try (OutputStream output = new FileOutputStream("C:/ChatApplication/ClientSide/src/main/resources/config.properties")) {
+            Properties prop = new Properties();
+
+            // set the properties value
+            prop.setProperty("User.Phone", phone);
+            prop.setProperty("user.password", password);
+
+            // save properties to project root folder
+            prop.store(output, null);
+
+        } catch (IOException e) {
+                System.out.println("Could not create a file"+e.getMessage());
+            }
+   }
 
 }
 
