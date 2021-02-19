@@ -40,6 +40,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 
@@ -206,6 +207,8 @@ public class ChatController implements Initializable {
             }
         });
         listViewFriendList = new ListView<>(sortedListFriends);
+        listViewFriendList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
 
             @Override
@@ -397,16 +400,19 @@ public class ChatController implements Initializable {
     public void startChatAction(ActionEvent actionEvent) {
 
 
-        List<String> chosenFriends = new ArrayList<>();
-        chosenFriends.add(currentUser.getPhoneNumber());
-        chosenFriends.add(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber());
-        System.out.println(FriendsManager.getInstance().getFriendName(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber()));
+        List<String> chooseFriends = new ArrayList<>();
+        chooseFriends.add(currentUser.getPhoneNumber());
+        listViewFriendList.getSelectionModel().getSelectedItems().forEach((e)->{
+            chooseFriends.add(e.getPhoneNumber());
+            System.err.println(e.getPhoneNumber());
+        });
+//        System.out.println(FriendsManager.getInstance().getFriendName(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber()));
+
         // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        ChatEntitiy createdEntity = new ChatEntitiy(0, chosenFriends, null);
+        ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
         createChatLayout(createdEntity);
         tabPane.getSelectionModel().selectPrevious();
-
     }
 
     public void createChatLayout(ChatEntitiy createdEntity) {
@@ -420,7 +426,7 @@ public class ChatController implements Initializable {
         spChatBoxes.getChildren().add(scrollPane);
 
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+            receiverName.setText(getReciversNames(createdEntity));
             messageField.setDisable(false);
             chatEntitiy = createdEntity;
             scrollPane.toFront();
@@ -440,7 +446,9 @@ public class ChatController implements Initializable {
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
         System.out.println(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers());
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers().get(0)));
+
+//            receiverName.setText(FriendsManager.getInstance().getFriendName(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers().get(0)));
+            receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
             chatEntitiy = messageEntity.get().getChatEntitiy();
             scrollPane.toFront();
@@ -472,5 +480,17 @@ public class ChatController implements Initializable {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return scrollPane;
+    }
+
+    private String getReciversNames(ChatEntitiy chatEntitiy){
+        List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList());
+        StringBuilder receiverNames=new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
+        for (int i = 1;i<participants.size();i++){
+            receiverNames.append(", ");
+            receiverNames.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
+        }
+        return receiverNames.toString();
     }
 }
