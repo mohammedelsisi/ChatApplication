@@ -22,6 +22,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +32,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.Notifications;
@@ -78,6 +80,7 @@ public class ChatController implements Initializable {
     private VBox messagesContainer;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
+    private Screen screen;
 
     public static void loadRequestList() {
         try {
@@ -106,6 +109,8 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        screen = Screen.getPrimary();
+        showNotification("Helloooooooo");
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
         currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
@@ -475,6 +480,16 @@ public class ChatController implements Initializable {
         return scrollPane;
     }
 
-
+    public void showNotification(String message) {
+        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
+        Notifications.create()
+                .owner(screen)
+                .title("Announcement")
+                .text(message)
+                .darkStyle()
+                .graphic(new ImageView(img))
+                .position(Pos.BOTTOM_RIGHT)
+                .show();
+    }
 
 }

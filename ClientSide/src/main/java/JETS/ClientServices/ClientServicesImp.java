@@ -1,17 +1,13 @@
 package JETS.ClientServices;
 
+import JETS.ui.controllers.ChatController;
 import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.StageCoordinator;
 import Models.MessageEntity;
 import Services.ClientServices;
 import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.controlsfx.control.Notifications;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -22,7 +18,7 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
 
     @Override
     public String getPhoneNumber() throws RemoteException {
-       return ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
+        return ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
     }
 
     @Override
@@ -33,22 +29,18 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
 
     @Override
     public void ReceiveAnnounc(String s) throws RemoteException {
-        Image img = null;
-//        try {
-//            img = new Image(new FileInputStream("E:\\ITI\\WARNINGSemiFinal\\ChatApplication\\ServerSide\\src\\main\\resources\\views\\annimg.jpg"));
-//            Notifications notification = Notifications.create();
-//            notification.title("Announcement");
-//            notification.text(s);
-//            notification.graphic(new ImageView(img));
-//            notification.darkStyle();
-//            notification.position(Pos.BASELINE_RIGHT);
-//            Platform.runLater(()->{
-//
-//                notification.show();
-//            });
-
-        System.out.println(s);
-
-
+        ChatController a = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+            a.showNotification(s);
+//        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
+//        Notifications notification = Notifications.create()
+//                .owner(StageCoordinator.getInstance().getScenes().get("Chat").getScene().getWindow())
+//                .title("Announcement")
+//                .text(s)
+//                .darkStyle()
+//                .graphic(new ImageView(img))
+//                .position(Pos.BOTTOM_RIGHT);
+//        Platform.runLater(() -> {
+//            notification.show();
+//        });
     }
 }
