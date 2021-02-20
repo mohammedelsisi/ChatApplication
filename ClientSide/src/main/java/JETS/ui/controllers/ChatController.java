@@ -486,12 +486,12 @@ public class ChatController implements Initializable {
     @FXML
     private void addFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Send File");
+        fileChooser.setTitle("Upload File");
         attachedFile = fileChooser.showOpenDialog(spChatBoxes.getScene().getWindow());
         if (attachedFile != null) {
             if (convertToMb(attachedFile.length()) > 64.0) {
                 attachedFile = null;
-                //Alert
+                // TODO Alert
             } else {
                 Group container = new Group();
                 HBox fileDialog = new HBox(10);
