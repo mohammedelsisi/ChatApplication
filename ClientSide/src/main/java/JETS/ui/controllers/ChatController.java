@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import javafx.scene.web.HTMLEditor;
 import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
@@ -63,7 +64,7 @@ public class ChatController implements Initializable {
     public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
-    public JFXTextArea messageField;
+    public HTMLEditor messageField;
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
@@ -258,7 +259,7 @@ public class ChatController implements Initializable {
                 return cell;
             }
         });
-        textHolder.textProperty().bind(messageField.textProperty());
+//        textHolder.textProperty().bind(messageField.tex);
         textHolder.setWrappingWidth(600);
         textHolder.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
             if (oldMessageFieldHigh != newValue.getHeight() && newValue.getHeight() < 100) {
@@ -364,9 +365,9 @@ public class ChatController implements Initializable {
 
     public void sendMessage(KeyEvent keyEvent) throws RemoteException {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            if (!messageField.getText().isBlank()) {
+            if (!messageField.getHtmlText().isBlank()) {
                 if (keyEvent.isAltDown()) {
-                    messageField.appendText("\n");
+                    messageField.setHtmlText(messageField.getHtmlText()+"<br>");
                 } else {
                     VBox vBox = addChatToMap(currentIdx);
 
@@ -376,19 +377,21 @@ public class ChatController implements Initializable {
                         VBox vBox2 = addChatToMap(currentIdx);
                         msgProperty.addListener((obs, old, newval) -> {
                             vBox2.getChildren().add(new ChatBox(newval));
-                            System.out.println("testtest");
                         });
                     }
 
-                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
+                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getHtmlText().trim(), currentUser.getPhoneNumber());
+                    System.out.println(messageField.getHtmlText());
+//                    MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getHtmlText().replace("<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "").replace("<p>", "\n")
+//                            .replace("<br>", "\n").replace("&nbsp;", " ").replace("</p>", "\n").replace("</body></html>", ""), currentUser.getPhoneNumber());
 
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
-                    messageField.clear();
+                    messageField.setHtmlText("");
                 }
 
             } else {
-                messageField.clear();
+                messageField.setHtmlText("");
             }
         }
 

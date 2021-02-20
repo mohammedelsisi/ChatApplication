@@ -18,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.ByteArrayInputStream;
@@ -60,14 +62,27 @@ public class ChatBox extends GridPane {
         this.setVgrow(messageContainer, Priority.ALWAYS);
         this.setMargin(messageContainer, new Insets(10.0, 10.0, 5.0, 10.0));
 
-        Label message = new Label(messageEntity.getMsgContent());
-        message.setScaleX(-1.0);
-        message.setFont(Font.font("Arial", 13.0));
-        message.setWrapText(true);
-        message.setTextFill(Color.WHITE);
-        message.setAlignment(Pos.BASELINE_CENTER);
-        messageContainer.getChildren().add(message);
-        messageContainer.setVgrow(message, Priority.ALWAYS);
+//        Label message = new Label(messageEntity.getMsgContent());
+//        message.setScaleX(-1.0);
+//        message.setFont(Font.font("Arial", 13.0));
+//        message.setWrapText(true);
+//        message.setTextFill(Color.WHITE);
+//        message.setAlignment(Pos.BASELINE_CENTER);
+//        messageContainer.getChildren().add(message);
+//        messageContainer.setVgrow(message, Priority.ALWAYS);
+
+
+        WebView webView = new WebView();
+        webView.setPrefHeight(USE_COMPUTED_SIZE);
+//        webView.maxHeight(100);
+        webView.setMinHeight(90);
+        webView.setPrefWidth(USE_COMPUTED_SIZE);
+        webView.setMaxHeight(Double.MAX_VALUE);
+        WebEngine web = webView.getEngine();
+        web.loadContent(messageEntity.getMsgContent());
+        webView.setScaleX(-1.0);
+//        messageContainer.setVgrow(webView, Priority.ALWAYS);
+        messageContainer.getChildren().add(webView);
 
 
         FontIcon messageSeen = new FontIcon();

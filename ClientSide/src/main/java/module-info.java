@@ -22,4 +22,5 @@ module ClientSide {
     requires nv.i18n;
     requires java.rmi;
     requires com.jfoenix;
+    requires javafx.web;
 }
