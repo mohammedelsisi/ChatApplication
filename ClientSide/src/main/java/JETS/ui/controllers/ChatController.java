@@ -1,14 +1,8 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
-import JETS.ui.helpers.ChatManager;
-import JETS.ui.helpers.FriendsManager;
-import JETS.ui.helpers.ModelsFactory;
-import JETS.ui.helpers.StageCoordinator;
-import Models.ChatEntitiy;
-import Models.CurrentUser;
-import Models.FriendEntity;
-import Models.MessageEntity;
+import JETS.ui.helpers.*;
+import Models.*;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -20,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -30,11 +25,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -51,6 +49,7 @@ public class ChatController implements Initializable {
     public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
+    private final Text textHolder = new Text();
     public JFXTextArea messageField;
     @FXML
     public VBox contacts;
@@ -75,8 +74,10 @@ public class ChatController implements Initializable {
     private TabPane tabPane;
     @FXML
     private VBox messagesContainer;
-    private Text textHolder = new Text();
+    @FXML
+    private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
+    private File attachedFile = null;
 
     public static void loadRequestList() {
         try {
@@ -121,8 +122,8 @@ public class ChatController implements Initializable {
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
                 ListCell<FriendEntity> cell = new ListCell<>() {
-                    Button acceptButton = new Button("Accept");
-                    Button rejectButton = new Button("Reject");
+                    final Button acceptButton = new Button("Accept");
+                    final Button rejectButton = new Button("Reject");
 
                     @Override
                     protected void updateItem(FriendEntity friendEntity, boolean b) {
@@ -174,7 +175,7 @@ public class ChatController implements Initializable {
                                 label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getPhoneNumber());
                                 label.setGraphic(imageCircle);
                                 hBox.getChildren().addAll(label, pane, acceptButton, rejectButton);
-                                hBox.setHgrow(pane, Priority.ALWAYS);
+                                HBox.setHgrow(pane, Priority.ALWAYS);
                                 hBox.setFillHeight(true);
                                 hBox.setAlignment(Pos.CENTER_LEFT);
                                 this.setGraphic(hBox);
@@ -301,6 +302,14 @@ public class ChatController implements Initializable {
                     }
 
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
+                    if (attachedFile != null) {
+                        try {
+                            msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
+                            attachedFile = null;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
@@ -472,5 +481,43 @@ public class ChatController implements Initializable {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return scrollPane;
+    }
+
+    @FXML
+    private void addFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Send File");
+        attachedFile = fileChooser.showOpenDialog(spChatBoxes.getScene().getWindow());
+        if (attachedFile != null) {
+            if (convertToMb(attachedFile.length()) > 64.0) {
+                attachedFile = null;
+                //Alert
+            } else {
+                Group container = new Group();
+                HBox fileDialog = new HBox(10);
+                fileDialog.setAlignment(Pos.CENTER);
+                fileDialog.setPadding(new Insets(10));
+                fileDialog.setStyle("-fx-background-color: #52ACA8; -fx-background-radius: 15px;");
+                Label label = new Label(attachedFile.getName());
+                label.setTextFill(Color.WHITE);
+                HBox.setHgrow(label, Priority.ALWAYS);
+                FontIcon icon = new FontIcon("mdi2c-close");
+                icon.setIconColor(Color.WHITE);
+                icon.setIconSize(20);
+                icon.setWrappingWidth(25);
+                icon.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
+                    chatControllersContainer.getChildren().remove(container);
+                    attachedFile = null;
+                });
+                fileDialog.getChildren().addAll(label, icon);
+                container.getChildren().add(fileDialog);
+                chatControllersContainer.getChildren().clear();
+                chatControllersContainer.getChildren().add(container);
+            }
+        }
+    }
+
+    private double convertToMb(long byteSize) {
+        return byteSize / Math.pow(1024.0, 2.0);
     }
 }

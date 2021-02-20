@@ -3,9 +3,11 @@ package Models;
 import java.io.Serializable;
 
 public class MessageEntity implements Serializable {
+    private int id;
     private ChatEntitiy chatEntitiy;
     private String msgContent;
     private String senderPhone;
+    private FileEntity file;
 
     public MessageEntity(ChatEntitiy chatEntitiy, String msgContent, String senderPhone) {
         this.chatEntitiy = chatEntitiy;
@@ -14,6 +16,22 @@ public class MessageEntity implements Serializable {
     }
 
     public MessageEntity() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public FileEntity getFile() {
+        return file;
+    }
+
+    public void setFile(FileEntity file) {
+        this.file = file;
     }
 
     public ChatEntitiy getChatEntitiy() {

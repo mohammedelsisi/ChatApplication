@@ -3,12 +3,7 @@ package JETS;
 import JETS.ui.helpers.ClientImp;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
-import Services.Chatting;
-import Services.ChatDao;
-import Services.ChatServiceInt;
-import Services.ConnectionInt;
-import Services.DAOInterface;
-import Services.UserFriendDaoInterface;
+import Services.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -23,6 +18,7 @@ public class ClientMain extends Application {
     public static ConnectionInt connectionInt;
     public static ChatServiceInt chatServiceInt;
     public static ChatDao chatDao;
+    public static FileService fileService;
 
     public static Chatting chatting;
 
@@ -49,6 +45,7 @@ public class ClientMain extends Application {
             chatServiceInt= (ChatServiceInt) registry.lookup("ChatService");
             chatDao= (ChatDao) registry.lookup("ChatDao");
             chatting=(Chatting) registry.lookup("ChattingService");
+            fileService = (FileService) registry.lookup("FileService");
 
         }catch (Exception e){
             e.printStackTrace();

@@ -3,12 +3,9 @@ package JETS;
 import JETS.db.DataSourceFactory;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
-import JETS.service.ChattingImp;
-import JETS.service.ChatDaoImp;
-import JETS.service.ChatServiceImp;
-import JETS.service.ConnectionService;
-import JETS.service.ConnectionServiceFactory;
+import JETS.service.*;
 import Services.ChatServiceInt;
+import Services.FileService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.rmi.RemoteException;
@@ -35,6 +32,7 @@ public class ServerMain extends Application {
             /*             method to get the last chat Id from database */
             ChatDaoImp chatDaoImp = new ChatDaoImp(conn);
             ChattingImp chattingImp = new ChattingImp(conn);
+            FileService fileService = new FileServiceImpl();
             Registry reg = LocateRegistry.createRegistry(6270);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
@@ -42,6 +40,7 @@ public class ServerMain extends Application {
             reg.rebind("UserFriendDao", userFriendDao);
             reg.rebind("ChatDao",chatDaoImp);
             reg.rebind("ChattingService", chattingImp);
+            reg.rebind("FileService", fileService);
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();
         }
