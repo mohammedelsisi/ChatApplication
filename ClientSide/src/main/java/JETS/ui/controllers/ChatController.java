@@ -7,11 +7,17 @@ import Models.CurrentUser;
 import Models.FriendEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.*;
+import javafx.scene.Group;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ArrayChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -33,11 +39,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
+import javafx.stage.*;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.w3c.dom.UserDataHandler;
 
 import java.io.*;
@@ -87,7 +91,10 @@ public class ChatController implements Initializable {
     @FXML
     private VBox messagesContainer;
     private Text textHolder = new Text();
+    @FXML
+    private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
+    private File attachedFile = null;
 
     @FXML
     private HBox HBDisplayName;
@@ -379,6 +386,16 @@ public class ChatController implements Initializable {
 
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
+                    if (attachedFile != null) {
+                        try {
+                            msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
+                            attachedFile = null;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
                     messageField.clear();
@@ -573,7 +590,7 @@ public class ChatController implements Initializable {
     }
 
 
-//this method will show popup then will close the application up on ok button is pressed
+    //this method will show popup then will close the application up on ok button is pressed
     public void handleSignOut(Event event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
         alert1.setTitle("Sign out");
@@ -587,6 +604,43 @@ public class ChatController implements Initializable {
         }
     }
 
+    @FXML
+    private void addFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload File");
+        attachedFile = fileChooser.showOpenDialog(spChatBoxes.getScene().getWindow());
+        if (attachedFile != null) {
+            if (convertToMb(attachedFile.length()) > 64.0) {
+                attachedFile = null;
+                // TODO Alert
+            } else {
+                Group container = new Group();
+                HBox fileDialog = new HBox(10);
+                fileDialog.setAlignment(Pos.CENTER);
+                fileDialog.setPadding(new Insets(10));
+                fileDialog.setStyle("-fx-background-color: #52ACA8; -fx-background-radius: 15px;");
+                Label label = new Label(attachedFile.getName());
+                label.setTextFill(Color.WHITE);
+                HBox.setHgrow(label, Priority.ALWAYS);
+                FontIcon icon = new FontIcon("mdi2c-close");
+                icon.setIconColor(Color.WHITE);
+                icon.setIconSize(20);
+                icon.setWrappingWidth(25);
+                icon.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
+                    chatControllersContainer.getChildren().remove(container);
+                    attachedFile = null;
+                });
+                fileDialog.getChildren().addAll(label, icon);
+                container.getChildren().add(fileDialog);
+                chatControllersContainer.getChildren().clear();
+                chatControllersContainer.getChildren().add(container);
+            }
+        }
+    }
+
+    private double convertToMb(long byteSize) {
+        return byteSize / Math.pow(1024.0, 2.0);
+    }
 
 
 

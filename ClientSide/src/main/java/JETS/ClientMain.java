@@ -35,6 +35,7 @@ public class ClientMain extends Application {
     public static ConnectionInt connectionInt;
     public static ChatServiceInt chatServiceInt;
     public static ChatDao chatDao;
+    public static FileService fileService;
 
     public static Chatting chatting;
 
@@ -81,6 +82,7 @@ public class ClientMain extends Application {
             chatServiceInt = (ChatServiceInt) registry.lookup("ChatService");
             chatDao = (ChatDao) registry.lookup("ChatDao");
             chatting = (Chatting) registry.lookup("ChattingService");
+            fileService = (FileService) registry.lookup("FileService");
 
         } catch (Exception e) {
             e.printStackTrace();

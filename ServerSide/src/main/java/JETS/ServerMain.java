@@ -9,6 +9,7 @@ import JETS.service.ChatServiceImp;
 import JETS.service.ConnectionService;
 import JETS.service.ConnectionServiceFactory;
 import Services.ChatServiceInt;
+import Services.FileService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.rmi.RemoteException;
@@ -35,13 +36,15 @@ public class ServerMain extends Application {
             /*             method to get the last chat Id from database */
             ChatDaoImp chatDaoImp = new ChatDaoImp(conn);
             ChattingImp chattingImp = new ChattingImp(conn);
-            Registry reg = LocateRegistry.createRegistry(6272);
+            FileService fileService = new FileServiceImpl();
+            Registry reg = LocateRegistry.createRegistry(6270);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
             reg.rebind("ChatService", chatService);
             reg.rebind("UserFriendDao", userFriendDao);
             reg.rebind("ChatDao",chatDaoImp);
             reg.rebind("ChattingService", chattingImp);
+            reg.rebind("FileService", fileService);
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();
         }
