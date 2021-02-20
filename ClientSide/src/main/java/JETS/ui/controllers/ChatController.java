@@ -1,6 +1,8 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.SavingChat.MessageType;
+import JETS.SavingChat.SavingSession;
 import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
@@ -30,11 +32,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -77,7 +81,7 @@ public class ChatController implements Initializable {
     private VBox messagesContainer;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
-
+    public static Map<Long,List<MessageType>> chatHistort=new HashMap<>();
     public static void loadRequestList() {
         try {
             requestLists.setAll(ClientMain.chatting.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
@@ -292,6 +296,7 @@ public class ChatController implements Initializable {
 
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
+
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
                         VBox vBox2 = addChatToMap(currentIdx);
                         msgProperty.addListener((obs, old, newval) -> {
@@ -301,6 +306,10 @@ public class ChatController implements Initializable {
                     }
 
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
+                    if(!ChatController.chatHistort.containsKey(chatEntitiy.getId())) {
+                        ChatController.chatHistort.put(chatEntitiy.getId(),new ArrayList<>());
+                    }
+                    chatHistort.get(chatEntitiy.getId()).add(new MessageType(msg.getSenderPhone(),msg.getMsgContent(),"left"));
 
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientMain.chatServiceInt.sendMessage(msg);
@@ -472,5 +481,14 @@ public class ChatController implements Initializable {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return scrollPane;
+    }
+
+    @FXML
+    public void saveChat(ActionEvent event){
+        FileChooser fileChooser=new FileChooser();
+        File savedPath=fileChooser.showOpenDialog(chatsVbox.getScene().getWindow());
+          if(chatEntitiy!=null){
+              new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
+          }
     }
 }

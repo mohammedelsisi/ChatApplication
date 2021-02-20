@@ -25,6 +25,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<?import javafx.scene.control.Button?>
 <AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
@@ -283,6 +284,7 @@
                                        </cursor>
                                     </Group>
                                     <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
+
                                        <children>
                                           <Circle fill="WHITE" radius="17.0" strokeType="INSIDE">
                                              <stroke>
@@ -347,5 +349,6 @@
             <Circle fx:id="circleView" fill="WHITE" radius="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
          </graphic>
       </Label>
+      <Button  onAction="#saveChat" layoutX="741.0" layoutY="85.0" mnemonicParsing="false" text="save" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="85.0" />
    </children>
 </AnchorPane>

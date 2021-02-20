@@ -1,10 +1,12 @@
 package JETS.ui.helpers;
 
+import JETS.SavingChat.MessageType;
 import JETS.ui.controllers.ChatController;
 import Models.MessageEntity;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,8 +29,14 @@ public class ChatManager {
     }
 
     public void receiveResponse(MessageEntity message) {
+        Long chatID = message.getChatEntitiy().getId();
+        if(!ChatController.chatHistort.containsKey(chatID)) {
+            ChatController.chatHistort.put(chatID,new ArrayList<>());
+        }
+        ChatController.chatHistort.get(chatID).add(new MessageType(message.getSenderPhone(), message.getMsgContent(), "right"));
+
         Platform.runLater(() -> {
-            Long chatID = message.getChatEntitiy().getId();
+
             if (RESPONSES.containsKey(chatID)) {
                 System.out.println(chatID);
                 System.err.println("test receive response ");
