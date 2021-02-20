@@ -2,10 +2,7 @@ package JETS.ui.controllers;
 
 import JETS.ClientMain;
 import JETS.ui.helpers.*;
-import Models.ChatEntitiy;
-import Models.CurrentUser;
-import Models.FriendEntity;
-import Models.MessageEntity;
+import Models.*;
 import com.jfoenix.controls.*;
 import javafx.scene.Group;
 

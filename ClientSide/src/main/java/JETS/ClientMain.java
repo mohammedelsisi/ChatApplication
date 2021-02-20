@@ -7,12 +7,7 @@ import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
-import Services.Chatting;
-import Services.ChatDao;
-import Services.ChatServiceInt;
-import Services.ConnectionInt;
-import Services.DAOInterface;
-import Services.UserFriendDaoInterface;
+import Services.*;
 import com.mysql.cj.log.Log;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -76,7 +71,7 @@ public class ClientMain extends Application {
     @Override
     public void init() {
         try {
-            Registry registry = LocateRegistry.getRegistry(6272);
+            Registry registry = LocateRegistry.getRegistry(5123);
             userDAO = (DAOInterface<CurrentUser>) registry.lookup("UserRegistrationService");
             connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             chatServiceInt = (ChatServiceInt) registry.lookup("ChatService");
