@@ -11,6 +11,7 @@ import Services.DAOInterface;
 import Services.UserFriendDaoInterface;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 
 import java.rmi.registry.LocateRegistry;
@@ -40,10 +41,12 @@ public class ClientMain extends Application {
 
     }
 
+
+
     @Override
     public void init() {
         try {
-            Registry registry = LocateRegistry.getRegistry(6270);
+            Registry registry = LocateRegistry.getRegistry(6253);
             userDAO = (DAOInterface<CurrentUser>)registry.lookup("UserRegistrationService");
             connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
             chatServiceInt= (ChatServiceInt) registry.lookup("ChatService");

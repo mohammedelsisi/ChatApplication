@@ -9,6 +9,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionService extends UnicastRemoteObject implements ConnectionInt,Connector {
+    public Map<String, ClientServices> getConnectedClients() {
+        return connectedClients;
+    }
+
     private final Map<String, ClientServices> connectedClients = new ConcurrentHashMap<>();
 
     public ConnectionService() throws RemoteException {
@@ -42,4 +46,5 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
     public ClientServices getClientService(String clientPhoneNumber) {
       return connectedClients.get(clientPhoneNumber);
     }
+
 }
