@@ -1,10 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
-import JETS.ui.helpers.ChatManager;
-import JETS.ui.helpers.FriendsManager;
-import JETS.ui.helpers.ModelsFactory;
-import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.*;
 import Models.ChatEntitiy;
 import Models.CurrentUser;
 import Models.FriendEntity;
@@ -578,38 +575,20 @@ public class ChatController implements Initializable {
 
 //this method will show popup then will close the application up on ok button is pressed
     public void handleSignOut(Event event) {
-        Stage stage = (Stage) MainAnchorPane.getScene().getWindow();
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
         alert1.setTitle("Sign out");
         alert1.setContentText("Do you really want to Sign out");
         alert1.setHeaderText(null);
         if (alert1.showAndWait().get() == ButtonType.OK){
-
             StageCoordinator.getInstance().switchToLoginScene();
-
+            ConfigurationHandler.getInstance().clearPassword();
+            System.out.println("done");
             //write to the property file so the user can  not open the application without login
-            rememberMe("","");
         }
     }
 
 
-    //upon closing the window, store the user info in a property file(basiony)
-    public void rememberMe(String phone, String password){
 
-        try (OutputStream output = new FileOutputStream("C:/ChatApplication/ClientSide/src/main/resources/config.properties")) {
-            Properties prop = new Properties();
-
-            // set the properties value
-            prop.setProperty("User.Phone", phone);
-            prop.setProperty("user.password", password);
-
-            // save properties to project root folder
-            prop.store(output, null);
-
-        } catch (IOException e) {
-                System.out.println("Could not create a file"+e.getMessage());
-            }
-   }
 
 }
 

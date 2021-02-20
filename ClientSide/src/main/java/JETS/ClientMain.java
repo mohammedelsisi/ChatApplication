@@ -2,6 +2,7 @@ package JETS;
 
 import JETS.ClientServices.ClientServicesFactory;
 import JETS.ui.helpers.ClientImp;
+import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
@@ -12,6 +13,7 @@ import Services.ChatServiceInt;
 import Services.ConnectionInt;
 import Services.DAOInterface;
 import Services.UserFriendDaoInterface;
+import com.mysql.cj.log.Log;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
@@ -46,34 +48,23 @@ public class ClientMain extends Application {
         StageCoordinator stageCoordinator = StageCoordinator.getInstance();
         stageCoordinator.initStage(primaryStage);
 
-        //read the properties file and based on the result switch to the proper scene(Basiony)
-        try (InputStream input = new FileInputStream("C:/ChatApplication/ClientSide/src/main/resources/config.properties")) {
+        try {
 
-            Properties prop = new Properties();
-
-            // load a properties file
-            prop.load(input);
-
-            // get the property value and assign then to the user.
-           String userPassword =  prop.getProperty("user.password");
-           String userPhone = prop.getProperty("User.Phone");
-            LoginEntity loginEntity = new LoginEntity(userPhone, userPassword);
+            //read the properties file and based on the result switch to the proper scene(Basiony)
+            LoginEntity loginEntity = ConfigurationHandler.getInstance().getLoginEntity();
             CurrentUser currentUser = ClientMain.userDAO.findByPhoneAndPassword(loginEntity);
-            ModelsFactory.getInstance().setCurrentUser(currentUser);
             if (currentUser != null) {
-                ClientMain.chatting.register(new ClientImp(),currentUser.getPhoneNumber());
+                ModelsFactory.getInstance().setCurrentUser(currentUser);
+                ClientMain.chatting.register(new ClientImp(), currentUser.getPhoneNumber());
                 ClientMain.connectionInt.registerAsConnected(ClientServicesFactory.getClientServicesImp());
                 stageCoordinator.switchToChatScene();
-                primaryStage.show();
             } else {
-                stageCoordinator.switchToLoginScene();
-                primaryStage.show();
+                StageCoordinator.getInstance().switchToLoginScene();
             }
-
-        }catch (IOException e){
-            System.out.println("Could not load the file"+e.getMessage());
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
-
+        primaryStage.show();
 
     }
 
@@ -85,13 +76,13 @@ public class ClientMain extends Application {
     public void init() {
         try {
             Registry registry = LocateRegistry.getRegistry(6272);
-            userDAO = (DAOInterface<CurrentUser>)registry.lookup("UserRegistrationService");
-            connectionInt= (ConnectionInt) registry.lookup("ConnectionService");
-            chatServiceInt= (ChatServiceInt) registry.lookup("ChatService");
-            chatDao= (ChatDao) registry.lookup("ChatDao");
-            chatting=(Chatting) registry.lookup("ChattingService");
+            userDAO = (DAOInterface<CurrentUser>) registry.lookup("UserRegistrationService");
+            connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
+            chatServiceInt = (ChatServiceInt) registry.lookup("ChatService");
+            chatDao = (ChatDao) registry.lookup("ChatDao");
+            chatting = (Chatting) registry.lookup("ChattingService");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -46,12 +46,8 @@ public class StageCoordinator {
         }
         primaryStage = stage;
 
+
         //if the user closes the application, call the method that keeps him logged in.(basiony)
-        stage.setOnCloseRequest(windowEvent -> {
-            ChatController chatController = new ChatController();
-             CurrentUser user =  ModelsFactory.getInstance().getCurrentUser();
-            chatController.rememberMe(user.getPhoneNumber(), user.getPassword());
-        });
     }
 
     public static StageCoordinator getInstance() {

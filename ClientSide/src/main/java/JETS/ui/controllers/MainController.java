@@ -3,6 +3,7 @@ package JETS.ui.controllers;
 import JETS.ClientMain;
 import JETS.ClientServices.ClientServicesFactory;
 import JETS.ui.helpers.ClientImp;
+import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
@@ -43,12 +44,15 @@ public class MainController implements Initializable {
     public void signInAction(ActionEvent actionEvent) throws RemoteException {
         LoginEntity loginEntity = new LoginEntity(phoneNumber.getText(), password.getText());
         CurrentUser currentUser = ClientMain.userDAO.findByPhoneAndPassword(loginEntity);
-        ModelsFactory.getInstance().setCurrentUser(currentUser);
+
         if (currentUser != null) {
+            ModelsFactory.getInstance().setCurrentUser(currentUser);
             ClientMain.chatting.register(new ClientImp(),currentUser.getPhoneNumber());
             ClientMain.connectionInt.registerAsConnected(ClientServicesFactory.getClientServicesImp());
             StageCoordinator stageCoordinator = StageCoordinator.getInstance();
             stageCoordinator.switchToChatScene();
+            ConfigurationHandler.getInstance().rememberMe(loginEntity);
+            password.clear();
         } else {
             System.out.println("Not Valid ");
         }
