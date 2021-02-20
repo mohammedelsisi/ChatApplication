@@ -1,6 +1,8 @@
 package JETS.ui.helpers;
 
+import JETS.ui.controllers.ChatController;
 import Models.ChatEntitiy;
+import Models.CurrentUser;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -43,6 +45,9 @@ public class StageCoordinator {
             throw new IllegalArgumentException("The Stage Already been initialized");
         }
         primaryStage = stage;
+
+
+        //if the user closes the application, call the method that keeps him logged in.(basiony)
     }
 
     public static StageCoordinator getInstance() {

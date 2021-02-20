@@ -1,10 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
-import JETS.ui.helpers.ChatManager;
-import JETS.ui.helpers.FriendsManager;
-import JETS.ui.helpers.ModelsFactory;
-import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.*;
 import Models.ChatEntitiy;
 import Models.CurrentUser;
 import Models.FriendEntity;
@@ -43,9 +40,9 @@ import javafx.stage.Window;
 import javafx.util.Callback;
 import org.w3c.dom.UserDataHandler;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.sql.Array;
 import java.sql.SQLException;
@@ -578,16 +575,20 @@ public class ChatController implements Initializable {
 
 //this method will show popup then will close the application up on ok button is pressed
     public void handleSignOut(Event event) {
-        Stage stage = (Stage) MainAnchorPane.getScene().getWindow();
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
         alert1.setTitle("Sign out");
         alert1.setContentText("Do you really want to Sign out");
         alert1.setHeaderText(null);
         if (alert1.showAndWait().get() == ButtonType.OK){
-
             StageCoordinator.getInstance().switchToLoginScene();
+            ConfigurationHandler.getInstance().clearPassword();
+            System.out.println("done");
+            //write to the property file so the user can  not open the application without login
         }
     }
+
+
+
 
 }
 
