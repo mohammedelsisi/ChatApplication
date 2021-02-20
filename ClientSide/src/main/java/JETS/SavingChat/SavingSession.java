@@ -24,28 +24,23 @@ import java.util.List;
 import java.util.Map;
 
 public class SavingSession {
-    public static void main(String[] args) {
-//        List<MessageType> msgs=new ArrayList<>();
-//        msgs.add(new MessageType("Mohamed","Hi ","left"));
-//        msgs.add(new MessageType("Ahmed","Hello ","right"));
-//        new SavingSession().saveChat("+0111",msgs);
-    }
-    //<friendPhoneNumber,DOM>
-    //private static Map<Long, Document> documents=new HashMap<>();
+
+    //<chatId,DOM>
+    private static Map<Long, Document> documents=new HashMap<>();
     public void saveChat(long chatId, List<MessageType> messageTypeList,File savedPath){
-//        Document document=null;
-//        if(documents.containsKey(chatId)){
-//            document=documents.get(chatId);
-//        }else {
+        Document document=null;
+        if(documents.containsKey(chatId)){
+           document=documents.get(chatId);
+        }else {
 //            File file = new File("ClientSide/target/classes/XML/" + friendPhoneNumber + ".xml");
 //            //check file system contains xml or not to append
 //            if (file.exists()) {
 //                document = createDoc(friendPhoneNumber + ".xml");
 //            } else {
-             Document   document = createDoc();
+                document = createDoc();
        //     }
-      //      documents.put(chatId, document);
-     //   }
+           documents.put(chatId, document);
+       }
         populateDocNewSession(document,document.getDocumentElement(), messageTypeList);
         TransformerFactory factory = TransformerFactory.newInstance();
         DOMSource xmlSource = new DOMSource(document);
@@ -78,14 +73,16 @@ public class SavingSession {
         messageElement.setAttribute("pos", messageType.getDirection());
 
         Element fromElement=document.createElement("From");
+        Element imgElement=document.createElement("Image");
+
         if(messageType.getDirection().equals("right")) {
             fromElement.setTextContent(FriendsManager.getInstance().getFriendName(messageType.getSenderPhone()));
+
         }else{
             fromElement.setTextContent(ModelsFactory.getInstance().getCurrentUser().getDisplayName());
         }
         messageElement.appendChild(fromElement);
-
-//        Element imgElement=document.createElement("Image");
+//
 //        FriendsManager.getInstance().getFriendPhoto(messageType.getSenderPhone()
 //        fromElement.setTextContent());
 //        messageElement.appendChild(fromElement);

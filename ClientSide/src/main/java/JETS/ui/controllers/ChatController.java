@@ -486,7 +486,8 @@ public class ChatController implements Initializable {
     @FXML
     public void saveChat(ActionEvent event){
         FileChooser fileChooser=new FileChooser();
-        File savedPath=fileChooser.showOpenDialog(chatsVbox.getScene().getWindow());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
+        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
           if(chatEntitiy!=null){
               new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
           }
