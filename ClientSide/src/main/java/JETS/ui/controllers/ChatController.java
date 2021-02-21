@@ -97,7 +97,7 @@ public class ChatController implements Initializable {
     private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
     private File attachedFile = null;
-    private Screen screen;
+
 
     @FXML
     private HBox HBDisplayName;

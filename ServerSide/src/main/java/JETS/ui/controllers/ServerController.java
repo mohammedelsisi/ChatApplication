@@ -8,6 +8,7 @@ import JETS.db.dao.UserFriendDao;
 import JETS.service.*;
 import Services.ChatServiceInt;
 import Services.ClientServices;
+import Services.FileService;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -44,7 +45,6 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable {
 
 
-
     public Registry reg = LocateRegistry.createRegistry(6253);
     public UserDao userDao;
     public ConnectionService connectionService;
@@ -60,6 +60,10 @@ public class ServerController implements Initializable {
     ObservableList<PieChart.Data> usersAvailable = FXCollections.observableArrayList();
     Map<String, PieChart.Data> genderMap = new HashMap<>();
     Map<String, PieChart.Data> countryMap = new HashMap<>();
+    UserFriendDao userFriendDao;
+    ChatServiceInt chatService;
+    ChatDaoImp chatDaoImp;
+    FileService fileService;
     @FXML
     private HBox hBoxAnalysis;
     @FXML
@@ -67,7 +71,6 @@ public class ServerController implements Initializable {
     @FXML
     private TextArea announcement;
     private Connection conn;
-
 
     public ServerController() throws RemoteException {
     }
@@ -78,6 +81,16 @@ public class ServerController implements Initializable {
             conn = DataSourceFactory.getConnection();
 
             JdbcRowSet rowSet = ServerMain.serverDao.getUsersInfo();
+
+
+            userDao = new UserDao(conn);
+            connectionService = ConnectionServiceFactory.getConnectionService();
+            userFriendDao = new UserFriendDao(conn);
+            chatService = new ChatServiceImp();
+            chatDaoImp = new ChatDaoImp(conn);
+            chattingImp = new ChattingImp(conn);
+            fileService = new FileServiceImpl();
+
 
             onlineUsers = new PieChart.Data("Online", online);
             int allusersIni = 0;
@@ -163,21 +176,15 @@ public class ServerController implements Initializable {
 
     public void startServer() {
 
-
         try {
 
-            UserDao userDao = new UserDao(conn);
-            ConnectionService connectionService = ConnectionServiceFactory.getConnectionService();
-            UserFriendDao userFriendDao = new UserFriendDao(conn);
-            ChatServiceInt chatService = new ChatServiceImp();
-            ChatDaoImp chatDaoImp = new ChatDaoImp(conn);
-            ChattingImp chattingImp = new ChattingImp(conn);
             reg.rebind("UserRegistrationService", userDao);
             reg.rebind("ConnectionService", connectionService);
             reg.rebind("ChatService", chatService);
             reg.rebind("UserFriendDao", userFriendDao);
             reg.rebind("ChatDao", chatDaoImp);
             reg.rebind("ChattingService", chattingImp);
+            reg.rebind("FileService", fileService);
 
             startBtn.setText("Stop Service");
         } catch (IOException throwables) {
