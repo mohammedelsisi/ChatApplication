@@ -1,7 +1,7 @@
 package JETS.db.dao;
 
 
-import JETS.ui.controllers.ServerController02;
+import JETS.ui.controllers.ServerController;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
@@ -77,7 +77,7 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(8, dto.getBio());
             statement.setBytes(9, dto.getUserPhoto());
             statement.executeUpdate();
-            ServerController02 sc = StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
+            ServerController sc = StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
             Platform.runLater(()->{
                 sc.refreshAnalysis();
             });

@@ -2,6 +2,8 @@ package JETS.service;
 
 import Services.ClientServices;
 import Services.ConnectionInt;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,7 +15,6 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
         return connectedClients;
     }
 
-//        private final Map<String, ClientServices> connectedClients = new ConcurrentHashMap<>();
     private final ObservableMap<String, ClientServices> connectedClients = FXCollections.observableHashMap();
 
     public ConnectionService() throws RemoteException {
