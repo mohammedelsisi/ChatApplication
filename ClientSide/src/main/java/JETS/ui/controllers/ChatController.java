@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ArrayChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+import java.util.stream.Collectors;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +39,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Callback;
+import org.controlsfx.control.Notifications;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.w3c.dom.UserDataHandler;
 
@@ -50,6 +52,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 
@@ -71,6 +74,8 @@ public class ChatController implements Initializable {
     public Dialog dialog = new Dialog();
     public Alert alert;
     public AnchorPane MainAnchorPane;
+    private Screen screen;
+
 
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
@@ -92,6 +97,7 @@ public class ChatController implements Initializable {
     private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
     private File attachedFile = null;
+    private Screen screen;
 
     @FXML
     private HBox HBDisplayName;
@@ -185,6 +191,8 @@ public class ChatController implements Initializable {
         loadFriendList();
 
         listViewRequestList = new ListView(requestLists);
+        listViewFriendList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
             @Override
             public ListCell<FriendEntity> call(ListView<FriendEntity> friendListListView) {
@@ -488,13 +496,14 @@ public class ChatController implements Initializable {
     public void startChatAction(ActionEvent actionEvent) {
 
 
-        List<String> chosenFriends = new ArrayList<>();
-        chosenFriends.add(currentUser.getPhoneNumber());
-        chosenFriends.add(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber());
-        System.out.println(FriendsManager.getInstance().getFriendName(listViewFriendList.getSelectionModel().getSelectedItem().getPhoneNumber()));
-        // treeViewFriends.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        ChatEntitiy createdEntity = new ChatEntitiy(0, chosenFriends, null);
+        List<String> chooseFriends = new ArrayList<>();
+        chooseFriends.add(currentUser.getPhoneNumber());
+        listViewFriendList.getSelectionModel().getSelectedItems().forEach((e)->{
+            chooseFriends.add(e.getPhoneNumber());
+            System.err.println(e.getPhoneNumber());
+        });
+        ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
         createChatLayout(createdEntity);
         tabPane.getSelectionModel().selectPrevious();
 
@@ -511,7 +520,7 @@ public class ChatController implements Initializable {
         spChatBoxes.getChildren().add(scrollPane);
 
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(createdEntity.getParticipantsPhoneNumbers().get(1)));
+            receiverName.setText(getReciversNames(createdEntity));
             messageField.setDisable(false);
             chatEntitiy = createdEntity;
             scrollPane.toFront();
@@ -531,7 +540,7 @@ public class ChatController implements Initializable {
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
         System.out.println(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers());
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            receiverName.setText(FriendsManager.getInstance().getFriendName(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers().get(0)));
+            receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
             chatEntitiy = messageEntity.get().getChatEntitiy();
             scrollPane.toFront();
@@ -640,6 +649,28 @@ public class ChatController implements Initializable {
     }
 
 
+    private String getReciversNames(ChatEntitiy chatEntitiy){
+        List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList());
+        StringBuilder receiverNames=new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
+        for (int i = 1;i<participants.size();i++){
+            receiverNames.append(", ");
+            receiverNames.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
+        }
+        return receiverNames.toString();
+    }
+    public void showNotification(String message) {
+        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
+        Notifications.create()
+                .owner(screen)
+                .title("Announcement")
+                .text(message)
+                .darkStyle()
+                .graphic(new ImageView(img))
+                .position(Pos.BOTTOM_RIGHT)
+                .show();
+    }
 
 }
 

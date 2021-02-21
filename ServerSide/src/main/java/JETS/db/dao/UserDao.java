@@ -1,9 +1,12 @@
 package JETS.db.dao;
 
 
+import JETS.ui.controllers.ServerController;
+import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
 import Services.DAOInterface;
+import javafx.application.Platform;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,14 +16,15 @@ import java.util.List;
 
 public class UserDao extends UnicastRemoteObject implements DAOInterface<CurrentUser> {
 
-    protected final Connection connection;
     private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
     private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,DOB,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
     private static final String GET_ONE = "SELECT * FROM user WHERE phone_number=?";
     private static final String GET_Friends = "SELECT * FROM user where phone_number = (select friend_number from user_friend where user_phone_number = ?)";
     private static final String UPDATE = "UPDATE user SET  password =?,Display_name=?, email = ?, gender = ?,country =?, DOB=?,bio =?,image =?,status=?  WHERE phone_number = ?";
     private static final String GET_ONE_WITH_Pass = "SELECT * FROM user WHERE phone_number=? and password =?";
-    private static final String UPDATE_USER_STATUS="UPDATE user SET STATUS=? where phone_number=?";
+    private static final String UPDATE_USER_STATUS = "UPDATE user SET STATUS=? where phone_number=?";
+    protected final Connection connection;
+
     public UserDao(Connection connection) throws RemoteException {
         this.connection = connection;
     }
@@ -60,7 +64,6 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     }
 
 
-
     @Override
     public CurrentUser create(CurrentUser dto) throws RemoteException, SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(INSERT);) {
@@ -74,10 +77,14 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
             statement.setString(8, dto.getBio());
             statement.setBytes(9, dto.getUserPhoto());
             statement.executeUpdate();
+            ServerController sc = StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
+            Platform.runLater(()->{
+                sc.refreshAnalysis();
+            });
+
             return dto;
         }
     }
-
 
 
     public int delete(String phoneNumber) {
@@ -109,26 +116,26 @@ public class UserDao extends UnicastRemoteObject implements DAOInterface<Current
     public CurrentUser findByPhoneAndPassword(LoginEntity l) throws RemoteException {
         CurrentUser user = new CurrentUser();
         try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE_WITH_Pass);) {
-           statement.setString(1,l.getPhoneNumber());
-           statement.setString(2,l.getPassword());
+            statement.setString(1, l.getPhoneNumber());
+            statement.setString(2, l.getPassword());
             ResultSet rs = statement.executeQuery();
 
-           if (rs.next()) {
+            if (rs.next()) {
                 user = createUser(rs, user);
-               return user;
-           }
+                return user;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void updateUserStatus(String phoneNumber,String status){
+    public void updateUserStatus(String phoneNumber, String status) {
         try (PreparedStatement statement = this.connection.prepareStatement(UPDATE_USER_STATUS);) {
             statement.setString(1, status);
             statement.setString(2, phoneNumber);
             statement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

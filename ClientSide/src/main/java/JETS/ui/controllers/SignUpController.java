@@ -99,6 +99,8 @@ public class SignUpController implements Initializable {
 
                 code = "+" + countryCodeData.getCode();
                 phoneNumber.setText("");
+                password.setText("");
+                confirmedPassword.setText("");
                 isPasswordCorrect = false;
 
             }
@@ -207,7 +209,8 @@ public class SignUpController implements Initializable {
     public void registerHandle(ActionEvent e) throws RemoteException, SQLException {
         if (isPhoneNumberCorrect && isEmailCorrect && isNameCorrect && isPasswordCorrect && !gender.getValue().toString().equals("Gender")) {
             phone = phoneNumber.getText();
-            if (phone.length() == 11) phone = phone.substring(1);
+            String country =((CountryCodeData)(countryCode.getSelectionModel().getSelectedItem())).getCountryName();
+            if (phone.length() == 11 &&country.equals("Egypt") ) phone = phone.substring(1);
             CurrentUser user = new CurrentUser();
             user.setPhoneNumber(code + phone);
             user.setEmail(emailAddress.getText());
@@ -218,6 +221,7 @@ public class SignUpController implements Initializable {
             user.setBio(bio.getText());
             user.setStatus("AVAILABLE");
             user.setUserPhoto(photoBytes);
+            user.setCountry(country);
             ClientMain.userDAO.create(user);
 
         }

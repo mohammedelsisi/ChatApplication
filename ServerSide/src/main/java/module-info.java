@@ -18,4 +18,6 @@ module ServerSide {
     exports JETS;
     requires Common;
     requires java.rmi;
+
+    requires java.sql.rowset;
 }

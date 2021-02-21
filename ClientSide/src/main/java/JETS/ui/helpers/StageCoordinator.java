@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -127,22 +129,34 @@ public class StageCoordinator {
     }
 
     public  HBox createChatLayout(ChatEntitiy chatEntitiy)  {
-        if(chatEntitiy.getParticipantsPhoneNumbers().size()==2) {
+        List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList());
+        StringBuilder receiver=new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
 
-
-            List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
-                    .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
-                    .collect(Collectors.toList());
-            String friendPhone = participants.get(0);
-            Label name = new Label(FriendsManager.getInstance().getFriendName(friendPhone));
+          for (int i = 1;i<participants.size();i++){
+              receiver.append(", ");
+              receiver.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
+          }
+            Label name = new Label(receiver.toString());
             Circle circle = new Circle(25);
-            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(friendPhone)))));
+            if(participants.size()==1){
+
+                circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(participants.get(0))))));
+            }else {
+                try(FileInputStream file = new FileInputStream("groupIcon.jpg")){
+                    circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(file.readAllBytes()))));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             HBox hBox = new HBox(circle, name);
             return hBox;
-        }else{
-            return null;
+
         }
 
     }
 
-}
+

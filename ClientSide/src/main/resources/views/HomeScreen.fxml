@@ -291,7 +291,7 @@
                      <top>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="receiverName" textFill="#6f6d6d">
+                              <Label fx:id="receiverName" alignment="CENTER" textFill="#6f6d6d" wrapText="true" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Calibri Bold" size="14.0" />
                                  </font>
