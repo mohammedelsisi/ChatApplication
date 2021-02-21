@@ -2,8 +2,6 @@ package JETS.service;
 
 import Services.ClientServices;
 import Services.ConnectionInt;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

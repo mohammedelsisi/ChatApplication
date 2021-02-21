@@ -1,7 +1,6 @@
 package JETS;
 
 import JETS.db.DataSourceFactory;
-import JETS.db.dao.ServerDao;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
 import JETS.service.ChattingImp;
@@ -12,14 +11,20 @@ import JETS.service.ConnectionServiceFactory;
 import JETS.ui.helpers.StageCoordinator;
 import Services.ChatServiceInt;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.*;
 
 public class ServerMain extends Application {
-    public static ServerDao serverDao;
+   
+
     public static void main(String[] args) {
         launch(args);
 
@@ -30,21 +35,19 @@ public class ServerMain extends Application {
         try {
             Connection conn = DataSourceFactory.getConnection();
             UserDao userDao = new UserDao(conn);
-            serverDao = new ServerDao(conn);
             ConnectionService connectionService = ConnectionServiceFactory.getConnectionService();
             UserFriendDao userFriendDao = new UserFriendDao(conn);
             ChatServiceInt chatService = new ChatServiceImp();
             /*             method to get the last chat Id from database */
             ChatDaoImp chatDaoImp = new ChatDaoImp(conn);
             ChattingImp chattingImp = new ChattingImp(conn);
-            Registry reg = LocateRegistry.createRegistry(6271);
+            Registry reg = LocateRegistry.createRegistry(6270);
             reg.rebind("UserRegistrationService",userDao);
             reg.rebind("ConnectionService",connectionService);
             reg.rebind("ChatService", chatService);
             reg.rebind("UserFriendDao", userFriendDao);
             reg.rebind("ChatDao",chatDaoImp);
             reg.rebind("ChattingService", chattingImp);
-
         } catch (SQLException | RemoteException throwables) {
             throwables.printStackTrace();
         }

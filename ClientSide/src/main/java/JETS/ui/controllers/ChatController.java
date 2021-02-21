@@ -22,6 +22,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -31,8 +33,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.controlsfx.control.Notifications;
+import org.controlsfx.control.Notifications;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -40,7 +45,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 
@@ -78,6 +82,7 @@ public class ChatController implements Initializable {
     private VBox messagesContainer;
     private Text textHolder = new Text();
     private double oldMessageFieldHigh;
+    private Screen screen;
 
     public static void loadRequestList() {
         try {
@@ -492,5 +497,16 @@ public class ChatController implements Initializable {
             receiverNames.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
         }
         return receiverNames.toString();
+    }
+    public void showNotification(String message) {
+        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
+        Notifications.create()
+                .owner(screen)
+                .title("Announcement")
+                .text(message)
+                .darkStyle()
+                .graphic(new ImageView(img))
+                .position(Pos.BOTTOM_RIGHT)
+                .show();
     }
 }
