@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.net.ClientProxy;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -222,7 +223,7 @@ public class SignUpController implements Initializable {
             user.setStatus("AVAILABLE");
             user.setUserPhoto(photoBytes);
             user.setCountry(country);
-            ClientMain.userDAO.create(user);
+            ClientProxy.getInstance().create(user);
 
         }
     }

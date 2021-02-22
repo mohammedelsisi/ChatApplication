@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.net.ClientProxy;
 import JETS.ui.helpers.ModelsFactory;
 import Models.CurrentUser;
 import com.jfoenix.controls.JFXPasswordField;
@@ -92,13 +93,12 @@ public class ChangePasswordController {
             alert.setHeaderText(null);
             alert.setContentText("Password Updated Successfully!");
             currentUser.setPassword(newPassword);
-            ClientMain.userDAO.update(currentUser);
+            ModelsFactory.getInstance().setCurrentUser(ClientProxy.getInstance().update(currentUser));
             alert.showAndWait();
             pfOldPassword.getScene().getWindow().hide();
         }
 
     }
-
 
 
     public boolean checkOldPassword(String oldPassword) {

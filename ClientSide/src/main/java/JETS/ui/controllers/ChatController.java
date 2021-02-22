@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
 import Models.*;
 import com.jfoenix.controls.*;
@@ -154,7 +155,7 @@ public class ChatController implements Initializable {
 
     public static void loadRequestList() {
         try {
-            requestLists.setAll(ClientMain.chatting.getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            requestLists.setAll(ClientProxy.getInstance().getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
 
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -165,7 +166,7 @@ public class ChatController implements Initializable {
         try {
 
 
-            friendsList.addAll(ClientMain.chatting.getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            friendsList.addAll(ClientProxy.getInstance().getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
             for (FriendEntity friendEntity : friendsList) {
                 ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
                 System.out.println(friendEntity.getDisplayName() + ":" + friendEntity.getStatus());
@@ -213,7 +214,7 @@ public class ChatController implements Initializable {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.chatting.refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            ClientProxy.getInstance().refuseRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
                                         } catch (RemoteException e) {
                                             e.printStackTrace();
@@ -224,7 +225,7 @@ public class ChatController implements Initializable {
                                     @Override
                                     public void handle(ActionEvent event) {
                                         try {
-                                            ClientMain.chatting.acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
+                                            ClientProxy.getInstance().acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
                                             friendsList.add(friendEntity);
                                             currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
@@ -346,7 +347,7 @@ public class ChatController implements Initializable {
             ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
             try {
                 System.out.println(newValue.toString());
-                ClientMain.chatting.tellstatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
+                ClientProxy.getInstance().tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -380,7 +381,7 @@ public class ChatController implements Initializable {
                     VBox vBox = addChatToMap(currentIdx);
 
                     if (chatEntitiy.getId() == 0) {
-                        chatEntitiy = ClientMain.chatDao.initiateChat(chatEntitiy);
+                        chatEntitiy = ClientProxy.getInstance().initiateChat(chatEntitiy);
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
                         VBox vBox2 = addChatToMap(currentIdx);
                         msgProperty.addListener((obs, old, newval) -> {
@@ -402,7 +403,7 @@ public class ChatController implements Initializable {
 
 
                     vBox.getChildren().add(new ChatBox(msg));
-                    ClientMain.chatServiceInt.sendMessage(msg);
+                    ClientProxy.getInstance().sendMessage(msg);
                     messageField.clear();
                 }
 
@@ -461,7 +462,7 @@ public class ChatController implements Initializable {
             System.out.println("  Please enter a valid Mobile Number");
         } else {
             try {
-                x = ClientMain.chatting.sendRequest(myphoneNumber, myfriendPhoneNo);
+                x = ClientProxy.getInstance().sendRequest(myphoneNumber, myfriendPhoneNo);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -585,7 +586,7 @@ public class ChatController implements Initializable {
         currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
         //set the date of birth = DPDatePicker.getValue;
 
-        ClientMain.userDAO.update(currentUser);
+        ClientProxy.getInstance().update(currentUser);
 
         //showing the update alert
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

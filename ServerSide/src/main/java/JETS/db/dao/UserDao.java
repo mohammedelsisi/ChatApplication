@@ -5,7 +5,6 @@ import JETS.ui.controllers.ServerController;
 import JETS.ui.helpers.StageCoordinator;
 import Models.CurrentUser;
 import Models.LoginEntity;
-import Services.DAOInterface;
 import javafx.application.Platform;
 
 import java.rmi.RemoteException;
@@ -14,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao extends UnicastRemoteObject implements DAOInterface<CurrentUser> {
+public class UserDao extends UnicastRemoteObject implements Services.UserDao<CurrentUser> {
 
     private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
     private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,DOB,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";

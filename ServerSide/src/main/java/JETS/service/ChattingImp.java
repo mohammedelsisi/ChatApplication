@@ -22,11 +22,7 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
          friendImp = new UserFriendDao(connection);
          userDao=new UserDao(connection);
     }
-    public void register(CallBack client, String phoneNumber) {
 
-
-        clients.put(phoneNumber, client);
-    }
     //Exit
     public void unRegister(String phoneNumber){
         clients.remove(phoneNumber);
@@ -82,7 +78,7 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
         return null;
     }
     //callback FriendDao
-    public void tellstatus(String phoneNumber,String status) throws RemoteException{
+    public void tellStatus(String phoneNumber,String status) throws RemoteException{
         userDao.updateUserStatus(phoneNumber,status);
         FriendEntity user=friendImp.findFriendByPhoneNumber(phoneNumber);
         List<FriendEntity> arr = new ArrayList<FriendEntity>();

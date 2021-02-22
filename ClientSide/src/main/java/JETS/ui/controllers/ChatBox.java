@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.net.ClientProxy;
 import JETS.ui.helpers.FileManager;
 import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
@@ -177,7 +178,7 @@ public class ChatBox extends GridPane {
             if (saveFile != null) {
                 Path savePath = saveFile.toPath().resolve(file.getName());
                 try {
-                    FileManager.writeFile(savePath.toFile(), ClientMain.fileService.getFileData(file, MESSAGE.getId()).getData());
+                    FileManager.writeFile(savePath.toFile(), ClientProxy.getInstance().getFileData(file, MESSAGE.getId()).getData());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
