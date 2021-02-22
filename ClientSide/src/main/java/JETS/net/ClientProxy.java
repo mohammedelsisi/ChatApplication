@@ -1,5 +1,6 @@
 package JETS.net;
 
+import JETS.ClientServices.ClientServicesFactory;
 import Models.*;
 import Services.*;
 
@@ -7,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(6253);
+            registry = LocateRegistry.getRegistry(5555);
         } catch (RemoteException  e) {
             e.printStackTrace();
         }
@@ -102,17 +104,35 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     }
 
     @Override
-    public boolean disconnect(ClientServices client) throws RemoteException {
+    public boolean disconnect(ClientServices client)  {
         try {
 
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
-        } catch (NotBoundException e) {
+            boolean disconnected=  connectionInt.disconnect(client);
+            UnicastRemoteObject.unexportObject(ClientServicesFactory.getClientServicesImp(),true);
+            return disconnected;
+        } catch (NotBoundException | RemoteException e) {
             e.printStackTrace();
         }
-        return connectionInt.disconnect(client);
+      return false;
     }
+
+    @Override
+    public boolean isConnected(String clientPhoneNumber) {
+        try {
+
+            if (connectionInt == null) {
+                connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
+            }
+            return connectionInt.isConnected(clientPhoneNumber);
+        } catch (NotBoundException | RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 
     @Override
@@ -170,7 +190,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public CurrentUser findByPhoneAndPassword(LoginEntity l) throws RemoteException {
         try {
-
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }

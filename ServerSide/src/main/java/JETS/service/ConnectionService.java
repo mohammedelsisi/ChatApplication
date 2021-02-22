@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConnectionService extends UnicastRemoteObject implements ConnectionInt,Connector {
+public class ConnectionService extends UnicastRemoteObject implements ConnectionInt {
     public ObservableMap<String, ClientServices> getConnectedClients() {
         return connectedClients;
     }
@@ -30,21 +30,21 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
     @Override
     public boolean disconnect(ClientServices client) throws RemoteException {
         boolean isSucceed = false;
+        System.out.println(client.getPhoneNumber() + " disconnected");
         String clientPhoneNumber = client.getPhoneNumber();
         if (connectedClients.containsKey(clientPhoneNumber)) {
             connectedClients.remove(clientPhoneNumber);
-            UnicastRemoteObject.unexportObject(client, true);
             isSucceed = true;
         }
         return isSucceed;
     }
-
     @Override
     public boolean isConnected(String clientPhoneNumber) {
+
         return connectedClients.containsKey(clientPhoneNumber);
     }
 
-    @Override
+
     public ClientServices getClientService(String clientPhoneNumber) {
       return connectedClients.get(clientPhoneNumber);
     }

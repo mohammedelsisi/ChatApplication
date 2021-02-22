@@ -3,7 +3,6 @@ package JETS.ui.controllers;
 import JETS.ClientMain;
 import JETS.ClientServices.ClientServicesFactory;
 import JETS.net.ClientProxy;
-import JETS.ui.helpers.ClientImp;
 import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
@@ -47,12 +46,16 @@ public class MainController implements Initializable {
         CurrentUser currentUser = ClientProxy.getInstance().findByPhoneAndPassword(loginEntity);
 
         if (currentUser != null) {
-            ModelsFactory.getInstance().setCurrentUser(currentUser);
-            ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
-            StageCoordinator stageCoordinator = StageCoordinator.getInstance();
-            stageCoordinator.switchToChatScene();
-            ConfigurationHandler.getInstance().rememberMe(loginEntity);
-            password.clear();
+            if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())) {
+                System.out.println("You are already connected");
+            } else {
+                ModelsFactory.getInstance().setCurrentUser(currentUser);
+                ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
+                StageCoordinator stageCoordinator = StageCoordinator.getInstance();
+                stageCoordinator.switchToChatScene();
+                ConfigurationHandler.getInstance().rememberMe(loginEntity);
+                password.clear();
+            }
         } else {
             System.out.println("Not Valid ");
         }

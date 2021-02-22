@@ -7,4 +7,6 @@ public interface ConnectionInt extends Remote {
 
     boolean registerAsConnected (ClientServices client) throws RemoteException;
     boolean disconnect (ClientServices client) throws RemoteException;
+    boolean isConnected(String clientPhoneNumber) throws RemoteException;
+
 }

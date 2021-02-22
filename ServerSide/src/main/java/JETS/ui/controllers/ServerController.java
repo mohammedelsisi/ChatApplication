@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable {
 
 
-    public Registry reg = LocateRegistry.createRegistry(6253);
+    public Registry reg = LocateRegistry.createRegistry(5555);
     public UserDao userDao;
     public ConnectionService connectionService;
     public ChattingImp chattingImp;
@@ -166,7 +166,7 @@ public class ServerController implements Initializable {
 
 
     public void serverAction() {
-        if (startBtn.isSelected() == true) {
+        if (startBtn.isSelected()) {
             startServer();
         } else {
             stopServer();
@@ -201,10 +201,10 @@ public class ServerController implements Initializable {
             reg.unbind("UserFriendDao");
             reg.unbind("ChatDao");
             reg.unbind("ChattingService");
+            reg.unbind("FileService");
             startBtn.setText("Start Service");
-            conn.close();
             System.out.println("serverclosed");
-        } catch (RemoteException | NotBoundException | SQLException e) {
+        } catch (RemoteException | NotBoundException  e) {
             e.printStackTrace();
         }
 

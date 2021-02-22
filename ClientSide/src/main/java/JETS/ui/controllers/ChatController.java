@@ -1,6 +1,7 @@
 package JETS.ui.controllers;
 
 import JETS.ClientMain;
+import JETS.ClientServices.ClientServicesFactory;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
 import Models.*;
@@ -606,8 +607,8 @@ public class ChatController implements Initializable {
         if (alert1.showAndWait().get() == ButtonType.OK){
             StageCoordinator.getInstance().switchToLoginScene();
             ConfigurationHandler.getInstance().clearPassword();
-            System.out.println("done");
-            //write to the property file so the user can  not open the application without login
+            System.out.println("out out out");
+            ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
         }
     }
 

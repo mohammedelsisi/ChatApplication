@@ -4,8 +4,10 @@ import JETS.ServerMain;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
 import Models.FriendEntity;
-import Services.CallBack;
 import Services.Chatting;
+import Services.ClientServices;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -15,7 +17,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ChattingImp extends UnicastRemoteObject implements Chatting {
-    Hashtable<String, CallBack> clients = new Hashtable<>();
+    private ObservableMap<String, ClientServices> clients = ConnectionServiceFactory.getConnectionService().getConnectedClients();
     UserFriendDao friendImp;
     UserDao userDao;
     public ChattingImp(Connection connection) throws RemoteException {

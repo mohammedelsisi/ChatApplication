@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao extends UnicastRemoteObject implements Services.UserDao<CurrentUser> {
+public class UserDao extends UnicastRemoteObject implements Services.UserDao {
 
     private static final String DELETE = "DELETE FROM user WHERE phone_number = ?";
     private static final String INSERT = "INSERT INTO user (phone_number,password,Display_name, email,gender,country,DOB,bio,image) VALUES (?,?, ?, ?, ?,?,?,?,?)";
@@ -29,20 +29,7 @@ public class UserDao extends UnicastRemoteObject implements Services.UserDao<Cur
     }
 
 
-    @Override
-    public CurrentUser findById(String phoneNumber) throws SQLException, RemoteException {
-        CurrentUser user = new CurrentUser();
-        try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE);) {
-            statement.setString(1, phoneNumber);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                user = createUser(rs, user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
+
 
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
@@ -97,19 +84,6 @@ public class UserDao extends UnicastRemoteObject implements Services.UserDao<Cur
     }
 
 
-    @Override
-    public List<CurrentUser> getFriends(String phoneNumber) throws RemoteException, SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_Friends);) {
-            preparedStatement.setString(1, phoneNumber);
-            List<CurrentUser> friends = new ArrayList<>();
-            ResultSet rs = preparedStatement.executeQuery();
-            CurrentUser user = new CurrentUser();
-            while (rs.next()) {
-                friends.add(createUser(rs, user));
-            }
-            return friends;
-        }
-    }
 
     @Override
     public CurrentUser findByPhoneAndPassword(LoginEntity l) throws RemoteException {

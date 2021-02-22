@@ -1,5 +1,7 @@
 package JETS.ui.helpers;
 
+import JETS.ClientServices.ClientServicesFactory;
+import JETS.net.ClientProxy;
 import JETS.ui.controllers.ChatController;
 import Models.ChatEntitiy;
 import Models.CurrentUser;
@@ -48,7 +50,11 @@ public class StageCoordinator {
         }
         primaryStage = stage;
 
-
+    stage.setOnCloseRequest((e)->{
+        if(ModelsFactory.getInstance().getCurrentUser()!=null){
+            ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+        }
+    });
         //if the user closes the application, call the method that keeps him logged in.(basiony)
     }
 
@@ -109,7 +115,7 @@ public class StageCoordinator {
             throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
         }
 
-        if (!scenes.containsKey("Chat")) {
+//        if (!scenes.containsKey("Chat")) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/HomeScreen.fxml"));
                 Parent Chat = fxmlLoader.load();
@@ -121,11 +127,11 @@ public class StageCoordinator {
                 e.printStackTrace();
                 System.out.println("IO Exception: Couldn't load 'Chat View' FXML file");
             }
-        } else {
-            SceneData ChatSceneData = scenes.get("Chat");
-            Scene ChatScene = ChatSceneData.getScene();
-            primaryStage.setScene(ChatScene);
-        }
+//        } else {
+//            SceneData ChatSceneData = scenes.get("Chat");
+//            Scene ChatScene = ChatSceneData.getScene();
+//            primaryStage.setScene(ChatScene);
+//        }
     }
 
     public  HBox createChatLayout(ChatEntitiy chatEntitiy)  {

@@ -2,7 +2,6 @@ package JETS;
 
 import JETS.ClientServices.ClientServicesFactory;
 import JETS.net.ClientProxy;
-import JETS.ui.helpers.ClientImp;
 import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
@@ -38,10 +37,16 @@ public class ClientMain extends Application {
             LoginEntity loginEntity = ConfigurationHandler.getInstance().getLoginEntity();
             CurrentUser currentUser = ClientProxy.getInstance().findByPhoneAndPassword(loginEntity);
             if (currentUser != null) {
-                ModelsFactory.getInstance().setCurrentUser(currentUser);
-                ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
-                stageCoordinator.switchToChatScene();
+                if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())){
+                    System.out.println("You are already connected");
+                    StageCoordinator.getInstance().switchToLoginScene();
+                }else {
+                    ModelsFactory.getInstance().setCurrentUser(currentUser);
+                    ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
+                    stageCoordinator.switchToChatScene();
+                }
             } else {
+                System.out.println("Server is Down");
                 StageCoordinator.getInstance().switchToLoginScene();
             }
         } catch (RemoteException e) {
