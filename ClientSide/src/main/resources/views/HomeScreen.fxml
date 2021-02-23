@@ -28,22 +28,21 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane fx:id="MainAnchorPane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
+<AnchorPane fx:id="MainAnchorPane" stylesheets="@../styles/StyleSheet.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.ChatController">
    <children>
 
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="409.0" side="LEFT" style="-fx-background-color: white;" styleClass="tab_pane" stylesheets="@../styles/StyleSheet.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
+            <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="409.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
               <tabs>
-                  <Tab disable="true" style="-fx-background-color: #004C4C; -fx-padding: 0 80;">
+                  <Tab fx:id="profileTab" disable="true">
                      <content>
                         <VBox prefHeight="200.0" prefWidth="100.0" />
                      </content>
                   </Tab>
-                  <Tab style="-fx-background-color: #004C4C;">
+                  <Tab>
                      <graphic>
                         <Label graphicTextGap="23.0" minWidth="100.0" prefHeight="18.0" prefWidth="81.0" text="CHATS" textFill="WHITE">
                            <font>
@@ -73,7 +72,7 @@
                         </VBox>
                      </content>
                   </Tab>
-                  <Tab style="-fx-background-color: #004040;">
+                  <Tab>
                      <graphic>
                         <Label graphicTextGap="15.0" minWidth="100.0" prefHeight="18.0" prefWidth="108.0" text="CONTACTS" textFill="WHITE">
                            <font>
@@ -95,13 +94,16 @@
                                  <font>
                                     <Font name="Lemon Regular" size="20.0" />
                                  </font>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
                               </Label>
                            </top>
                            <center>
                               <VBox fx:id="contacts" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
-                              <JFXButton buttonType="RAISED" defaultButton="true" onAction="#startChatAction" ripplerFill="#c68787" styleClass="btn-success" stylesheets="@../styles/bootstrapfx.css" text="Start Chat" BorderPane.alignment="CENTER">
+                              <JFXButton buttonType="RAISED" defaultButton="true" onAction="#startChatAction" prefHeight="32.0" prefWidth="88.0" ripplerFill="#c68787" styleClass="startBtn" stylesheets="@../styles/bootstrapfx.css" text="Start Chat" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets bottom="25.0" />
                                  </BorderPane.margin>
@@ -110,7 +112,7 @@
                         </BorderPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-background-color: #004040;">
+                  <Tab>
                      <graphic>
                         <Label graphicTextGap="13.0" minWidth="100.0" prefHeight="18.0" prefWidth="108.0" text="USER INFO" textFill="WHITE">
                            <graphic>
@@ -216,14 +218,15 @@
                                     <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
                                  </padding>
                               </HBox>
-                              <Panel prefHeight="50.0" prefWidth="300.0" VBox.vgrow="SOMETIMES">
-                                 <left>
-                                    <JFXButton fx:id="btnChangePassword" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#HandleChangePassword" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #70c1b3;" text="Change Password" textFill="WHITE" BorderPane.alignment="CENTER" />
-                                 </left>
-                                 <center>
-                                    <JFXButton fx:id="btnSaveChanges" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#SaveUpdateChanges" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #70c1b3;" text="Save changes" textFill="WHITE" BorderPane.alignment="CENTER" />
-                                 </center>
-                              </Panel>
+                              <HBox alignment="CENTER" layoutX="20.0" layoutY="284.0" prefHeight="162.0" prefWidth="238.0" spacing="5.0" styleClass="border_chats" stylesheets="@../styles/StyleSheet.css">
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <children>
+                                    <JFXButton fx:id="btnChangePassword" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#HandleChangePassword" prefHeight="30.0" prefWidth="111.0" styleClass="startBtn" text="Change Password" textFill="WHITE" wrapText="true" />
+                                    <JFXButton fx:id="btnSaveChanges" alignment="CENTER" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#SaveUpdateChanges" prefHeight="30.0" prefWidth="110.0" styleClass="startBtn" text="Save changes" textFill="WHITE" />
+                                 </children>
+                              </HBox>
 
 
                            </children>
@@ -328,9 +331,9 @@
                            <children>
                               <Pane prefHeight="35.0" prefWidth="250.0" styleClass="upper_rightBar" stylesheets="@../styles/StyleSheet.css">
                                  <children>
-                                    <Group layoutX="50.0" layoutY="35.0" onMouseClicked="#requestFriend">
+                                    <Group id="cc" layoutX="50.0" layoutY="35.0" onMouseClicked="#requestFriend" styleClass="logos">
                                        <children>
-                                          <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE">
+                                          <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE" styleClass="logos">
                                              <fill>
                                                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                                                    <stops>
@@ -360,7 +363,7 @@
                                     </Group>
                                     <Group layoutX="203.0" layoutY="35.0">
                                        <children>
-                                          <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE">
+                                          <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE" styleClass="logos">
                                              <fill>
                                                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                                                    <stops>
@@ -393,7 +396,7 @@
                                     </Group>
                                     <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
                                        <children>
-                                          <Circle fill="WHITE" radius="17.0" strokeType="INSIDE">
+                                          <Circle fill="WHITE" radius="17.0" strokeType="INSIDE" styleClass="logos">
                                              <stroke>
                                                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                                                    <stops>
@@ -431,8 +434,14 @@
                                                    </stops>
                                                 </RadialGradient>
                                              </iconColor>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
                                           </FontIcon>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Group>
                                  </children>
                               </Pane>
@@ -456,9 +465,9 @@
             <Circle fx:id="circleView" fill="WHITE" radius="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
          </graphic>
       </Label>
-      <Button layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" text="SignOut">
+      <Button fx:id="btnSignout" layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut">
          <graphic>
-            <FontIcon fill="#d7d2d2" iconColor="#1b0101" iconLiteral="fas-sign-out-alt" iconSize="22" selectionFill="BLACK" tabSize="19">
+            <FontIcon fill="#d7d2d2" iconColor="#1b0101" iconLiteral="fas-sign-out-alt" iconSize="22" tabSize="19">
                <font>
                   <Font size="15.0" />
                </font>

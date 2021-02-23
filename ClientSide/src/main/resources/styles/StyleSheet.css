@@ -25,21 +25,64 @@
     -fx-background-color: white;
 }
 
-.tab_pane{
+TabPane{
     -fx-background-color:  #004C4C;
     -fx-outer-border :    #004C4C;
-    -fx-text-box-border: #004C4C;
-	-fx-background-color:transparent;
+    -fx-text-box-border: #083e3e;
+    /*-fx-text-box-border:linear-gradient( rgba(0,76,76,1) 0%, rgba(48,118,133,1) 100%);*/
+  /*-fx-background-color:  linear-gradient( rgba(0,76,76,1) 0%, rgba(48,118,133,1) 100%);*/
+
+
+    -fx-background-color:transparent;
  
 
 }
 
-.profileTab{
+.signOut {
+    -fx-background-color: #69e3e3;
+
+}
+
+.startBtn{
+    -fx-background-color: #173535;
+    -fx-text-fill: white;
+
+}
+.startBtn:hover{
+    -fx-background-color: #1c5454;
+
+
+}
+.signOut:hover{
+    -fx-background-color: #0e3535;
+    -fx-text-fill: white;
+
+}
+.logos:hover{
+    /*-fx-border-color: red;*/
+    /*-fx-border-width: 5px;*/
+    -fx-fill: #5282f6;
+}
+.tab
+{
+    -fx-background-color: #004040;
+
+}
+.tab:hover {
+    -fx-background-color: #36b3b3;
+
+}
+
+.tab:selected{
+    -fx-background-color: #338383;
+}
+#profileTab{
 	 -fx-background-color:  #004C4C;
     -fx-outer-border :    #004C4C;
     -fx-text-box-border: #004C4C;
 	-fx-background-color:transparent;
- 
+    -fx-padding:0 80;
+
  -fx-tab-min-width:120px;
   -fx-tab-max-width:120px;
   -fx-tab-min-height:50px;
