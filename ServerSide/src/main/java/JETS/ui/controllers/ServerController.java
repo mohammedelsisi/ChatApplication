@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable {
 
 
-    public Registry reg = LocateRegistry.createRegistry(5555);
+    public Registry reg = LocateRegistry.createRegistry(9090);
     public UserDao userDao;
     public ConnectionService connectionService;
     public ChattingImp chattingImp;

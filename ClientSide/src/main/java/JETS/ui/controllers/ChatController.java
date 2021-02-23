@@ -678,5 +678,8 @@ public class ChatController implements Initializable {
         tray.showAndWait();
     }
 
+    public void viewing() {
+        appNotifications.getInstance().okai("hello","yes");
+    }
 }
 

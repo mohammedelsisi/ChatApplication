@@ -6,6 +6,7 @@ import JETS.net.ClientProxy;
 import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
 import Models.LoginEntity;
 import javafx.event.ActionEvent;
@@ -57,6 +58,10 @@ public class MainController implements Initializable {
                 password.clear();
             }
         } else {
+            String msg = "Please Enter Valid PhoneNumber & Password or please SignUP";
+            String title ="USER NOT FOUND!";
+
+            appNotifications.getInstance().okai(msg,title);
             System.out.println("Not Valid ");
         }
     }
