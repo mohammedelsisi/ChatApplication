@@ -198,7 +198,6 @@ public class ChatController implements Initializable {
         loadFriendList();
 
         listViewRequestList = new ListView(requestLists);
-        listViewFriendList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         listViewRequestList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
             @Override
@@ -289,6 +288,8 @@ public class ChatController implements Initializable {
             }
         });
         listViewFriendList = new ListView<>(sortedListFriends);
+        listViewFriendList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         listViewFriendList.setCellFactory(new Callback<ListView<FriendEntity>, ListCell<FriendEntity>>() {
 
             @Override
