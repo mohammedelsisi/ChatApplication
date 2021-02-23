@@ -12,6 +12,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
@@ -59,42 +60,33 @@ public class appNotifications {
         grid.getChildren().addAll(mobilePhone,text1,hboxbtn);
         grid.getStylesheets().add("x.css");
         dialog.getDialogPane().setContent(grid);
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
+       // Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+       // stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
 
     }
 
 
     public void okai(String msg, String title){
 
-        Dialog dialog = new Dialog();
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle(title);
+        /*Label header = new Label(head);
+        header.setTextFill(Color.WHITE);
+        alert.setHeaderText(String.valueOf(header));*/
+        //alert.setContentText(title);
+        Label a  = new Label(msg);
+        a.setWrapText(true);
+        a.setTextFill(Color.WHITE);
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(15,15,15,15));
-        grid.setVgap(25);
-        grid.setHgap(10);
-        //message
-        Label message = new Label(msg);
-        Font fontlabel = Font.font("Cambria", FontWeight.BOLD, 15);
-        message.setFont(fontlabel);
-        message.setTextFill(Color.WHITE);
-        GridPane.setConstraints(message,1,0);
-
-        Button oK = new Button("OK");
-        oK.setStyle("-fx-background-color: #e3fafa; -fx-cursor: hand;");
-        Font font = Font.font("Cambria", FontWeight.BOLD, 13);
-        oK.setFont(font);
-        GridPane.setConstraints(oK,4,0);
-
-        grid.getChildren().addAll(message,oK);
-
-        grid.setStyle("-fx-background-color: #008080");
-        dialog.getDialogPane().setContent(grid);
-        dialog.setResizable(false);
-        //dialogTitle
-        dialog.setTitle(title);
-        dialog.show();
-//        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-//        stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
+        grid.add(a,2,0);
+        alert.getDialogPane().setPrefSize(400,130);
+        alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
+        ButtonType btnok = new ButtonType("OK", OK_DONE);
+        alert.getDialogPane().setContent(grid);
+        alert.getButtonTypes().add(btnok);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+        alert.showAndWait();
 
         //error, info, notification
     }
