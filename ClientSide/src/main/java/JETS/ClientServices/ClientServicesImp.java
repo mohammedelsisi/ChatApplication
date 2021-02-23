@@ -32,7 +32,15 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     @Override
     public void ReceiveAnnounc(String s) throws RemoteException {
         ChatController a = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+
+        Platform.runLater(()->{
+
             a.showNotification(s);
+
+        });
+
+
+
 //        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
 //        Notifications notification = Notifications.create()
 //                .owner(StageCoordinator.getInstance().getScenes().get("Chat").getScene().getWindow())

@@ -26,6 +26,14 @@
 
 
     <dependencies>
+<!--        mvn install:install-file -Dfile=F://TrayNotification.jar -DgroupId=TrayNotification -DartifactId=Chat -Dversion=1.0.0 -Dpackaging=jar -DgeneratePom=true-->
+
+        <dependency>
+            <groupId>TrayNotification</groupId>
+            <artifactId>Chat</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.jets</groupId>
             <artifactId>Common</artifactId>
