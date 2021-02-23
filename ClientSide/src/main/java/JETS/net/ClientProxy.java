@@ -93,7 +93,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public boolean registerAsConnected(ClientServices client) throws RemoteException {
         try {
-
+//            UnicastRemoteObject.exportObject(ClientServicesFactory.getClientServicesImp(),5555);
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
@@ -110,9 +110,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
-            boolean disconnected=  connectionInt.disconnect(client);
-            UnicastRemoteObject.unexportObject(ClientServicesFactory.getClientServicesImp(),true);
-            return disconnected;
+            return connectionInt.disconnect(client);
         } catch (NotBoundException | RemoteException e) {
             e.printStackTrace();
         }
@@ -194,7 +192,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
         } catch (NotBoundException e) {
-            e.printStackTrace();
+           throw new RuntimeException("Server Is Down");
         }
         return userDAO.findByPhoneAndPassword(l);
     }

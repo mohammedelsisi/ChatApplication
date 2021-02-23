@@ -13,9 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 
 
@@ -56,9 +58,6 @@ public class ClientMain extends Application {
 
     }
 
-    public void rememberMeAction(ActionEvent actionEvent) throws RemoteException {
-
-    }
 
     @Override
     public void init() {
@@ -66,7 +65,8 @@ public class ClientMain extends Application {
     }
 
     @Override
-    public void stop() {
+    public void stop() throws NoSuchObjectException {
+        UnicastRemoteObject.unexportObject(ClientServicesFactory.getClientServicesImp(),true);
 
     }
 
