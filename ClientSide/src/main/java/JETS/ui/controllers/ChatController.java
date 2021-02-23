@@ -37,13 +37,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.w3c.dom.UserDataHandler;
+import tray.animations.AnimationType;
+import tray.notification.NotificationType;
+import tray.notification.TrayNotification;
 
 import java.io.*;
 import java.net.URL;
@@ -663,15 +668,14 @@ public class ChatController implements Initializable {
         return receiverNames.toString();
     }
     public void showNotification(String message) {
-        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
-        Notifications.create()
-                .owner(screen)
-                .title("Announcement")
-                .text(message)
-                .darkStyle()
-                .graphic(new ImageView(img))
-                .position(Pos.BOTTOM_RIGHT)
-                .show();
+
+        String title = "Server Announcement";
+        TrayNotification tray = new TrayNotification();
+        tray.setTitle(title);
+        tray.setMessage(message);
+        tray.setNotificationType(NotificationType.INFORMATION);
+        tray.setAnimationType(AnimationType.POPUP);
+        tray.showAndWait();
     }
 
 }
