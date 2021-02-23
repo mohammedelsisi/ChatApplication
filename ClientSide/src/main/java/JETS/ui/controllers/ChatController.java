@@ -669,7 +669,7 @@ public class ChatController implements Initializable {
     }
     public void showNotification(String message) {
 
-        String title = "Server Announcement";
+        String title = "LONGTALK CHAT";
         TrayNotification tray = new TrayNotification();
         tray.setTitle(title);
         tray.setMessage(message);
