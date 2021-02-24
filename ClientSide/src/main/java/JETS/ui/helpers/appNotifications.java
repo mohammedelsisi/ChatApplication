@@ -116,6 +116,15 @@ public class appNotifications {
 
     }
 
+    public void sucessNotify(String message, String Title, javafx.util.Duration duration) {
+        TrayNotification tray = new TrayNotification();
+        tray.setTitle(Title);
+        tray.setMessage(message);
+
+        tray.setNotificationType(NotificationType.SUCCESS);
+        tray.setAnimationType(AnimationType.POPUP);
+        tray.showAndDismiss(duration);
+    }
 
     public void sideInfo(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();

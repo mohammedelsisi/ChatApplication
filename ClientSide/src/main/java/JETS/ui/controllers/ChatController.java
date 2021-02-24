@@ -238,6 +238,8 @@ public class ChatController implements Initializable {
                                             requestLists.remove(friendEntity);
                                             friendsList.add(friendEntity);
                                             currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
+                                            appNotifications.getInstance().sucessNotify("You and " + friendEntity.getDisplayName() + " Are Now Friends","Congratulations",Duration.seconds(5));
+
                                         } catch (RemoteException e) {
                                             e.printStackTrace();
                                         }
