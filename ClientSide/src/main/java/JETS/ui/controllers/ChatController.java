@@ -568,11 +568,7 @@ public class ChatController implements Initializable {
             ClientProxy.getInstance().update(currentUser);
 
             //showing the update alert
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Updated Information");
-            alert.setContentText("Information Updated Successfully");
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            appNotifications.getInstance().okai("Information Updated Successfully","Updated Information");
         } catch (RemoteException e) {
             ServerOfflineHandler.handle("Bot cannot send messages right now.");
         } catch (SQLException e) {

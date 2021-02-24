@@ -76,7 +76,7 @@ public class appNotifications {
     public void okai(String msg, String title) {
 
         Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setTitle(title);
+        alert.setTitle(title.toUpperCase());
         Label a = new Label(msg);
         a.setWrapText(true);
         a.setTextFill(Color.WHITE);
@@ -96,20 +96,17 @@ public class appNotifications {
 
     public void cancel(String msg,String title){
 
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setTitle(title);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(title.toUpperCase());
             Label a  = new Label(msg);
             a.setWrapText(true);
             a.setTextFill(Color.WHITE);
             GridPane grid = new GridPane();
             grid.add(a,2,0);
+            alert.setHeaderText(null);
             alert.getDialogPane().setPrefSize(400,130);
-            alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
-            ButtonType btnok = new ButtonType("OK", OK_DONE);
-            ButtonType cancel = new ButtonType("Cancel",CANCEL_CLOSE);
+            alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria;");
             alert.getDialogPane().setContent(grid);
-            alert.getButtonTypes().add(btnok);
-            alert.getButtonTypes().add(cancel);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
             alert.showAndWait();
@@ -118,7 +115,7 @@ public class appNotifications {
 
     public void sucessNotify(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();
-        tray.setTitle(Title);
+        tray.setTitle(Title.toUpperCase());
         tray.setMessage(message);
 
         tray.setNotificationType(NotificationType.SUCCESS);
@@ -128,7 +125,7 @@ public class appNotifications {
 
     public void sideInfo(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();
-        tray.setTitle(Title);
+        tray.setTitle(Title.toUpperCase());
         tray.setMessage(message);
         tray.setNotificationType(NotificationType.INFORMATION);
         tray.setAnimationType(AnimationType.POPUP);
@@ -137,7 +134,7 @@ public class appNotifications {
 
     public void sideError(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();
-        tray.setTitle(Title);
+        tray.setTitle(Title.toUpperCase());
         tray.setMessage(message);
         tray.setNotificationType(NotificationType.ERROR);
         tray.setAnimationType(AnimationType.POPUP);
@@ -148,7 +145,7 @@ public class appNotifications {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
-        alert.setTitle(title);
+        alert.setTitle(title.toUpperCase());
         Label a = new Label(msg);
         a.setWrapText(true);
         a.setTextFill(Color.WHITE);
@@ -168,7 +165,7 @@ public class appNotifications {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
-        alert.setTitle(title);
+        alert.setTitle(title.toUpperCase());
         Label a = new Label(msg);
         a.setWrapText(true);
         a.setTextFill(Color.WHITE);

@@ -8,9 +8,9 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.addFriendController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="471.0" style="-fx-border-color: white; -fx-border-width: 2px;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JETS.ui.controllers.addFriendController">
     <children>
-        <AnchorPane fx:id="chPassRoot" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="40.0" prefWidth="471.0" style="-fx-background-color: #0c4c4c;">
+        <AnchorPane fx:id="chPassRoot" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="40.0" prefWidth="471.0" style="-fx-background-color: #0c4c4c; -fx-border-color: white;">
             <children>
                 <Label contentDisplay="TOP" layoutX="18.0" prefHeight="40.0" prefWidth="187.0" text="ADD FRIEND" textAlignment="CENTER" textFill="#fef3d9" textOverrun="WORD_ELLIPSIS">
                     <font>
@@ -19,7 +19,7 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="155.0" prefWidth="471.0" style="-fx-background-color: #008080;">
+        <AnchorPane layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="155.0" prefWidth="471.0" style="-fx-background-color: #008080; -fx-border-color: white;">
             <children>
                 <Label contentDisplay="TOP" layoutX="31.0" layoutY="32.0" prefHeight="40.0" prefWidth="224.0" text="Enter Friend's Mobile Phone No." textAlignment="CENTER" textFill="#fef3d9" textOverrun="WORD_ELLIPSIS">
                     <font>
@@ -33,8 +33,8 @@
                 </Label>
             <JFXTextField fx:id="phoneNumber" focusColor="#eeff00" layoutX="262.0" layoutY="32.0" prefHeight="25.0" prefWidth="176.0" unFocusColor="#eeff00" />
             <FontIcon iconLiteral="fas-user-plus" iconSize="15" layoutX="5.0" layoutY="58.0" text="" />
-                <Button layoutX="317.0" layoutY="116.0" mnemonicParsing="false" onAction="#cancelingRequest" text="CANCEL" />
-                <Button layoutX="394.0" layoutY="116.0" mnemonicParsing="false" onAction="#addingFriend" prefHeight="25.0" prefWidth="60.0" text="ADD" />
+                <Button layoutX="391.0" layoutY="116.0" mnemonicParsing="false" onAction="#cancelingRequest" text="CANCEL" />
+                <Button layoutX="310.0" layoutY="116.0" mnemonicParsing="false" onAction="#addingFriend" prefHeight="25.0" prefWidth="60.0" text="ADD" />
             </children>
         </AnchorPane>
     </children>

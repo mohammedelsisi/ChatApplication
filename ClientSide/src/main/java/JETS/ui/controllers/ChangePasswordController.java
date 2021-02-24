@@ -3,6 +3,7 @@ package JETS.ui.controllers;
 import JETS.ClientMain;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
 import com.jfoenix.controls.JFXPasswordField;
 
@@ -77,27 +78,18 @@ public class ChangePasswordController {
         String confirmNewPassword = pfConfirmedNewPassword.getText();
 
         if (!checkOldPassword(oldPassword)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Wrong old password");
-            alert.setHeaderText(null);
-            alert.setContentText("Entered Password Doesn't match the old one.");
-            alert.showAndWait();
+            appNotifications.getInstance().errorBox("Entered Password Doesn't match the old one.","Wrong old password");
         } else if (!newPassword.equals(confirmNewPassword)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setContentText("Password Values must Be identical");
-            alert.showAndWait();
+            appNotifications.getInstance().errorBox("Password Values must Be identical","Doesn't Match!");
+
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Change Password ");
-            alert.setHeaderText(null);
-            alert.setContentText("Password Updated Successfully!");
+
             currentUser.setPassword(newPassword);
             CurrentUser user = ClientProxy.getInstance().update(currentUser);
             if(user != null) {
                 ModelsFactory.getInstance().setCurrentUser(user);
+                appNotifications.getInstance().okai("wohooo! Password Updated Successfully!","Successfully Changed");
             }
-            alert.showAndWait();
             pfOldPassword.getScene().getWindow().hide();
         }
 
