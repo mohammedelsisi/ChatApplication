@@ -31,17 +31,20 @@ import java.util.stream.Collectors;
 
 public class StageCoordinator {
 
-    private static Stage primaryStage;
     private static final StageCoordinator stageCoordinator = new StageCoordinator();
-
-    public Map<String, SceneData> getScenes() {
-        return scenes;
-    }
-
+    private static Stage primaryStage;
     private final Map<String, SceneData> scenes = new HashMap<>();
 
     private StageCoordinator() {
 
+    }
+
+    public static StageCoordinator getInstance() {
+        return stageCoordinator;
+    }
+
+    public Map<String, SceneData> getScenes() {
+        return scenes;
     }
 
     public void initStage(Stage stage) {
@@ -50,21 +53,17 @@ public class StageCoordinator {
         }
         primaryStage = stage;
 
-    stage.setOnCloseRequest((e)->{
-        if(ModelsFactory.getInstance().getCurrentUser()!=null){
-            try {
+        stage.setOnCloseRequest((e) -> {
+            if (ModelsFactory.getInstance().getCurrentUser() != null) {
+                try {
 
-                ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
-            }catch (RuntimeException s){
+                    ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+                } catch (RuntimeException s) {
 
+                }
             }
-        }
-    });
+        });
         //if the user closes the application, call the method that keeps him logged in.(basiony)
-    }
-
-    public static StageCoordinator getInstance() {
-        return stageCoordinator;
     }
 
     public void switchToLoginScene() {
@@ -76,7 +75,7 @@ public class StageCoordinator {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/LoginView01.fxml"));
                 Parent main = fxmlLoader.load();
-                Scene mainScene = new Scene(main,655,610);
+                Scene mainScene = new Scene(main, 655, 610);
                 SceneData MainSceneData = new SceneData(fxmlLoader, main, mainScene);
                 scenes.put("MainScene", MainSceneData);
                 primaryStage.setScene(mainScene);
@@ -100,7 +99,7 @@ public class StageCoordinator {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/regView.fxml"));
                 Parent SignUP = fxmlLoader.load();
-                Scene SignUPScene = new Scene(SignUP,655,610);
+                Scene SignUPScene = new Scene(SignUP, 655, 610);
                 SceneData SignUPSceneData = new SceneData(fxmlLoader, SignUP, SignUPScene);
                 scenes.put("SignUPScene", SignUPSceneData);
                 primaryStage.setScene(SignUPScene);
@@ -120,54 +119,49 @@ public class StageCoordinator {
             throw new RuntimeException("Stage Coordinator should be initialized with a Stage before it could be used");
         }
 
-//        if (!scenes.containsKey("Chat")) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/HomeScreen.fxml"));
-                Parent Chat = fxmlLoader.load();
-                Scene ChatScene = new Scene(Chat,655,610);
-                SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);
-                scenes.put("Chat", ChatSceneData);
-                primaryStage.setScene(ChatScene);
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("IO Exception: Couldn't load 'Chat View' FXML file");
-            }
-//        } else {
-//            SceneData ChatSceneData = scenes.get("Chat");
-//            Scene ChatScene = ChatSceneData.getScene();
-//            primaryStage.setScene(ChatScene);
-//        }
-    }
-
-    public  HBox createChatLayout(ChatEntitiy chatEntitiy)  {
-        List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
-                .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
-                .collect(Collectors.toList());
-        StringBuilder receiver=new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
-
-          for (int i = 1;i<participants.size();i++){
-              receiver.append(", ");
-              receiver.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
-          }
-            Label name = new Label(receiver.toString());
-            Circle circle = new Circle(25);
-            if(participants.size()==1){
-
-                circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(participants.get(0))))));
-            }else {
-                try(FileInputStream file = new FileInputStream("groupIcon.jpg")){
-                    circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(file.readAllBytes()))));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            HBox hBox = new HBox(circle, name);
-            return hBox;
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/HomeScreen.fxml"));
+            Parent Chat = fxmlLoader.load();
+            Scene ChatScene = new Scene(Chat, 655, 610);
+            SceneData ChatSceneData = new SceneData(fxmlLoader, Chat, ChatScene);
+            scenes.put("Chat", ChatSceneData);
+            primaryStage.setScene(ChatScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IO Exception: Couldn't load 'Chat View' FXML file");
         }
 
     }
+
+    public HBox createChatLayout(ChatEntitiy chatEntitiy) {
+        List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
+                .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList());
+        StringBuilder receiver = new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
+
+        for (int i = 1; i < participants.size(); i++) {
+            receiver.append(", ");
+            receiver.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
+        }
+        Label name = new Label(receiver.toString());
+        Circle circle = new Circle(25);
+        if (participants.size() == 1) {
+
+            circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(participants.get(0))))));
+        } else {
+            try (FileInputStream file = new FileInputStream("groupIcon.jpg")) {
+                circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(file.readAllBytes()))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        HBox hBox = new HBox(circle, name);
+        return hBox;
+
+    }
+
+}
 
 

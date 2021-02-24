@@ -30,11 +30,11 @@ public class ChatManager {
 
     public void receiveResponse(MessageEntity message) {
         int chatID = message.getChatEntitiy().getId();
-
-        if(!ChatController.chatHistort.containsKey(chatID)) {
-            ChatController.chatHistort.put(chatID,new ArrayList<MessageType>());
+        ChatController chat = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+        if(!chat.getChatHistory().containsKey(chatID)) {
+            chat.getChatHistory().put(chatID,new ArrayList<MessageType>());
         }
-        ChatController.chatHistort.get(chatID).add(new MessageType(message.getSenderPhone(), message.getMsgContent(), "right"));
+        chat.getChatHistory().get(chatID).add(new MessageType(message.getSenderPhone(), message.getMsgContent(), "right"));
 
         Platform.runLater(() -> {
             if (RESPONSES.containsKey(chatID)) {
@@ -44,7 +44,6 @@ public class ChatManager {
                 SimpleObjectProperty<MessageEntity> simpleMsg = createNewChatResponse(chatID);
                 simpleMsg.set(message);
 
-                ChatController chat = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
                 chat.createChatLayout(simpleMsg);
             }
         });

@@ -56,12 +56,14 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
-    public static Map<Integer, List<MessageType>> chatHistort = new HashMap<>();
+    public Map<Integer, List<MessageType>> getChatHistory() {
+        return chatHistory;
+    }
+
+    private final Map<Integer, List<MessageType>> chatHistory = new HashMap<>();
 
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
-    private final TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
-    private final TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
     @FXML
@@ -75,13 +77,12 @@ public class ChatController implements Initializable {
     public AnchorPane MainAnchorPane;
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
-    int currentIdx;
     ListView<FriendEntity> listViewRequestList;
     ListView<FriendEntity> listViewFriendList = new ListView<>();
     private BotManager chatBot = new BotManager();
     @FXML
     private FontIcon fileButton;
-    private Screen screen;
+
     @FXML
     private StackPane spChatBoxes;
     @FXML
@@ -385,10 +386,10 @@ public class ChatController implements Initializable {
                             VBox vBox = addChatToMap(chatEntitiy);
                             MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
-                            if (!ChatController.chatHistort.containsKey(chatEntitiy.getId())) {
-                                ChatController.chatHistort.put(chatEntitiy.getId(), new ArrayList<MessageType>());
+                            if (!chatHistory.containsKey(chatEntitiy.getId())) {
+                                chatHistory.put(chatEntitiy.getId(), new ArrayList<MessageType>());
                             }
-                            chatHistort.get(chatEntitiy.getId()).add(new MessageType(msg.getSenderPhone(), msg.getMsgContent(), "left"));
+                            chatHistory.get(chatEntitiy.getId()).add(new MessageType(msg.getSenderPhone(), msg.getMsgContent(), "left"));
 
 
 //                        if (chatEntitiy != null) {
@@ -625,18 +626,7 @@ public class ChatController implements Initializable {
     }
 
 
-    //this method will show popup then will close the application up on ok button is pressed
     public void handleSignOut(Event event) {
-//        Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert1.setTitle("Sign out");
-//        alert1.setContentText("Do you really want to Sign out");
-//        alert1.setHeaderText(null);
-//        if (alert1.showAndWait().get() == ButtonType.OK){
-//            StageCoordinator.getInstance().switchToLoginScene();
-//            ConfigurationHandler.getInstance().clearPassword();
-//            System.out.println("out out out");
-//            ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
-//        }
         appNotifications.getInstance().cancel("Do you want to sign out?", "R U Leaving?", () -> {
             StageCoordinator.getInstance().switchToLoginScene();
             ConfigurationHandler.getInstance().clearPassword();
@@ -733,7 +723,7 @@ public class ChatController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html"));
         File savedPath = fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
         if (chatEntitiy != null) {
-            new SavingSession().saveChat(chatEntitiy.getId(), chatHistort.get(chatEntitiy.getId()), savedPath);
+            new SavingSession().saveChat(chatEntitiy.getId(), chatHistory.get(chatEntitiy.getId()), savedPath);
         }
     }
 }
