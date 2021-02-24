@@ -385,7 +385,7 @@ public class ChatController implements Initializable {
                             vBox2.getChildren().add(new ChatBox(newVal));
                             if(botToggle.isSelected()) {
                                 try {
-                                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+                                    sendMessage(currentIdx,chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
                                 } catch (RemoteException e) {
                                     appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
                                 }
@@ -418,8 +418,8 @@ public class ChatController implements Initializable {
 
     }
 
-    private void sendMessage(String message, ChatEntitiy chat) throws RemoteException {
-        VBox vBox = addChatToMap(currentIdx);
+    private void sendMessage(int idx,String message, ChatEntitiy chat) throws RemoteException {
+        VBox vBox = addChatToMap(idx);
         MessageEntity msg = new MessageEntity(chat, message, currentUser.getPhoneNumber());
         vBox.getChildren().add(new ChatBox(msg));
         ClientProxy.getInstance().sendMessage(msg);
@@ -552,7 +552,8 @@ public class ChatController implements Initializable {
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
         if(botToggle.isSelected()) {
             try {
-                sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
+                System.err.println(idx);
+                sendMessage(idx,chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
             } catch (RemoteException e) {
                 appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
             }
@@ -569,7 +570,8 @@ public class ChatController implements Initializable {
             vBox.getChildren().add(new ChatBox(newVal));
             if(botToggle.isSelected()) {
                 try {
-                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+                    System.err.println(idx);
+                    sendMessage(idx,chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
                 } catch (RemoteException e) {
                     appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
                 }
