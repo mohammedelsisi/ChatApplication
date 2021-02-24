@@ -53,6 +53,8 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
+    public static Map<Integer,List<MessageType>> chatHistort=new HashMap<>();
+
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
     private final TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
@@ -670,6 +672,22 @@ public class ChatController implements Initializable {
 
     public ObservableList<FriendEntity> getFriendsList() {
         return friendsList;
+    }
+    private String getReceiverPhones(List <String> participants) {
+
+        return  participants.stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+                .collect(Collectors.toList()).get(0);
+
+    }
+
+    @FXML
+    public void saveChat(ActionEvent event){
+        FileChooser fileChooser=new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
+        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
+        if(chatEntitiy!=null){
+            new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
+        }
     }
 }
 

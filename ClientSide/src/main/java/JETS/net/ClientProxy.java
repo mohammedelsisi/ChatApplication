@@ -14,6 +14,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, ChatDao, Chatting, FileService {
 
@@ -28,7 +29,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(9393);
+            registry = LocateRegistry.getRegistry(7979);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -67,6 +68,18 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (ConnectException e) {
             ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
+    }
+
+    @Override
+    public Map<String, FriendEntity> loadParticipants(int chatId, String myPhoneNumber) throws RemoteException {
+        try {
+            if (chatDao == null) {
+                chatDao = (ChatDao) registry.lookup("ChatDao");
+            }
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        }
+        return chatDao.loadParticipants(chatId,myPhoneNumber);
     }
 
     @Override
