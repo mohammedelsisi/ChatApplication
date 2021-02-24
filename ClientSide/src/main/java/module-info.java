@@ -24,6 +24,8 @@ module ClientSide {
     requires com.jfoenix;
     requires Chat;
 
+    //bot
+    requires bot;
 
 
 
