@@ -25,7 +25,7 @@ module ClientSide {
     requires Chat;
 
     //bot
-    requires bot;
+    //requires bot;
 
 
 

@@ -3,7 +3,7 @@ package JETS.ui.controllers;
 import JETS.ClientServices.ClientServicesFactory;
 import JETS.SavingChat.MessageType;
 import JETS.SavingChat.SavingSession;
-import JETS.bot.BotManager;
+//import JETS.bot.BotManager;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
 import Models.*;
@@ -45,9 +45,9 @@ import javafx.stage.*;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
-import tray.animations.AnimationType;
-import tray.notification.NotificationType;
-import tray.notification.TrayNotification;
+//import tray.animations.AnimationType;
+//import tray.notification.NotificationType;
+//import tray.notification.TrayNotification;
 
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -82,7 +82,7 @@ public class ChatController implements Initializable {
     int currentIdx;
     ListView<FriendEntity> listViewRequestList;
     ListView<FriendEntity> listViewFriendList = new ListView<>();
-    private BotManager chatBot = new BotManager();
+    //private BotManager chatBot = new BotManager();
     @FXML
     private FontIcon fileButton;
     private Screen screen;
@@ -515,13 +515,13 @@ public class ChatController implements Initializable {
 
         msgProperty.addListener((obs, oldVal, newVal) -> {
             vBox.getChildren().add(new ChatBox(newVal));
-            if (botToggle.isSelected()) {
-                try {
-                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
-                } catch (RemoteException e) {
-                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
-                }
-            }
+//            if (botToggle.isSelected()) {
+//                try {
+//                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+//                } catch (RemoteException e) {
+//                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+//                }
+//            }
         });
 
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -554,13 +554,13 @@ public class ChatController implements Initializable {
         ScrollPane scrollPane = getScrollPane(vBox);
         spChatBoxes.getChildren().add(scrollPane);
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
-        if (botToggle.isSelected()) {
-            try {
-                sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
-            } catch (RemoteException e) {
-                appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
-            }
-        }
+//        if (botToggle.isSelected()) {
+//            try {
+//                sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
+//            } catch (RemoteException e) {
+//                appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+//            }
+//        }
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
@@ -571,14 +571,14 @@ public class ChatController implements Initializable {
         });
         messageEntity.addListener((obs, oldVal, newVal) -> {
             vBox.getChildren().add(new ChatBox(newVal));
-            if (botToggle.isSelected()) {
-                try {
-//                    System.err.println(idx);
-                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
-                } catch (RemoteException e) {
-                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
-                }
-            }
+//            if (botToggle.isSelected()) {
+//                try {
+////                    System.err.println(idx);
+//                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
+//                } catch (RemoteException e) {
+//                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+//                }
+      //      }
         });
     }
 
@@ -698,13 +698,13 @@ public class ChatController implements Initializable {
 
     public void showNotification(String message) {
 
-        String title = "LONGTALK CHAT";
-        TrayNotification tray = new TrayNotification();
-        tray.setTitle(title);
-        tray.setMessage(message);
-        tray.setNotificationType(NotificationType.INFORMATION);
-        tray.setAnimationType(AnimationType.POPUP);
-        tray.showAndWait();
+//        String title = "LONGTALK CHAT";
+//        TrayNotification tray = new TrayNotification();
+//        tray.setTitle(title);
+//        tray.setMessage(message);
+//        tray.setNotificationType(NotificationType.INFORMATION);
+//        tray.setAnimationType(AnimationType.POPUP);
+//        tray.showAndWait();
     }
 
     public void viewing() {
@@ -719,11 +719,12 @@ public class ChatController implements Initializable {
 
     @FXML
     public void saveChat(ActionEvent event){
+
         FileChooser fileChooser=new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
         File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
         if(chatEntitiy!=null){
-            new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
+            new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),chatEntitiy.getParticipantsPhoneNumbers(),savedPath);
         }
     }
 }

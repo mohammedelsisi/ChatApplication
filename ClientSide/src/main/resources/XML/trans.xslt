@@ -134,6 +134,29 @@
                     -moz-user-select: none;
                     -ms-user-select: none;
                     }
+                    #imgLeft{
+                    float:right;
+                    border-radius: 50%;
+                    width: 100px;
+                    }
+                    #imgRight{
+                    float:left;
+                    border-radius: 50%;
+                    width: 100px;
+                    }
+                    .self h2{
+                    float:right;
+
+                    padding:7px;
+                    }
+                    .other h2{
+                    float:left;
+                    padding:7px;
+                    }
+                    .msg{
+                    margin:10px;
+                    vertical-align:left;
+                    }
                 </style>
             </head>
             <body>
@@ -148,22 +171,40 @@
                             <xsl:when test="@pos='left'">
                                 <li class="self">
                                     <div class="msg" >
+                                    <div style="min-width: 300px; min-height:105px;">
+                                        <img id="imgLeft">
+                                            <xsl:attribute name="src">
+                                                <xsl:value-of select="Image"/>
+                                            </xsl:attribute>
+                                        </img>
                                         <h2> <xsl:value-of select="From"/></h2>
+                                    </div>
+                                        <div style="min-width: 300px; min-height:105px;">
                                         <p>
 
                                             <xsl:value-of select="Body"/>
                                         </p>
+                                    </div>
                                     </div>
                                 </li>
                             </xsl:when>
                             <xsl:otherwise>
                                 <li class="other">
                                     <div class="msg" >
+                                    <div style="min-width: 300px; min-height:105px;">
+                                        <img id="imgRight">
+                                            <xsl:attribute name="src">
+                                                <xsl:value-of select="Image"/>
+                                            </xsl:attribute>
+                                        </img>
                                         <h2> <xsl:value-of select="From"/></h2>
+                                    </div>
+                                    <div class="msg">
                                         <p>
 
                                             <xsl:value-of select="Body"/>
                                         </p>
+                                     </div>
                                     </div>
                                 </li>
                             </xsl:otherwise>
