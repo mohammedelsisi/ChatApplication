@@ -27,9 +27,20 @@ public class CurrentUser implements Serializable {
     private String country;
     private String Bio;
     private Map<String, FriendEntity> friends = new HashMap<>();
-
+    transient private Map<String, FriendEntity> participantsInGroup=new HashMap<>() ;
     public StringProperty displayNamePropertyProperty() {
         return displayNameProperty;
+    }
+
+    public Map<String, FriendEntity> getParticipantsInGroup() {
+        if(participantsInGroup==null){
+            participantsInGroup=new HashMap<>();
+        }
+        return participantsInGroup;
+    }
+
+    public void setParticipantsInGroup(Map<String, FriendEntity> participantsInGroup) {
+        this.participantsInGroup = participantsInGroup;
     }
 
     public byte[] getUserPhoto() {

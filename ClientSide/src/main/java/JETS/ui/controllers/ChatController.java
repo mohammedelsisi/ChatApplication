@@ -393,9 +393,10 @@ public class ChatController implements Initializable {
                     messageField.appendText("\n");
                 } else {
                     VBox vBox = addChatToMap(currentIdx);
-
+                    System.out.println("before sent"+chatEntitiy.getId());
                     if (chatEntitiy.getId() == 0) {
                         chatEntitiy = ClientProxy.getInstance().initiateChat(chatEntitiy);
+                        System.out.println("after sent"+chatEntitiy.getId());
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
                         VBox vBox2 = addChatToMap(currentIdx);
                         msgProperty.addListener((obs, oldVal, newVal) -> {
@@ -522,8 +523,18 @@ public class ChatController implements Initializable {
     }
 
     public void createChatLayout(SimpleObjectProperty<MessageEntity> messageEntity) {
-
+        int chatId=messageEntity.get().getChatEntitiy().getId();
+        try {
+            Map<String, FriendEntity> participantsInGroupChat = ClientProxy.getInstance().loadParticipants(chatId, currentUser.getPhoneNumber());
+           for (FriendEntity s:participantsInGroupChat.values()){
+               System.out.println(s.getPhoneNumber());
+           }
+            currentUser.getParticipantsInGroup().putAll(participantsInGroupChat);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
         HBox hBox = StageCoordinator.getInstance().createChatLayout(messageEntity.get().getChatEntitiy());
+
         chatsVbox.getChildren().add(hBox);
         int idx = chatsVbox.getChildren().lastIndexOf(hBox);
         VBox vBox = addChatToMap(idx);
