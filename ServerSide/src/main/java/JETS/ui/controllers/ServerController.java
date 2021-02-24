@@ -6,6 +6,7 @@ import JETS.db.dao.ServerDao;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
 import JETS.service.*;
+import JETS.ui.helpers.ServiceController;
 import Services.ChatServiceInt;
 import Services.ClientServices;
 import Services.FileService;
@@ -46,10 +47,6 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable {
 
 
-    public Registry reg = LocateRegistry.createRegistry(7979);
-    public UserDao userDao;
-    public ConnectionService connectionService;
-    public ChattingImp chattingImp;
     int online = 0;
     PieChart genderChart = new PieChart();
     PieChart countryChart = new PieChart();
@@ -61,17 +58,13 @@ public class ServerController implements Initializable {
     ObservableList<PieChart.Data> usersAvailable = FXCollections.observableArrayList();
     Map<String, PieChart.Data> genderMap = new HashMap<>();
     Map<String, PieChart.Data> countryMap = new HashMap<>();
-    UserFriendDao userFriendDao;
-    ChatServiceInt chatService;
-    ChatDaoImp chatDaoImp;
-    FileService fileService;
+
     @FXML
     private HBox hBoxAnalysis;
     @FXML
     private ToggleButton startBtn;
     @FXML
     private TextArea announcement;
-    private Connection conn;
 
     public ServerController() throws RemoteException {
     }
@@ -79,20 +72,9 @@ public class ServerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            conn = DataSourceFactory.getConnection();
+
 
             ResultSet rowSet = ServerMain.serverDao.getUsersInfo();
-
-
-            userDao = new UserDao(conn);
-            connectionService = ConnectionServiceFactory.getConnectionService();
-            userFriendDao = new UserFriendDao(conn);
-            chatService = new ChatServiceImp();
-            chatDaoImp = new ChatDaoImp(conn);
-            chattingImp = new ChattingImp(conn);
-            fileService = new FileServiceImpl();
-
-
             onlineUsers = new PieChart.Data("Online", online);
             int allusersIni = 0;
             rowSet.beforeFirst();
@@ -158,7 +140,7 @@ public class ServerController implements Initializable {
             addTooltipToChartSlice(countryChart);
 
 
-        } catch (SQLException | IOException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
@@ -177,37 +159,16 @@ public class ServerController implements Initializable {
 
     public void startServer() {
 
-        try {
 
-            reg.rebind("UserRegistrationService", userDao);
-            reg.rebind("ConnectionService", connectionService);
-            reg.rebind("ChatService", chatService);
-            reg.rebind("UserFriendDao", userFriendDao);
-            reg.rebind("ChatDao", chatDaoImp);
-            reg.rebind("ChattingService", chattingImp);
-            reg.rebind("FileService", fileService);
+        ServiceController.getServiceController().startService();
+        startBtn.setText("Stop Service");
 
-            startBtn.setText("Stop Service");
-        } catch (IOException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
 
     public void stopServer() {
-        try {
-            reg.unbind("UserRegistrationService");
-            reg.unbind("ConnectionService");
-            reg.unbind("ChatService");
-            reg.unbind("UserFriendDao");
-            reg.unbind("ChatDao");
-            reg.unbind("ChattingService");
-            reg.unbind("FileService");
-            startBtn.setText("Start Service");
-            System.out.println("serverclosed");
-        } catch (RemoteException | NotBoundException  e) {
-            e.printStackTrace();
-        }
+        ServiceController.getServiceController().stopService();
+        startBtn.setText("Start Service");
 
     }
 

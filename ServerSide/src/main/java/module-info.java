@@ -11,13 +11,13 @@ module ServerSide {
     requires org.kordamp.ikonli.fontawesome5;
     requires org.kordamp.ikonli.materialdesign2;
     requires java.sql; /*  JDBC*/
-    requires mysql.connector.java;   /* not needed after JDBC 3*/
+//    requires mysql.connector.java;   /* not needed after JDBC 3*/
     requires java.naming;
-    requires mail;
     opens JETS.ui.controllers;
     exports JETS;
     requires Common;
     requires java.rmi;
 
     requires java.sql.rowset;
+    requires mysql.connector.java;
 }

@@ -3,6 +3,7 @@ package JETS.db.dao;
 import Models.FriendEntity;
 import Services.UserFriendDaoInterface;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserFriendDao  implements UserFriendDaoInterface {
+public class UserFriendDao extends UnicastRemoteObject implements UserFriendDaoInterface {
 
      private static final String SearchByPhoneno =  " select phone_number from user where phone_number=?";
      private static final String AddFriend = "Insert into user_friend (user_phone_number , friend_number, friendship_status) Values (? , ?, ?)";

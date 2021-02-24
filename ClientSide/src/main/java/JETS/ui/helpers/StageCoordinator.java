@@ -20,10 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +146,7 @@ public class StageCoordinator {
 
             circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(FriendsManager.getInstance().getFriendPhoto(participants.get(0))))));
         } else {
-            try (FileInputStream file = new FileInputStream("groupIcon.jpg")) {
+            try (InputStream file = getClass().getResourceAsStream("groupIcon.jpg")) {
                 circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(file.readAllBytes()))));
             } catch (IOException e) {
                 e.printStackTrace();

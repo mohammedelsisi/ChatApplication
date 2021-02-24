@@ -22,9 +22,9 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
     private ObservableMap<String, ClientServices> clients = ConnectionServiceFactory.getConnectionService().getConnectedClients();
     UserFriendDao friendImp;
     UserDao userDao;
-    public ChattingImp(Connection connection) throws RemoteException {
-         friendImp = new UserFriendDao(connection);
-         userDao=new UserDao(connection);
+    public ChattingImp( UserFriendDao friendDao, UserDao userDao) throws RemoteException {
+         this.friendImp = friendDao;
+        this.userDao=userDao;
     }
 
     //Exit

@@ -29,7 +29,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(7979);
+            registry = LocateRegistry.getRegistry(9999);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -228,6 +228,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
             }
             return userDAO.findByPhoneAndPassword(l);
         } catch (NotBoundException | RemoteException e) {
+            e.printStackTrace();
             throw new RuntimeException("Server Is Down");
         }
     }
