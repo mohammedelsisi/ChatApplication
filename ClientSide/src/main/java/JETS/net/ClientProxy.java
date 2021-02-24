@@ -26,7 +26,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(1212);
+            registry = LocateRegistry.getRegistry(9393);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package JETS.ui.controllers;
 
 import JETS.ClientMain;
 import JETS.ClientServices.ClientServicesFactory;
+import JETS.bot.BotManager;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
 import Models.*;

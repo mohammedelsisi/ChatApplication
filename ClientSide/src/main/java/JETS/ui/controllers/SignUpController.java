@@ -2,6 +2,8 @@ package JETS.ui.controllers;
 
 import JETS.ClientMain;
 import JETS.net.ClientProxy;
+import JETS.security.SecurityProvider;
+import JETS.security.enums.HashTypes;
 import JETS.ui.helpers.StageCoordinator;
 import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
@@ -57,9 +59,9 @@ public class SignUpController implements Initializable {
     @FXML
     private TextField emailAddress;
     @FXML
-    private TextField password;
+    private PasswordField password;
     @FXML
-    private TextField confirmedPassword;
+    private PasswordField confirmedPassword;
     @FXML
     private TextField displayName;
     @FXML
