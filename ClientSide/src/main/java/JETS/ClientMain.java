@@ -49,7 +49,6 @@ public class ClientMain extends Application {
                     stageCoordinator.switchToChatScene();
                 }
             } else {
-                System.out.println("Server is Down");
                 StageCoordinator.getInstance().switchToLoginScene();
             }
         } catch (RemoteException e) {

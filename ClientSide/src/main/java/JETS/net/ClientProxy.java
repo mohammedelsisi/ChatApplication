@@ -1,6 +1,7 @@
 package JETS.net;
 
 import JETS.ClientServices.ClientServicesFactory;
+import JETS.ui.helpers.ModelsFactory;
 import Models.*;
 import Services.*;
 
@@ -25,7 +26,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(9090);
+            registry = LocateRegistry.getRegistry(1212);
         } catch (RemoteException  e) {
             e.printStackTrace();
         }
@@ -93,19 +94,21 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public boolean registerAsConnected(ClientServices client) throws RemoteException {
         try {
-//            UnicastRemoteObject.exportObject(ClientServicesFactory.getClientServicesImp(),5555);
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-        return connectionInt.registerAsConnected(client);
+        boolean connected= connectionInt.registerAsConnected(client);
+        tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),"AVAILABLE");
+        return connected;
     }
 
     @Override
     public boolean disconnect(ClientServices client)  {
         try {
+            tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),"OFFLINE");
 
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
@@ -120,7 +123,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public boolean isConnected(String clientPhoneNumber) {
         try {
-
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }

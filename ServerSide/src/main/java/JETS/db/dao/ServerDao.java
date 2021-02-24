@@ -17,21 +17,15 @@ public class ServerDao {
         this.connection = connection;
     }
 
-    public JdbcRowSet getUsersInfo() {
-        JdbcRowSet jdbcRowSet = null;
+    public ResultSet getUsersInfo() {
         try {
-            RowSetFactory rowSetFactory = RowSetProvider.newFactory();
-            jdbcRowSet = rowSetFactory.createJdbcRowSet();
-            jdbcRowSet.setUrl("jdbc:mysql://localhost:3306/chatschema");
-            jdbcRowSet.setUsername("admin");
-            jdbcRowSet.setPassword("iti41");
-            jdbcRowSet.setCommand(USERS_GENDERS);
-            jdbcRowSet.execute();
+            PreparedStatement preparedStatement = connection.prepareStatement(USERS_GENDERS,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            return preparedStatement.executeQuery();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return jdbcRowSet;
+        return null;
     }
 
 }

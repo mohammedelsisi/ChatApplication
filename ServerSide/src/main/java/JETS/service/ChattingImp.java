@@ -26,9 +26,7 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
     }
 
     //Exit
-    public void unRegister(String phoneNumber){
-        clients.remove(phoneNumber);
-    }
+
     //friendImp
     public List<FriendEntity> getFriends(String phoneNumber){
         try {
