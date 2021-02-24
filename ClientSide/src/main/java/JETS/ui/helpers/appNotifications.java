@@ -77,17 +77,13 @@ public class appNotifications {
 
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle(title);
-        /*Label header = new Label(head);
-        header.setTextFill(Color.WHITE);
-        alert.setHeaderText(String.valueOf(header));*/
-        //alert.setContentText(title);
         Label a = new Label(msg);
         a.setWrapText(true);
         a.setTextFill(Color.WHITE);
         GridPane grid = new GridPane();
         grid.add(a, 2, 0);
         alert.getDialogPane().setPrefSize(400, 130);
-        alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
+        alert.getDialogPane().setStyle("-fx-background-color: #0e393c ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
         ButtonType btnok = new ButtonType("OK", OK_DONE);
         alert.getDialogPane().setContent(grid);
         alert.getButtonTypes().add(btnok);
@@ -159,5 +155,23 @@ public class appNotifications {
         }
     }
 
+    public void errorBox(String msg, String title) {
 
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setTitle(title);
+        Label a = new Label(msg);
+        a.setWrapText(true);
+        a.setTextFill(Color.WHITE);
+        GridPane grid = new GridPane();
+        grid.add(a, 2, 0);
+        alert.getDialogPane().setPrefSize(400, 130);
+        alert.getDialogPane().setStyle("-fx-background-color: #0e393c ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
+        alert.getDialogPane().setContent(grid);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+        alert.showAndWait();
+
+        //error, info, notification
+    }
 }

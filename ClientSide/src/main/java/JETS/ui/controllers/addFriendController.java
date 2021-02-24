@@ -2,15 +2,17 @@ package JETS.ui.controllers;
 
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.appNotifications;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 
 import java.rmi.RemoteException;
 
 public class addFriendController {
-    public JFXPasswordField phoneNumber;
-    String myFriendPhoneNo = phoneNumber.getText();
+    public JFXTextField phoneNumber;
+    String myFriendPhoneNo;
     String myPhoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
 
     public void cancelingRequest(ActionEvent event) {
@@ -18,20 +20,14 @@ public class addFriendController {
     }
 
     public void addingFriend(ActionEvent event) {
-
+        myFriendPhoneNo = phoneNumber.getText();
         if(myFriendPhoneNo.equals(myPhoneNumber)){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("INVALID Trial");
-            alert.setHeaderText(null);
-            alert.setContentText("You Cannot add your Account");
-            alert.showAndWait();
+            appNotifications.getInstance().errorBox("You Cannot add your Account","INVALID TRIAL");
+
         }
-        else if(myFriendPhoneNo.isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("INVALID Trial");
-            alert.setHeaderText(null);
-            alert.setContentText("Please Enter Mobile No.");
-            alert.showAndWait();
+        else if(myFriendPhoneNo.isBlank()){
+            appNotifications.getInstance().errorBox("Please Enter Mobile No.","INVALID TRIAL");
+
         }else {
 
             ifexistAdd();
@@ -41,20 +37,15 @@ public class addFriendController {
     }
       public void ifexistAdd (){
           try {
-              int x=0;
-               x = ClientProxy.getInstance().sendRequest(myPhoneNumber, myFriendPhoneNo);
+              int x= ClientProxy.getInstance().sendRequest(myPhoneNumber, myFriendPhoneNo);
               if (x==1){
-                  Alert alert = new Alert(Alert.AlertType.NONE);
-                  alert.setTitle("Request Sent");
-                  alert.setHeaderText(null);
-                  alert.setContentText(" Request Sent Successfully To your Friend ;) ");
-                  alert.showAndWait();
+                  appNotifications.getInstance().okai(" Request Sent Successfully To your Friend ;)","Request Sent");
+                  phoneNumber.getScene().getWindow().hide();
               }else if(x==0){
-                  Alert alert = new Alert(Alert.AlertType.ERROR);
-                  alert.setTitle("INVALID Trial");
-                  alert.setHeaderText(null);
-                  alert.setContentText("There Is No User Exit With This Credentials");
-                  alert.showAndWait();
+                  appNotifications.getInstance().errorBox("There Is No User With This Credentials","INVALID TRIAL");
+              } else if (x == 2) {
+                  appNotifications.getInstance().errorBox("You can't send request to this number","INVALID TRIAL");
+
               }
           } catch (RemoteException e) {
               e.printStackTrace();

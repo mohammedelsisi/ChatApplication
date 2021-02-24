@@ -427,64 +427,26 @@ public class ChatController implements Initializable {
     @FXML
     public void requestFriend() throws SQLException, RemoteException {
 
-        invalidYourself = new Label();
-        invalidYourself.setTextFill(Color.RED);
-        //  dialog.setTitle();
-        dialog.setResizable(false);
 
-        Label label1 = new Label("Enter Your Friend's Phone Number: ");
-        TextField text1 = new TextField();
-        grid.add(label1, 1, 1);
-        grid.add(text1, 2, 1);
-        grid.add(invalidYourself, 1, 2);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/AddFriend.fxml"));
+            Parent addFriendPane = fxmlLoader.load();
+            Scene addFriendScene = new Scene(addFriendPane, 471, 195);
+            Stage newWindow = new Stage();
+            newWindow.initStyle(StageStyle.UNDECORATED);
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+            newWindow.setTitle("ADD FRIEND");
+            newWindow.setScene(addFriendScene);
+            newWindow.setResizable(false);
+            newWindow.setX(500);
+            newWindow.setY(200);
+            newWindow.show();
 
-        dialog.getDialogPane().setContent(grid);
-        ButtonType buttonTypeOk = new ButtonType("Add Friend", OK_DONE);
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-        dialog.getDialogPane().getButtonTypes().setAll(buttonTypeOk);
-        dialog.setOnCloseRequest(event -> {
-            String myFriendphoneNo = text1.getText();
-            if (AddFriend(myFriendphoneNo) == 0) {
-                event.consume();
-            }
-        });
-        Optional<ButtonType> resultOfAddFriend = dialog.showAndWait();
-        Button btn = (Button) dialog.getDialogPane().lookupButton(buttonTypeOk);
-        // dialog.setOnCloseRequest();
-//
-//        if (resultOfAddFriend.get()==buttonTypeOk)
-//        {
-//            AddFriend(myFriendphoneNo);
-//        }
-    }
-
-    public int AddFriend(String myfriendNum) {
-        int x = 0;
-        String myphoneNumber = ModelsFactory.getInstance().getCurrentUser().getPhoneNumber();
-        String myfriendPhoneNo = myfriendNum;
-
-        if (myphoneNumber.equals(myfriendPhoneNo)) {
-            invalidYourself.setText(" Please enter a valid Mobile No.");
-            System.out.println("You cannot add your account");
-
-        } else if (myfriendNum.isEmpty()) {
-            invalidYourself.setText(" Please enter a valid Mobile No.");
-            System.out.println("  Please enter a valid Mobile Number");
-        } else {
-            try {
-                x = ClientProxy.getInstance().sendRequest(myphoneNumber, myfriendPhoneNo);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(myphoneNumber);
-            System.out.println(myfriendPhoneNo);
-            System.out.println(x);
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return x;
-    }
 
+    }
     @FXML
     public void requestsHandle() {
         Alert alert = new Alert(Alert.AlertType.NONE);

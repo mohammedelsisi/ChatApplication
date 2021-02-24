@@ -29,7 +29,7 @@ public class UserFriendDao  implements UserFriendDaoInterface {
     }
 
     public int  SearchbyPhoneno (String MyPoneNumber,String FriendPhoneNo){
-        int find =0;
+
         try (PreparedStatement stmt = this.connection.prepareStatement(SearchByPhoneno)){
             stmt.setString(1, FriendPhoneNo);
             ResultSet rs = stmt.executeQuery();
@@ -39,7 +39,7 @@ public class UserFriendDao  implements UserFriendDaoInterface {
             }
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+           return 2;
         }
 
         return 0;
@@ -60,15 +60,12 @@ public class UserFriendDao  implements UserFriendDaoInterface {
         }
     }
 
-    public void InsertInUserFriend(String MyPoneNumber,String FriendPhoneNo){
+    public void InsertInUserFriend(String MyPoneNumber,String FriendPhoneNo) throws SQLException {
         try (PreparedStatement stmt2 = this.connection.prepareStatement(AddFriend)){
             stmt2.setString(1,FriendPhoneNo);
             stmt2.setString(2,MyPoneNumber);
             stmt2.setString(3,"pending");
             stmt2.execute();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
 
         }
     }
