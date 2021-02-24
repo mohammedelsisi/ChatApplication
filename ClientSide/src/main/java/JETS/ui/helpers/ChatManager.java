@@ -5,6 +5,7 @@ import Models.MessageEntity;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,6 +28,13 @@ public class ChatManager {
     }
 
     public void receiveResponse(MessageEntity message) {
+        int chatID = message.getChatEntitiy().getId();
+
+        if(!ChatController.chatHistort.containsKey(chatID)) {
+            ChatController.chatHistort.put(chatID,new ArrayList<MessageType>());
+        }
+        ChatController.chatHistort.get(chatID).add(new MessageType(message.getSenderPhone(), message.getMsgContent(), "right"));
+
         Platform.runLater(() -> {
             int chatID = message.getChatEntitiy().getId();
             if (RESPONSES.containsKey(chatID)) {

@@ -63,6 +63,8 @@ public class ChatController implements Initializable {
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
+    public static Map<Long,List<MessageType>> chatHistort=new HashMap<>();
+
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
@@ -382,6 +384,13 @@ public class ChatController implements Initializable {
 
                     MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
+                    if(!ChatController.chatHistort.containsKey(chatEntitiy.getId())) {
+                        ChatController.chatHistort.put(chatEntitiy.getId(),new ArrayList<MessageType>());
+                    }
+                    chatHistort.get(chatEntitiy.getId()).add(new MessageType(msg.getSenderPhone(),msg.getMsgContent(),"left"));
+
+
+
                     if (attachedFile != null) {
                         try {
                             msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
@@ -473,7 +482,7 @@ public class ChatController implements Initializable {
                     System.out.println(getReceiverPhones(e.getParticipantsPhoneNumbers()));
                     tabPane.getSelectionModel().selectPrevious();
 
-                 flag.set(false);
+                    flag.set(false);
                 }
             });
         }
@@ -700,10 +709,19 @@ public class ChatController implements Initializable {
     }
     private String getReceiverPhones(List <String> participants) {
 
-       return  participants.stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+        return  participants.stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
                 .collect(Collectors.toList()).get(0);
 
     }
 
+    @FXML
+    public void saveChat(ActionEvent event){
+        FileChooser fileChooser=new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
+        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
+        if(chatEntitiy!=null){
+            new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
+        }
+    }
 }
 

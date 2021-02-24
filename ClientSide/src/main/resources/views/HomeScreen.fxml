@@ -37,7 +37,7 @@
       <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
             <TabPane fx:id="tabPane" minWidth="240.0" prefHeight="500.0" prefWidth="409.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="150.0" tabMaxWidth="30.0" tabMinHeight="150.0">
-              <tabs>
+               <tabs>
                   <Tab fx:id="profileTab" disable="true">
                      <content>
                         <VBox prefHeight="200.0" prefWidth="100.0" />
@@ -237,26 +237,26 @@
                         </VBox>
                      </content>
                   </Tab>
-                 <Tab style="-fx-background-color: #004040;">
-                 <graphic>
-                    <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" value="My Status">
-                       <VBox.margin>
-                          <Insets left="15.0" />
-                       </VBox.margin>
-                       <items>
+                  <Tab style="-fx-background-color: #004040;">
+                     <graphic>
+                        <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" value="My Status">
+                           <VBox.margin>
+                              <Insets left="15.0" />
+                           </VBox.margin>
+                           <items>
 
-                          <FXCollections fx:factory="observableArrayList">
-                             <String fx:value="AVAILABLE" />
-                             <String fx:value="BUSY" />
-                             <String fx:value="AWAY" />
-                             <String fx:value="OFFLINE" />
-                          </FXCollections>
-                       </items>
-                    </ComboBox>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="AVAILABLE" />
+                                 <String fx:value="BUSY" />
+                                 <String fx:value="AWAY" />
+                                 <String fx:value="OFFLINE" />
+                              </FXCollections>
+                           </items>
+                        </ComboBox>
 
-                 </graphic>
-                 </Tab>
-              </tabs>
+                     </graphic>
+                  </Tab>
+               </tabs>
             </TabPane>
 
             <BorderPane minWidth="280.0">
@@ -476,5 +476,6 @@
             </FontIcon>
          </graphic>
       </Button>
+      <Button  onAction="#saveChat" layoutX="741.0" layoutY="85.0" mnemonicParsing="false" text="save" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="85.0" />
    </children>
 </AnchorPane>
