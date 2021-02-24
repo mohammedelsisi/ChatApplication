@@ -44,23 +44,31 @@ public class MainController implements Initializable {
 
     public void signInAction(ActionEvent actionEvent) throws RemoteException {
         LoginEntity loginEntity = new LoginEntity(phoneNumber.getText(), password.getText());
-        CurrentUser currentUser = ClientProxy.getInstance().findByPhoneAndPassword(loginEntity);
+        try {
 
-        if (currentUser != null) {
-            if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())) {
-                appNotifications.getInstance().okai("You are Already Connected, Can't login Twice","Login Failed");
+            CurrentUser currentUser = ClientProxy.getInstance().findByPhoneAndPassword(loginEntity);
+
+
+            if (currentUser != null) {
+                if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())) {
+                    appNotifications.getInstance().okai("You are Already Connected, Can't login Twice", "Login Failed");
+                } else {
+                    ModelsFactory.getInstance().setCurrentUser(currentUser);
+                    ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
+                    StageCoordinator stageCoordinator = StageCoordinator.getInstance();
+                    stageCoordinator.switchToChatScene();
+                    ConfigurationHandler.getInstance().rememberMe(loginEntity);
+                    password.clear();
+                }
             } else {
-                ModelsFactory.getInstance().setCurrentUser(currentUser);
-                ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
-                StageCoordinator stageCoordinator = StageCoordinator.getInstance();
-                stageCoordinator.switchToChatScene();
-                ConfigurationHandler.getInstance().rememberMe(loginEntity);
-                password.clear();
+                String msg = "Please Enter Valid PhoneNumber & Password or please SignUP";
+                String title = "USER NOT FOUND!";
+                appNotifications.getInstance().okai(msg, title);
             }
-        } else {
-            String msg = "Please Enter Valid PhoneNumber & Password or please SignUP";
-            String title ="USER NOT FOUND!";
-            appNotifications.getInstance().okai(msg,title);
+
+        }catch (RuntimeException ss){
+            appNotifications.getInstance().okai("Sorry, Our Service isn't Available at the Moment. Please, Come back later","Server Down");
+
         }
     }
 }
