@@ -37,8 +37,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +45,7 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable {
 
 
-    public Registry reg = LocateRegistry.createRegistry(1212);
+    public Registry reg = LocateRegistry.createRegistry(4646);
     public UserDao userDao;
     public ConnectionService connectionService;
     public ChattingImp chattingImp;
@@ -82,7 +80,7 @@ public class ServerController implements Initializable {
         try {
             conn = DataSourceFactory.getConnection();
 
-            ResultSet rowSet = ServerMain.serverDao.getUsersInfo();
+            JdbcRowSet rowSet = ServerMain.serverDao.getUsersInfo();
 
 
             userDao = new UserDao(conn);
@@ -240,7 +238,7 @@ public class ServerController implements Initializable {
         }
     }
 
-    public Map<String, Double> getUserData(ResultSet rowSet, String column) throws SQLException {
+    public Map<String, Double> getUserData(RowSet rowSet, String column) throws SQLException {
         rowSet.beforeFirst();
         Map<String, Double> map = new HashMap<>();
         while (rowSet.next()) {
@@ -267,7 +265,7 @@ public class ServerController implements Initializable {
 
         try {
 
-            ResultSet rowSet = ServerMain.serverDao.getUsersInfo();
+            JdbcRowSet rowSet = ServerMain.serverDao.getUsersInfo();
             int allusersInis = 0;
             rowSet.beforeFirst();
             while (rowSet.next()) {

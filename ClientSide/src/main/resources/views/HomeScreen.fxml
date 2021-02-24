@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
@@ -394,7 +395,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Group>
-                                    <Group fx:id="NewChatCreation"  onMouseClicked="#viewing" layoutX="125.0" layoutY="35.0">
+                                    <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0" onMouseClicked="#viewing">
                                        <children>
                                           <Circle fill="WHITE" radius="17.0" strokeType="INSIDE" styleClass="logos">
                                              <stroke>
@@ -465,6 +466,7 @@
             <Circle fx:id="circleView" fill="WHITE" radius="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
          </graphic>
       </Label>
+      <JFXToggleButton fx:id="botToggle" layoutX="10.0" layoutY="350.0" prefHeight="58.0" prefWidth="139.0" text="Enable Bot" textFill="WHITE" AnchorPane.bottomAnchor="94.0" AnchorPane.leftAnchor="10.0" />
       <Button fx:id="btnSignout" layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut">
          <graphic>
             <FontIcon fill="#d7d2d2" iconColor="#1b0101" iconLiteral="fas-sign-out-alt" iconSize="22" tabSize="19">

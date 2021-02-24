@@ -72,6 +72,7 @@ public class ChatController implements Initializable {
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
     private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
+    private BotManager chatBot = new BotManager();
     @FXML
     public VBox contacts;
     public VBox chatsVbox;
@@ -106,7 +107,8 @@ public class ChatController implements Initializable {
     private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
     private File attachedFile = null;
-
+    @FXML
+    private JFXToggleButton botToggle;
 
     @FXML
     private HBox HBDisplayName;
@@ -393,9 +395,15 @@ public class ChatController implements Initializable {
                         chatEntitiy = ClientProxy.getInstance().initiateChat(chatEntitiy);
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
                         VBox vBox2 = addChatToMap(currentIdx);
-                        msgProperty.addListener((obs, old, newval) -> {
-                            vBox2.getChildren().add(new ChatBox(newval));
-                            System.out.println("testtest");
+                        msgProperty.addListener((obs, oldVal, newVal) -> {
+                            vBox2.getChildren().add(new ChatBox(newVal));
+                            if(botToggle.isSelected()) {
+                                try {
+                                    sendMessage(currentIdx,chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+                                } catch (RemoteException e) {
+                                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+                                }
+                            }
                         });
                     }
 
@@ -423,6 +431,14 @@ public class ChatController implements Initializable {
         }
 
     }
+
+    private void sendMessage(int idx,String message, ChatEntitiy chat) throws RemoteException {
+        VBox vBox = addChatToMap(idx);
+        MessageEntity msg = new MessageEntity(chat, message, currentUser.getPhoneNumber());
+        vBox.getChildren().add(new ChatBox(msg));
+        ClientProxy.getInstance().sendMessage(msg);
+    }
+
 
     @FXML
     public void requestFriend() throws SQLException, RemoteException {
@@ -512,7 +528,14 @@ public class ChatController implements Initializable {
         ScrollPane scrollPane = getScrollPane(vBox);
         spChatBoxes.getChildren().add(scrollPane);
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
-        System.out.println(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers());
+        if(botToggle.isSelected()) {
+            try {
+                System.err.println(idx);
+                sendMessage(idx,chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
+            } catch (RemoteException e) {
+                appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+            }
+        }
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
@@ -521,10 +544,16 @@ public class ChatController implements Initializable {
             scrollPane.toFront();
             currentIdx = idx;
         });
-        messageEntity.addListener((obs, old, newval) -> {
-
-            vBox.getChildren().add(new ChatBox(newval));
-            System.out.println("dada");
+        messageEntity.addListener((obs, oldVal, newVal) -> {
+            vBox.getChildren().add(new ChatBox(newVal));
+            if(botToggle.isSelected()) {
+                try {
+                    System.err.println(idx);
+                    sendMessage(idx,chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
+                } catch (RemoteException e) {
+                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+                }
+            }
         });
     }
 
