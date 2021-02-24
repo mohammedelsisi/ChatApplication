@@ -120,7 +120,7 @@ public class UserDao extends UnicastRemoteObject implements Services.UserDao {
         user.setGender(rs.getString("gender"));
         user.setPhoneNumber(rs.getString("phone_number"));
         user.setDOB(rs.getDate("DOB").toString());
-        System.out.println(rs.getDate("DOB").toString());
+        user.setCountry(rs.getString("country"));
         user.setBio(rs.getString("bio"));
         user.setStatus(rs.getString("status"));
         user.setUserPhoto(rs.getBytes("image"));

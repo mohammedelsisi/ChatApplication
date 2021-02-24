@@ -93,7 +93,10 @@ public class ChangePasswordController {
             alert.setHeaderText(null);
             alert.setContentText("Password Updated Successfully!");
             currentUser.setPassword(newPassword);
-            ModelsFactory.getInstance().setCurrentUser(ClientProxy.getInstance().update(currentUser));
+            CurrentUser user = ClientProxy.getInstance().update(currentUser);
+            if(user != null) {
+                ModelsFactory.getInstance().setCurrentUser(user);
+            }
             alert.showAndWait();
             pfOldPassword.getScene().getWindow().hide();
         }

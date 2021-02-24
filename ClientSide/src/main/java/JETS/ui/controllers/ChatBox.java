@@ -1,15 +1,15 @@
 package JETS.ui.controllers;
 
-import JETS.ClientMain;
 import JETS.net.ClientProxy;
+import JETS.net.ServerOfflineHandler;
 import JETS.ui.helpers.FileManager;
 import JETS.ui.helpers.FriendsManager;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
 import Models.FileEntity;
 import Models.MessageEntity;
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.rmi.RemoteException;
 
 public class ChatBox extends GridPane {
 
@@ -168,7 +169,7 @@ public class ChatBox extends GridPane {
         downloadBtn.setTextFill(Color.web("#fff8f8"));
         filename.setScaleX(-1);
         downloadBtn.setScaleX(-1);
-        if(!isResponse) {
+        if (!isResponse) {
             downloadBtn.setScaleZ(-1);
         }
         downloadBtn.addEventHandler(ActionEvent.ACTION, (e) -> {
@@ -178,9 +179,12 @@ public class ChatBox extends GridPane {
             if (saveFile != null) {
                 Path savePath = saveFile.toPath().resolve(file.getName());
                 try {
-                    FileManager.writeFile(savePath.toFile(), ClientProxy.getInstance().getFileData(file, MESSAGE.getId()).getData());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    FileEntity fileEntity = ClientProxy.getInstance().getFileData(file, MESSAGE.getId());
+                if (fileEntity != null) {
+                    FileManager.writeFile(savePath.toFile(), fileEntity.getData());
+                }
+                } catch (RemoteException remoteException) {
+                    ServerOfflineHandler.handle("Sorry, cannot continue your request. :(");
                 }
             }
         });

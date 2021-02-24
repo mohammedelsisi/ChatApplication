@@ -35,12 +35,11 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     public void ReceiveAnnounc(String s) throws RemoteException {
         ChatController a = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
 
             a.showNotification(s);
 
         });
-
 
 
 //        Image img = new Image(getClass().getResource("/Pics/annimg.jpg").toString());
@@ -57,31 +56,30 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     }
 
 
-
-
-
-
     @Override
     public void notifyRejection(FriendEntity user) throws RemoteException {
-        System.out.println(user.getDisplayName()+" rejected your request");
+        System.out.println(user.getDisplayName() + " rejected your request");
     }
 
     @Override
     public void notifyAcceptance(FriendEntity user) throws RemoteException {
-
-        Platform.runLater( () -> {ChatController.friendsList.add(user);
-        appNotifications.getInstance().sucessNotify("You and " + user.getDisplayName() + " Are Now Friends","Congratulations", Duration.seconds(5));});
+        Platform.runLater(() -> {
+            ChatController chatController = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+            chatController.getFriendsList().add(user);
+            appNotifications.getInstance().sucessNotify("You and " + user.getDisplayName() + " Are Now Friends", "Congratulations", Duration.seconds(5));
+        });
         ModelsFactory.getInstance().getCurrentUser().getFriends().put(user.getPhoneNumber(), user);
     }
 
     @Override
     public void notifyOnOff(FriendEntity user) throws RemoteException {
         //Show Notification
-        Runnable r=new Runnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
-                ChatController.friendsList.remove(user);
-                ChatController.friendsList.add(user);
+                ChatController chatController = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+                chatController.getFriendsList().remove(user);
+                chatController.getFriendsList().add(user);
             }
         };
         Platform.runLater(r);
@@ -89,22 +87,12 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
 
     @Override
     public void notifyRequest(FriendEntity user) throws RemoteException {
-        ChatController.requestLists.add(user);
-       Platform.runLater(() ->{
-        appNotifications.getInstance().sideInfo("Yor Received a Friend Request From "+ user.getDisplayName()  , "Friend Request" , Duration.seconds(5));
-    });
+        ChatController chatController = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
+        chatController.getRequestList().add(user);
+        Platform.runLater(() -> {
+            appNotifications.getInstance().sideInfo("Yor Received a Friend Request From " + user.getDisplayName(), "Friend Request", Duration.seconds(5));
+        });
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

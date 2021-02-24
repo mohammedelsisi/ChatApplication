@@ -7,8 +7,9 @@ public class ModelsFactory {
     private static final ModelsFactory instance = new ModelsFactory();
 
     private CurrentUser currentUser;
-//    private DAOInterface<CurrentUser> userDAO;
-    private ModelsFactory () {
+
+    //    private DAOInterface<CurrentUser> userDAO;
+    private ModelsFactory() {
     }
 
     public static ModelsFactory getInstance() {
@@ -21,13 +22,17 @@ public class ModelsFactory {
         }
         return currentUser;
     }
-    public void setCurrentUser( CurrentUser currentUser) {
-        this.currentUser=currentUser;
+
+    public void setCurrentUser(CurrentUser currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void createNewUser() {
+        currentUser = new CurrentUser();
     }
 
 
-
-    public void signIn(String phoneNumber,String password){
+    public void signIn(String phoneNumber, String password) {
     }
 
 }

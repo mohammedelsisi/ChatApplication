@@ -221,7 +221,7 @@ public class SignUpController implements Initializable {
     }
 
     @FXML
-    public void registerHandle(ActionEvent e) throws RemoteException {
+    public void registerHandle(ActionEvent e) {
         try {
 
 

@@ -1,15 +1,17 @@
 package JETS.net;
 
-import JETS.ClientServices.ClientServicesFactory;
+import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
+import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.appNotifications;
 import Models.*;
 import Services.*;
 
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -39,55 +41,63 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     @Override
     public ChatEntitiy initiateChat(ChatEntitiy chatEntitiy) throws RemoteException {
+        ChatEntitiy chat = null;
         try {
-
             if (chatDao == null) {
                 chatDao = (ChatDao) registry.lookup("ChatDao");
             }
+            chat = chatDao.initiateChat(chatEntitiy);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        return chatDao.initiateChat(chatEntitiy);
+        return chat;
     }
 
     @Override
     public void insertParticipant(String phoneNumber, long chatId) throws RemoteException {
         try {
-
             if (chatDao == null) {
                 chatDao = (ChatDao) registry.lookup("ChatDao");
             }
+            chatDao.insertParticipant(phoneNumber, chatId);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        chatDao.insertParticipant(phoneNumber, chatId);
     }
 
     @Override
     public void sendMessage(MessageEntity messageEntity) throws RemoteException {
         try {
-
             if (chatServiceInt == null) {
                 chatServiceInt = (ChatServiceInt) registry.lookup("ChatService");
             }
+            chatServiceInt.sendMessage(messageEntity);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        chatServiceInt.sendMessage(messageEntity);
     }
 
 
     @Override
     public FileEntity getFileData(FileEntity file, int messageId) throws RemoteException {
+        FileEntity fileEntity = null;
         try {
-
             if (fileService == null) {
                 fileService = (FileService) registry.lookup("FileService");
             }
+            fileEntity = fileService.getFileData(file, messageId);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        return fileService.getFileData(file, messageId);
+        return fileEntity;
     }
 
 
@@ -97,7 +107,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
-        } catch (NotBoundException e) {
+        } catch (NotBoundException | ConnectException e) {
             e.printStackTrace();
         }
         boolean connected = connectionInt.registerAsConnected(client);
@@ -109,7 +119,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     public boolean disconnect(ClientServices client) {
         try {
             tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), "OFFLINE");
-
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
@@ -128,8 +137,12 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
             return connectionInt.isConnected(clientPhoneNumber);
-        } catch (NotBoundException | RemoteException e) {
-            e.printStackTrace();
+        } catch (NotBoundException e) {
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
+        } catch (RemoteException e) {
+            ServerOfflineHandler.handle("Sorry, cannot continue your request.\ntry to login later.");
         }
         return false;
     }
@@ -137,26 +150,28 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
+        CurrentUser user = null;
         try {
-
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
+            user = userDAO.update(dto);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        return userDAO.update(dto);
+        return user;
     }
 
     @Override
     public CurrentUser create(CurrentUser dto) throws SQLException {
         try {
-
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
             return userDAO.create(dto);
-        } catch (NotBoundException | RemoteException  e) {
+        } catch (NotBoundException | RemoteException e) {
             throw new RuntimeException("Sorry, You can't Register Now. Our Service is not available");
         }
 
@@ -165,27 +180,31 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public int delete(String phoneNumber) throws RemoteException {
         try {
-
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
         return userDAO.delete(phoneNumber);
     }
 
     @Override
     public List<FriendEntity> getFriends(String PhoneNumber) throws RemoteException {
+        List<FriendEntity> friends = null;
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
+            friends = chatting.getFriends(PhoneNumber);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        return chatting.getFriends(PhoneNumber);
+        return friends;
     }
 
     @Override
@@ -194,7 +213,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
-
             return userDAO.findByPhoneAndPassword(l);
         } catch (NotBoundException | RemoteException e) {
             throw new RuntimeException("Server Is Down");
@@ -203,26 +221,30 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
 
     @Override
     public List<FriendEntity> getFriendRequests(String myPhoneNumber) throws RemoteException {
+        List<FriendEntity> friends = null;
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
+            friends = chatting.getFriendRequests(myPhoneNumber);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        return chatting.getFriendRequests(myPhoneNumber);
+        return friends;
     }
 
     @Override
     public int sendRequest(String senderPhoneNumber, String receiverPhoneNumber) throws RemoteException {
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
         return chatting.sendRequest(senderPhoneNumber, receiverPhoneNumber);
     }
@@ -230,39 +252,42 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     @Override
     public void acceptRequest(String myphoneNumber, String acceptedphoneNumber) throws RemoteException {
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
+            chatting.acceptRequest(myphoneNumber, acceptedphoneNumber);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        chatting.acceptRequest(myphoneNumber, acceptedphoneNumber);
     }
 
     @Override
     public void refuseRequest(String myphoneNumber, String rejectedphoneNumber) throws RemoteException {
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
+            chatting.refuseRequest(myphoneNumber, rejectedphoneNumber);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        chatting.refuseRequest(myphoneNumber, rejectedphoneNumber);
     }
 
     @Override
     public void tellStatus(String phoneNumber, String status) throws RemoteException {
         try {
-
             if (chatting == null) {
                 chatting = (Chatting) registry.lookup("ChattingService");
             }
+            chatting.tellStatus(phoneNumber, status);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
+        } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
-        chatting.tellStatus(phoneNumber, status);
     }
 }
