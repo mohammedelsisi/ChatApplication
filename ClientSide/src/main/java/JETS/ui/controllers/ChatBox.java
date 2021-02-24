@@ -60,8 +60,8 @@ public class ChatBox extends GridPane {
         this.getRowConstraints().addAll(createCommonRowConstraints(3, new float[]{-1.0f, 20.0f, -1.0f}, new Priority[]{Priority.SOMETIMES, Priority.ALWAYS, Priority.SOMETIMES}));
 
         Group imagesContainer = new Group();
-        Circle status = createUserStatus();
-        imagesContainer.getChildren().addAll(userImage, status);
+//        Circle status = createUserStatus();
+        imagesContainer.getChildren().add(userImage);
         this.add(imagesContainer, 0, 0, 1, 3);
         setValignment(imagesContainer, VPos.TOP);
         setHalignment(imagesContainer, HPos.CENTER);
