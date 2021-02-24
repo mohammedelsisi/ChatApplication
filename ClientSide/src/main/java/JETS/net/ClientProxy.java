@@ -114,8 +114,10 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
             return connectionInt.disconnect(client);
-        } catch (NotBoundException | RemoteException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
+        }catch (NotBoundException s){
+            throw new RuntimeException("Cannot Reach Server");
         }
       return false;
     }

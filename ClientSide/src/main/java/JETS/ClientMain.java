@@ -53,6 +53,10 @@ public class ClientMain extends Application {
             }
         } catch (RemoteException e) {
             e.printStackTrace();
+        }catch (RuntimeException rr){
+            StageCoordinator.getInstance().switchToLoginScene();
+            appNotifications.getInstance().okai("Sorry, Our Service isn't Available at the Moment. Please, Come back later","Server Down");
+
         }
         primaryStage.show();
 

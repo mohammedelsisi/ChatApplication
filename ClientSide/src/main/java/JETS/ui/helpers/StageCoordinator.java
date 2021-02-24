@@ -52,7 +52,12 @@ public class StageCoordinator {
 
     stage.setOnCloseRequest((e)->{
         if(ModelsFactory.getInstance().getCurrentUser()!=null){
-            ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+            try {
+
+                ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+            }catch (RuntimeException s){
+
+            }
         }
     });
         //if the user closes the application, call the method that keeps him logged in.(basiony)
