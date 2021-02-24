@@ -1,6 +1,8 @@
 package JETS.ui.controllers;
 
 import JETS.ClientServices.ClientServicesFactory;
+import JETS.SavingChat.MessageType;
+import JETS.SavingChat.SavingSession;
 import JETS.bot.BotManager;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
@@ -56,14 +58,15 @@ import java.util.*;
 
 
 public class ChatController implements Initializable {
-    public static Label invalidYourself;
     public static ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     public static ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
-    public static TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     public static TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
+    public static Map<Integer,List<MessageType>> chatHistort=new HashMap<>();
+
+
+
     private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
-    public static Map<Long,List<MessageType>> chatHistort=new HashMap<>();
 
     @FXML
     public VBox contacts;

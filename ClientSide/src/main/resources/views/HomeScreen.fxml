@@ -467,7 +467,7 @@
          </graphic>
       </Label>
       <JFXToggleButton fx:id="botToggle" layoutX="10.0" layoutY="350.0" prefHeight="58.0" prefWidth="139.0" text="Enable Bot" textFill="WHITE" AnchorPane.bottomAnchor="94.0" AnchorPane.leftAnchor="10.0" />
-      <Button fx:id="btnSignout" layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut">
+      <Button fx:id="btnSignout" layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="26.0">
          <graphic>
             <FontIcon fill="#d7d2d2" iconColor="#1b0101" iconLiteral="fas-sign-out-alt" iconSize="22" tabSize="19">
                <font>
@@ -476,6 +476,6 @@
             </FontIcon>
          </graphic>
       </Button>
-      <Button  onAction="#saveChat" layoutX="741.0" layoutY="85.0" mnemonicParsing="false" text="save" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="85.0" />
+      <Button layoutX="741.0" layoutY="85.0" mnemonicParsing="false" onAction="#saveChat" prefHeight="25.0" prefWidth="70.0" styleClass="startBtn" text="Save Chat" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="85.0" />
    </children>
 </AnchorPane>

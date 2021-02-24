@@ -1,5 +1,6 @@
 package JETS.ui.helpers;
 
+import JETS.SavingChat.MessageType;
 import JETS.ui.controllers.ChatController;
 import Models.MessageEntity;
 import javafx.application.Platform;
@@ -36,7 +37,6 @@ public class ChatManager {
         ChatController.chatHistort.get(chatID).add(new MessageType(message.getSenderPhone(), message.getMsgContent(), "right"));
 
         Platform.runLater(() -> {
-            int chatID = message.getChatEntitiy().getId();
             if (RESPONSES.containsKey(chatID)) {
                 System.out.println(chatID);
                 RESPONSES.get(chatID).set(message);
