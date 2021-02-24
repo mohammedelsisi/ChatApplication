@@ -48,7 +48,7 @@ public class MainController implements Initializable {
 
         if (currentUser != null) {
             if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())) {
-                System.out.println("You are already connected");
+                appNotifications.getInstance().okai("You are Already Connected, Can't login Twice","Login Failed");
             } else {
                 ModelsFactory.getInstance().setCurrentUser(currentUser);
                 ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
@@ -60,9 +60,7 @@ public class MainController implements Initializable {
         } else {
             String msg = "Please Enter Valid PhoneNumber & Password or please SignUP";
             String title ="USER NOT FOUND!";
-
             appNotifications.getInstance().okai(msg,title);
-            System.out.println("Not Valid ");
         }
     }
 }

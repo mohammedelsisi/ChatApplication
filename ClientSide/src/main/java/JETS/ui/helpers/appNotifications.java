@@ -1,5 +1,7 @@
 package JETS.ui.helpers;
 
+import JETS.ClientServices.ClientServicesFactory;
+import JETS.net.ClientProxy;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -18,19 +20,24 @@ import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
 
 import java.time.Duration;
+import java.util.Optional;
+import java.util.function.Predicate;
 
+import static javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE;
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 
 public class appNotifications {
 
     private static final appNotifications notifyApp = new appNotifications();
 
-    public static appNotifications getInstance() {return notifyApp;}
+    public static appNotifications getInstance() {
+        return notifyApp;
+    }
 
-    public void CanceAddl(){
+    public void CanceAddl() {
         Dialog dialog = new Dialog();
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(15,15,15,15));
+        grid.setPadding(new Insets(15, 15, 15, 15));
         grid.setVgap(25);
         grid.setHgap(10);
 
@@ -38,12 +45,12 @@ public class appNotifications {
         Font fontlabel = Font.font("Cambria", FontWeight.BOLD, 15);
         mobilePhone.setFont(fontlabel);
         mobilePhone.setTextFill(Color.WHITE);
-        GridPane.setConstraints(mobilePhone,0,0);
+        GridPane.setConstraints(mobilePhone, 0, 0);
 
         TextField text1 = new TextField();
         text1.setStyle("-fx-background-color: #e3fafa; -fx-border-color: #076666");
-        text1.setFont(Font.font("Cambria",FontWeight.BOLD,13));
-        GridPane.setConstraints(text1,1,0);
+        text1.setFont(Font.font("Cambria", FontWeight.BOLD, 13));
+        GridPane.setConstraints(text1, 1, 0);
 
         Button AddFriend = new Button("Add Friend");
         AddFriend.setStyle("-fx-background-color: #e3fafa; -fx-cursor: hand;");
@@ -55,18 +62,18 @@ public class appNotifications {
         Cancel.setFont(font);
         Cancel.setCancelButton(true);
 
-        HBox hboxbtn = new HBox(20,AddFriend,Cancel);
-        GridPane.setConstraints(hboxbtn,1,1);
-        grid.getChildren().addAll(mobilePhone,text1,hboxbtn);
+        HBox hboxbtn = new HBox(20, AddFriend, Cancel);
+        GridPane.setConstraints(hboxbtn, 1, 1);
+        grid.getChildren().addAll(mobilePhone, text1, hboxbtn);
         grid.getStylesheets().add("x.css");
         dialog.getDialogPane().setContent(grid);
-       // Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-       // stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
+        // Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        // stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
 
     }
 
 
-    public void okai(String msg, String title){
+    public void okai(String msg, String title) {
 
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle(title);
@@ -74,12 +81,12 @@ public class appNotifications {
         header.setTextFill(Color.WHITE);
         alert.setHeaderText(String.valueOf(header));*/
         //alert.setContentText(title);
-        Label a  = new Label(msg);
+        Label a = new Label(msg);
         a.setWrapText(true);
         a.setTextFill(Color.WHITE);
         GridPane grid = new GridPane();
-        grid.add(a,2,0);
-        alert.getDialogPane().setPrefSize(400,130);
+        grid.add(a, 2, 0);
+        alert.getDialogPane().setPrefSize(400, 130);
         alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
         ButtonType btnok = new ButtonType("OK", OK_DONE);
         alert.getDialogPane().setContent(grid);
@@ -92,7 +99,7 @@ public class appNotifications {
     }
 
 
-    public void sideInfo(String message, String Title, javafx.util.Duration duration){
+    public void sideInfo(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();
         tray.setTitle(Title);
         tray.setMessage(message);
@@ -101,7 +108,7 @@ public class appNotifications {
         tray.showAndDismiss(duration);
     }
 
-    public void sideError(String message, String Title, javafx.util.Duration duration){
+    public void sideError(String message, String Title, javafx.util.Duration duration) {
         TrayNotification tray = new TrayNotification();
         tray.setTitle(Title);
         tray.setMessage(message);
@@ -110,8 +117,25 @@ public class appNotifications {
         tray.showAndDismiss(duration);
     }
 
+    public void cancel(String msg, String title, Runnable runnable) {
 
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setTitle(title);
+        Label a = new Label(msg);
+        a.setWrapText(true);
+        a.setTextFill(Color.WHITE);
+        GridPane grid = new GridPane();
+        grid.add(a, 2, 0);
+        alert.getDialogPane().setPrefSize(400, 130);
+        alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
+        alert.getDialogPane().setContent(grid);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            runnable.run();
+        }
+    }
 
 
 }

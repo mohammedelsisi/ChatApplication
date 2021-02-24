@@ -5,6 +5,7 @@ import JETS.net.ClientProxy;
 import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
 import Models.LoginEntity;
 import Services.*;
@@ -40,8 +41,8 @@ public class ClientMain extends Application {
             CurrentUser currentUser = ClientProxy.getInstance().findByPhoneAndPassword(loginEntity);
             if (currentUser != null) {
                 if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())){
-                    System.out.println("You are already connected");
                     StageCoordinator.getInstance().switchToLoginScene();
+                    appNotifications.getInstance().okai("You are Already Connected, Can't login Twice","Login Failed");
                 }else {
                     ModelsFactory.getInstance().setCurrentUser(currentUser);
                     ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());

@@ -3,6 +3,7 @@ package JETS.ui.controllers;
 import JETS.ClientMain;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.appNotifications;
 import Models.CurrentUser;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -30,9 +31,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpController implements Initializable {
     public static List<CountryCodeData> countryCodesList = new ArrayList<>();
+    private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     public JFXTextArea bio;
     public Circle circlePP;
     @FXML
@@ -50,7 +54,6 @@ public class SignUpController implements Initializable {
     private ComboBox countryCode;
     @FXML
     private TextField phoneNumber;
-    private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     @FXML
     private TextField emailAddress;
     @FXML
@@ -61,6 +64,13 @@ public class SignUpController implements Initializable {
     private TextField displayName;
     @FXML
     private ComboBox gender;
+    private static final String USERNAME_PATTERN =
+            "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$";
+    private static final Pattern pattern = Pattern.compile(USERNAME_PATTERN);
+    public static boolean isValidName(final String username) {
+        Matcher matcher = pattern.matcher(username);
+        return matcher.matches();
+    }
     private boolean firstTimeChkPass = true;
 
     public static boolean isValidEmail(String email) {
@@ -75,6 +85,7 @@ public class SignUpController implements Initializable {
         Tooltip t = new Tooltip(msg);
         textField.setStyle("-fx-border-color: red; -fx-border-radius: 4px; -fx-border-width: 2px;");
         textField.setTooltip(t);
+
 
     }
 
@@ -145,8 +156,8 @@ public class SignUpController implements Initializable {
         //DisplayName validation
         displayName.textProperty().addListener((arg0, oldValue, newValue) -> {
 
-            if (displayName.getText().length() < 3) {
-                showError(displayName, "Password must be at least 3 characters");
+            if (!isValidName(displayName.getText())) {
+                showError(displayName, "User Name must be at least 4 characters");
                 isNameCorrect = false;
             } else {
                 passValidation(displayName);
@@ -186,6 +197,7 @@ public class SignUpController implements Initializable {
         });
 
 
+
     }
 
     @FXML
@@ -207,11 +219,17 @@ public class SignUpController implements Initializable {
     }
 
     @FXML
-    public void registerHandle(ActionEvent e) throws RemoteException, SQLException {
-        if (isPhoneNumberCorrect && isEmailCorrect && isNameCorrect && isPasswordCorrect && !gender.getValue().toString().equals("Gender")) {
+    public void registerHandle(ActionEvent e) throws RemoteException {
+        try {
+
+
+        if (phoneNumber.getText().isBlank() || password.getText().isBlank() || confirmedPassword.getText().isBlank() ||gender.getValue().toString().equals("Gender")||displayName.getText().isBlank()||emailAddress.getText().isBlank()) {
+            appNotifications.getInstance().okai("Please Continue Registration Fields", "Registration Form");
+            validateFields();
+        } else if (isPhoneNumberCorrect && isEmailCorrect && isNameCorrect && isPasswordCorrect && !gender.getValue().toString().equals("Gender")) {
             phone = phoneNumber.getText();
-            String country =((CountryCodeData)(countryCode.getSelectionModel().getSelectedItem())).getCountryName();
-            if (phone.length() == 11 &&country.equals("Egypt") ) phone = phone.substring(1);
+            String country = ((CountryCodeData) (countryCode.getSelectionModel().getSelectedItem())).getCountryName();
+            if (phone.length() == 11 && country.equals("Egypt")) phone = phone.substring(1);
             CurrentUser user = new CurrentUser();
             user.setPhoneNumber(code + phone);
             user.setEmail(emailAddress.getText());
@@ -224,34 +242,72 @@ public class SignUpController implements Initializable {
             user.setUserPhoto(photoBytes);
             user.setCountry(country);
             ClientProxy.getInstance().create(user);
+            appNotifications.getInstance().okai("Registration Successfully, You Can Login Now to Long Talk", "Successful Registration");
+            StageCoordinator.getInstance().switchToLoginScene();
+           MainController controller= StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
+           controller.phoneNumber.setText(code+phone);
+           controller.password.requestFocus();
+        } else {
+            appNotifications.getInstance().okai("Sorry, but there are some invalid information. Try to make the fields green", "Registration Form");
 
+        }
+
+        } catch (SQLException ee){
+            if(ee.getErrorCode()==1062){
+                appNotifications.getInstance().okai("This Number is already Registered", "Registration Form");
+
+            }
         }
     }
 
-    public Boolean givenPhoneNumber_whenValid_thenOK(String phoneNumber) {
-        try {
-            Phonenumber.PhoneNumber phone = phoneNumberUtil.parse(phoneNumber,
+        public Boolean givenPhoneNumber_whenValid_thenOK (String phoneNumber){
+            try {
+                Phonenumber.PhoneNumber phone = phoneNumberUtil.parse(phoneNumber,
 
-                    Phonenumber.PhoneNumber.CountryCodeSource.UNSPECIFIED.name());
-            return phoneNumberUtil.isValidNumber(phone);
-        } catch (NumberParseException e) {
-            //e.printStackTrace();
-            return false;
+                        Phonenumber.PhoneNumber.CountryCodeSource.UNSPECIFIED.name());
+                return phoneNumberUtil.isValidNumber(phone);
+            } catch (NumberParseException e) {
+                //e.printStackTrace();
+                return false;
+            }
         }
-    }
 
-    private void loadCountryCodes() {
-        Set<String> set = phoneNumberUtil.getSupportedRegions();
+        private void loadCountryCodes () {
+            Set<String> set = phoneNumberUtil.getSupportedRegions();
 
-        String[] arr = set.toArray(new String[set.size()]);
-        for (int i = 0; i < arr.length; i++) {
-            countryCodesList.add(new CountryCodeData(PhoneNumberUtil.getInstance().getCountryCodeForRegion(arr[i]), CountryCode.getByCode(arr[i]).getName()));
+            String[] arr = set.toArray(new String[set.size()]);
+            for (int i = 0; i < arr.length; i++) {
+                countryCodesList.add(new CountryCodeData(PhoneNumberUtil.getInstance().getCountryCodeForRegion(arr[i]), CountryCode.getByCode(arr[i]).getName()));
+            }
         }
-    }
 
 
-    public void SignInAction(MouseEvent mouseEvent) {
-        StageCoordinator stageCoordinator = StageCoordinator.getInstance();
-        stageCoordinator.switchToLoginScene();
+        public void SignInAction (MouseEvent mouseEvent){
+            StageCoordinator stageCoordinator = StageCoordinator.getInstance();
+            stageCoordinator.switchToLoginScene();
+        }
+
+        private void validateFields(){
+        if (phoneNumber.getText().isBlank()) {
+            phoneNumber.setText(" ");
+            phoneNumber.setText("");
+        }
+        if (password.getText().isBlank()){
+            password.setText(" ");
+            password.setText("");
+        }
+        if(confirmedPassword.getText().isBlank()){
+            confirmedPassword.setText(" ");
+            confirmedPassword.setText("");
+        }
+        if(displayName.getText().isBlank()){
+            displayName.setText(" ");
+            displayName.setText("");
+        }
+        if(emailAddress.getText().isBlank()){
+            emailAddress.setText("");
+            emailAddress.setText(" ");
+        }
+        }
+
     }
-}

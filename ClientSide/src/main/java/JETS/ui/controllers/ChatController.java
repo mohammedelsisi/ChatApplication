@@ -611,16 +611,22 @@ public class ChatController implements Initializable {
 
     //this method will show popup then will close the application up on ok button is pressed
     public void handleSignOut(Event event) {
-        Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-        alert1.setTitle("Sign out");
-        alert1.setContentText("Do you really want to Sign out");
-        alert1.setHeaderText(null);
-        if (alert1.showAndWait().get() == ButtonType.OK){
+//        Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert1.setTitle("Sign out");
+//        alert1.setContentText("Do you really want to Sign out");
+//        alert1.setHeaderText(null);
+//        if (alert1.showAndWait().get() == ButtonType.OK){
+//            StageCoordinator.getInstance().switchToLoginScene();
+//            ConfigurationHandler.getInstance().clearPassword();
+//            System.out.println("out out out");
+//            ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+//        }
+        appNotifications.getInstance().cancel("Do you want to sign out?","R U Leaving?", ()->{
             StageCoordinator.getInstance().switchToLoginScene();
             ConfigurationHandler.getInstance().clearPassword();
             System.out.println("out out out");
             ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
-        }
+        });
     }
 
     @FXML
