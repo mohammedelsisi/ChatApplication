@@ -19,6 +19,7 @@ import tray.notification.TrayNotification;
 
 import java.time.Duration;
 
+import static javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE;
 import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 
 public class appNotifications {
@@ -89,6 +90,28 @@ public class appNotifications {
         alert.showAndWait();
 
         //error, info, notification
+    }
+
+    public void cancel(String msg,String title){
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle(title);
+            Label a  = new Label(msg);
+            a.setWrapText(true);
+            a.setTextFill(Color.WHITE);
+            GridPane grid = new GridPane();
+            grid.add(a,2,0);
+            alert.getDialogPane().setPrefSize(400,130);
+            alert.getDialogPane().setStyle("-fx-background-color: #1c9696 ; -fx-font-weight: BOLD; -fx-font-size: 15;-fx-font-family: Cambria; ");
+            ButtonType btnok = new ButtonType("OK", OK_DONE);
+            ButtonType cancel = new ButtonType("Cancel",CANCEL_CLOSE);
+            alert.getDialogPane().setContent(grid);
+            alert.getButtonTypes().add(btnok);
+            alert.getButtonTypes().add(cancel);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+            alert.showAndWait();
+
     }
 
 
