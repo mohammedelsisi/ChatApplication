@@ -129,7 +129,7 @@ public class UserFriendDao  implements UserFriendDaoInterface {
            return user;
        }
 
-    public FriendEntity createUser(ResultSet rs, FriendEntity request) throws SQLException {
+    public static FriendEntity createUser(ResultSet rs, FriendEntity request) throws SQLException {
             request.setDisplayName(rs.getString("display_name"));
             request.setPhoneNumber(rs.getString("phone_number"));
             request.setBio(rs.getString("bio"));

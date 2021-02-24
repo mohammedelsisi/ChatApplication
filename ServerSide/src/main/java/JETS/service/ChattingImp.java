@@ -3,6 +3,7 @@ package JETS.service;
 import JETS.ServerMain;
 import JETS.db.dao.UserDao;
 import JETS.db.dao.UserFriendDao;
+import Models.ChatEntitiy;
 import Models.FriendEntity;
 import Services.Chatting;
 import Services.ClientServices;
@@ -13,6 +14,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -100,6 +102,7 @@ public class ChattingImp extends UnicastRemoteObject implements Chatting {
             }
         }
     }
+
 
 
 

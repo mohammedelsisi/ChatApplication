@@ -2,9 +2,10 @@ package Models;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ChatEntitiy implements Serializable {
-    private long id;
+    private int id;
     private List<String> participantsPhoneNumbers;
     private String chatName;
 
@@ -20,17 +21,17 @@ public class ChatEntitiy implements Serializable {
 
     }
 
-    public ChatEntitiy(long id, List<String> phoneNumber,String chatName) {
+    public ChatEntitiy(int id, List<String> phoneNumber,String chatName) {
         this.id = id;
         this.participantsPhoneNumbers = phoneNumber;
         this.chatName=chatName;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

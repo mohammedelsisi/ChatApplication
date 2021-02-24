@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatManager {
     private static final ChatManager CHAT_MANAGER = new ChatManager();
-    private final Map<Long, SimpleObjectProperty<MessageEntity>> RESPONSES;
+    private final Map<Integer, SimpleObjectProperty<MessageEntity>> RESPONSES;
 
     private ChatManager() {
         RESPONSES = new ConcurrentHashMap<>();
@@ -20,7 +20,7 @@ public class ChatManager {
         return CHAT_MANAGER;
     }
 
-    public SimpleObjectProperty<MessageEntity> createNewChatResponse(long chatID) {
+    public SimpleObjectProperty<MessageEntity> createNewChatResponse(int chatID) {
         SimpleObjectProperty<MessageEntity> response = new SimpleObjectProperty<>();
         RESPONSES.put(chatID, response);
         return response;
@@ -28,15 +28,15 @@ public class ChatManager {
 
     public void receiveResponse(MessageEntity message) {
         Platform.runLater(() -> {
-            Long chatID = message.getChatEntitiy().getId();
+            int chatID = message.getChatEntitiy().getId();
+            System.out.println("before"+chatID);
             if (RESPONSES.containsKey(chatID)) {
-                System.out.println(chatID);
+                System.out.println("after"+chatID);
                 System.err.println("test receive response ");
                 RESPONSES.get(chatID).set(message);
             } else {
                 SimpleObjectProperty<MessageEntity> simpleMsg = createNewChatResponse(chatID);
                 simpleMsg.set(message);
-
                 ChatController chat = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
                 chat.createChatLayout(simpleMsg);
             }
