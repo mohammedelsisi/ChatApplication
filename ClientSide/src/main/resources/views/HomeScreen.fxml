@@ -267,7 +267,7 @@
                               <HBox fx:id="chatControllersContainer" />
                               <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                  <children>
-                                    <FontIcon iconColor="WHITE" iconLiteral="mdi2f-file-upload" iconSize="35" onMouseClicked="#addFile">
+                                    <FontIcon fx:id="fileButton" disable="true" iconColor="WHITE" iconLiteral="mdi2f-file-upload" iconSize="35" onMouseClicked="#addFile">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>

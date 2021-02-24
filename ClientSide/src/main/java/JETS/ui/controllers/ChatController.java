@@ -77,6 +77,8 @@ public class ChatController implements Initializable {
     public VBox chatsVbox;
     @FXML
     public ComboBox statusComboBox;
+    @FXML
+    private FontIcon fileButton;
     public GridPane grid = new GridPane();
     public Dialog dialog = new Dialog();
     public Alert alert;
@@ -381,7 +383,7 @@ public class ChatController implements Initializable {
 
     public void sendMessage(KeyEvent keyEvent) throws RemoteException {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            if (!messageField.getText().isBlank()) {
+            if (!messageField.getText().isBlank() || attachedFile != null) {
                 if (keyEvent.isAltDown()) {
                     messageField.appendText("\n");
                 } else {
@@ -403,6 +405,7 @@ public class ChatController implements Initializable {
                         try {
                             msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
                             attachedFile = null;
+                            chatControllersContainer.getChildren().remove(0);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -530,6 +533,7 @@ public class ChatController implements Initializable {
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(createdEntity));
             messageField.setDisable(false);
+            fileButton.setDisable(false);
             chatEntitiy = createdEntity;
             scrollPane.toFront();
             currentIdx = idx;
@@ -550,6 +554,7 @@ public class ChatController implements Initializable {
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
+            fileButton.setDisable(false);
             chatEntitiy = messageEntity.get().getChatEntitiy();
             scrollPane.toFront();
             currentIdx = idx;

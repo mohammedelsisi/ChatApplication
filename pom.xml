@@ -19,6 +19,7 @@
         <ikonli.version>12.1.0</ikonli.version>
         <controlsfx.version>11.0.3</controlsfx.version>
         <tilesfx.version>11.47</tilesfx.version>
+        <junit.version>4.13</junit.version>
     </properties>
 
 
@@ -147,6 +148,13 @@
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
             <version>5.8.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
