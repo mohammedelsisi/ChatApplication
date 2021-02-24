@@ -51,7 +51,7 @@ public class MainController implements Initializable {
 
             if (currentUser != null) {
                 if (ClientProxy.getInstance().isConnected(loginEntity.getPhoneNumber())) {
-                    appNotifications.getInstance().okai("You are Already Connected, Can't login Twice", "Login Failed");
+                    appNotifications.getInstance().errorBox("You are Already Connected, Can't login Twice", "Login Failed");
                 } else {
                     ModelsFactory.getInstance().setCurrentUser(currentUser);
                     ClientProxy.getInstance().registerAsConnected(ClientServicesFactory.getClientServicesImp());
@@ -67,7 +67,7 @@ public class MainController implements Initializable {
             }
 
         }catch (RuntimeException ss){
-            appNotifications.getInstance().okai("Sorry, Our Service isn't Available at the Moment. Please, Come back later","Server Down");
+            appNotifications.getInstance().errorBox("Sorry, Our Service isn't Available at the Moment. Please, Come back later","Server Down");
 
         }
     }

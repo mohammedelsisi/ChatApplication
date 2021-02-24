@@ -248,15 +248,18 @@ public class SignUpController implements Initializable {
            controller.phoneNumber.setText(code+phone);
            controller.password.requestFocus();
         } else {
-            appNotifications.getInstance().okai("Sorry, but there are some invalid information. Try to make the fields green", "Registration Form");
+            appNotifications.getInstance().errorBox("Sorry, but there are some invalid information. Try to make the fields green", "Registration Form");
 
         }
 
         } catch (SQLException ee){
             if(ee.getErrorCode()==1062){
-                appNotifications.getInstance().okai("This Number is already Registered", "Registration Form");
+                appNotifications.getInstance().errorBox("This Number is already Registered", "Registration Form");
 
             }
+        }catch (RuntimeException ss){
+            appNotifications.getInstance().errorBox(ss.getMessage(), "Service Down");
+
         }
     }
 

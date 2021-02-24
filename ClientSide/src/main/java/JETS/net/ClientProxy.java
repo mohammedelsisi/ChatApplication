@@ -15,8 +15,8 @@ import java.util.List;
 
 public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, ChatDao, Chatting, FileService {
 
-    public static Chatting chatting;
     private static final ClientProxy clientProxy = new ClientProxy();
+    public static Chatting chatting;
     private UserDao userDAO;
     private ConnectionInt connectionInt;
     private ChatServiceInt chatServiceInt;
@@ -27,7 +27,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     private ClientProxy() {
         try {
             registry = LocateRegistry.getRegistry(1212);
-        } catch (RemoteException  e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -87,7 +87,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-        return fileService.getFileData(file,messageId);
+        return fileService.getFileData(file, messageId);
     }
 
 
@@ -100,26 +100,25 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-        boolean connected= connectionInt.registerAsConnected(client);
-        tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),"AVAILABLE");
+        boolean connected = connectionInt.registerAsConnected(client);
+        tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), "AVAILABLE");
         return connected;
     }
 
     @Override
-    public boolean disconnect(ClientServices client)  {
+    public boolean disconnect(ClientServices client) {
         try {
-            tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(),"OFFLINE");
+            tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), "OFFLINE");
 
             if (connectionInt == null) {
                 connectionInt = (ConnectionInt) registry.lookup("ConnectionService");
             }
             return connectionInt.disconnect(client);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }catch (NotBoundException s){
+
+        } catch (NotBoundException | RemoteException s) {
             throw new RuntimeException("Cannot Reach Server");
         }
-      return false;
+
     }
 
     @Override
@@ -136,7 +135,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     }
 
 
-
     @Override
     public CurrentUser update(CurrentUser dto) throws SQLException, RemoteException {
         try {
@@ -151,16 +149,17 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     }
 
     @Override
-    public CurrentUser create(CurrentUser dto) throws RemoteException, SQLException {
+    public CurrentUser create(CurrentUser dto) throws SQLException {
         try {
 
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
-        } catch (NotBoundException e) {
-            e.printStackTrace();
+            return userDAO.create(dto);
+        } catch (NotBoundException | RemoteException  e) {
+            throw new RuntimeException("Sorry, You can't Register Now. Our Service is not available");
         }
-        return userDAO.create(dto);
+
     }
 
     @Override
@@ -190,15 +189,16 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     }
 
     @Override
-    public CurrentUser findByPhoneAndPassword(LoginEntity l) throws RemoteException {
+    public CurrentUser findByPhoneAndPassword(LoginEntity l) {
         try {
             if (userDAO == null) {
                 userDAO = (UserDao) registry.lookup("UserRegistrationService");
             }
-        } catch (NotBoundException e) {
-           throw new RuntimeException("Server Is Down");
+
+            return userDAO.findByPhoneAndPassword(l);
+        } catch (NotBoundException | RemoteException e) {
+            throw new RuntimeException("Server Is Down");
         }
-        return userDAO.findByPhoneAndPassword(l);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-        return chatting.sendRequest(senderPhoneNumber,receiverPhoneNumber);
+        return chatting.sendRequest(senderPhoneNumber, receiverPhoneNumber);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-       chatting.acceptRequest(myphoneNumber,acceptedphoneNumber);
+        chatting.acceptRequest(myphoneNumber, acceptedphoneNumber);
     }
 
     @Override
@@ -250,7 +250,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-        chatting.refuseRequest(myphoneNumber,rejectedphoneNumber);
+        chatting.refuseRequest(myphoneNumber, rejectedphoneNumber);
     }
 
     @Override
@@ -263,6 +263,6 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
-       chatting.tellStatus(phoneNumber,status);
+        chatting.tellStatus(phoneNumber, status);
     }
 }
