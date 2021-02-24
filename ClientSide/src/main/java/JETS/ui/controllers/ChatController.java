@@ -355,7 +355,7 @@ public class ChatController implements Initializable {
             }
         });
         contacts.getChildren().addAll(listViewFriendList);
-        statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatus());
+        statusComboBox.setValue("AVAILABLE");
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             // notify my friends during termination or sign out
             ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
@@ -422,8 +422,6 @@ public class ChatController implements Initializable {
                             e.printStackTrace();
                         }
                     }
-
-
                     vBox.getChildren().add(new ChatBox(msg));
                     ClientProxy.getInstance().sendMessage(msg);
                     messageField.clear();
