@@ -239,7 +239,7 @@
                   </Tab>
                   <Tab style="-fx-background-color: #004040;">
                      <graphic>
-                        <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" value="My Status">
+                        <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #004c4c;" value="My Status">
                            <VBox.margin>
                               <Insets left="15.0" />
                            </VBox.margin>
@@ -457,17 +457,24 @@
 
 
 
-      <Label alignment="CENTER" contentDisplay="TOP" graphicTextGap="8.0" prefHeight="174.0" prefWidth="162.0" text="Dalia" textFill="RED">
+      <Label fx:id="lblUserName" alignment="CENTER" contentDisplay="TOP" graphicTextGap="8.0" prefHeight="174.0" prefWidth="162.0" text="Dalia Ayman" textFill="WHITE">
 
          <padding>
             <Insets top="5.0" />
          </padding>
          <graphic>
-            <Circle fx:id="circleView" fill="WHITE" radius="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+            <Circle fx:id="circleView" fill="WHITE" radius="60.0" stroke="#ffffff" strokeType="INSIDE" strokeWidth="3.0" />
          </graphic>
+         <font>
+            <Font name="Lemon Regular" size="12.0" />
+         </font>
       </Label>
-      <JFXToggleButton fx:id="botToggle" layoutX="10.0" layoutY="350.0" prefHeight="58.0" prefWidth="139.0" text="Enable Bot" textFill="WHITE" AnchorPane.bottomAnchor="94.0" AnchorPane.leftAnchor="10.0" />
-      <Button fx:id="btnSignout" layoutX="26.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="26.0">
+      <JFXButton fx:id="btnChangeUserPic" buttonType="RAISED" layoutX="111.0" layoutY="111.0" minHeight="0.0" minWidth="0.0" onAction="#ChangeUserPic" prefHeight="25.0" prefWidth="35.0" textFill="#075727">
+         <graphic>
+            <FontIcon iconColor="WHITE" iconLiteral="far-file-image" iconSize="20" wrappingWidth="1.0" />
+         </graphic></JFXButton>
+      <JFXToggleButton fx:id="botToggle" layoutX="10.0" layoutY="340.0" prefHeight="58.0" prefWidth="139.0" text="Enable Bot" textFill="WHITE" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="10.0" />
+      <Button fx:id="btnSignout" layoutX="26.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="26.0">
          <graphic>
             <FontIcon fill="#d7d2d2" iconColor="#1b0101" iconLiteral="fas-sign-out-alt" iconSize="22" tabSize="19">
                <font>

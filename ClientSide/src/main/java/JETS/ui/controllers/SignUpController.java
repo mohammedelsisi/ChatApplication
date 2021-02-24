@@ -190,7 +190,7 @@ public class SignUpController implements Initializable {
 
             if (!password.getText().equals(newValue)) {
 
-                showError(confirmedPassword, "Password mismatch");
+                showError(confirmedPassword, "Password Mismatch");
                 isPasswordCorrect = false;
             } else {
                 passValidation(confirmedPassword);
@@ -226,7 +226,7 @@ public class SignUpController implements Initializable {
 
 
             if (phoneNumber.getText().isBlank() || password.getText().isBlank() || confirmedPassword.getText().isBlank() || gender.getValue().toString().equals("Gender") || displayName.getText().isBlank() || emailAddress.getText().isBlank()) {
-                appNotifications.getInstance().okai("Please Continue Registration Fields", "Registration Form");
+                appNotifications.getInstance().okai("Please Fill all Registration Fields", "Registration Form");
                 validateFields();
             } else if (isPhoneNumberCorrect && isEmailCorrect && isNameCorrect && isPasswordCorrect && !gender.getValue().toString().equals("Gender")) {
                 phone = phoneNumber.getText();
@@ -261,13 +261,13 @@ public class SignUpController implements Initializable {
                 user.setUserPhoto(photoBytes);
                 user.setCountry(country);
                 ClientProxy.getInstance().create(user);
-                appNotifications.getInstance().okai("Registration Successfully, You Can Login Now to Long Talk", "Successful Registration");
+                appNotifications.getInstance().okai("Registration Successfully, You Can Login Now to LongTalk", "Successful Registration");
                 StageCoordinator.getInstance().switchToLoginScene();
                 MainController controller = StageCoordinator.getInstance().getScenes().get("MainScene").getLoader().getController();
                 controller.phoneNumber.setText(code + phone);
                 controller.password.requestFocus();
             } else {
-                appNotifications.getInstance().errorBox("Sorry, but there are some invalid information. Try to make the fields green", "Registration Form");
+                appNotifications.getInstance().errorBox("Sorry, but there are some invalid information. Fill fields with right data till you make the fields green", "Registration Form");
 
             }
 

@@ -42,9 +42,7 @@ import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -56,6 +54,9 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
+    public JFXButton btnChangeUserPic;
+    public Label lblUserName;
+
     public Map<Integer, List<MessageType>> getChatHistory() {
         return chatHistory;
     }
@@ -179,6 +180,12 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        //binding the user name label
+
+        lblUserName.setText(currentUser.getDisplayName());
+
+
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
         currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
@@ -612,6 +619,7 @@ public class ChatController implements Initializable {
             currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
             currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
             currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            lblUserName.setText(tFDisplayName.getText());
             //set the date of birth = DPDatePicker.getValue;
 
             ClientProxy.getInstance().update(currentUser);
@@ -726,5 +734,34 @@ public class ChatController implements Initializable {
             new SavingSession().saveChat(chatEntitiy.getId(), chatHistory.get(chatEntitiy.getId()), savedPath);
         }
     }
+    public void ChangeUserPic(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Image", "*.jpg", "*.png", "*.jpeg")
+        );
+
+        File selectedPhoto = chooser.showOpenDialog(btnChangeUserPic.getScene().getWindow());
+        if(selectedPhoto !=null){
+            try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(selectedPhoto))) {
+                byte[] photoBytes = bufferedInputStream.readAllBytes();
+                circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(photoBytes))));
+                currentUser.setUserPhoto(photoBytes);
+                ClientProxy.getInstance().update(currentUser);
+            } catch (IOException | SQLException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+        }else {
+            /*Alert noPhotoSelected = new Alert(Alert.AlertType.INFORMATION);
+            *//*noPhotoSelected.setTitle("No photo selected");
+            noPhotoSelected.setHeaderText(null);
+            noPhotoSelected.setContentText("No Photo selected !");
+            noPhotoSelected.showAndWait();*/
+           appNotifications.getInstance().okai("No Photo Selected","Change Photo ");
+        }
+
+    }
+
 }
+
+
 
