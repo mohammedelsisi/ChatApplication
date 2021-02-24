@@ -4,10 +4,12 @@ import JETS.ui.controllers.ChatController;
 import JETS.ui.helpers.ChatManager;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
+import JETS.ui.helpers.appNotifications;
 import Models.FriendEntity;
 import Models.MessageEntity;
 import Services.ClientServices;
 import javafx.application.Platform;
+import javafx.util.Duration;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -66,8 +68,9 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
 
     @Override
     public void notifyAcceptance(FriendEntity user) throws RemoteException {
-        System.out.println(user.getDisplayName()+" accepted your request");
-        Platform.runLater( () -> ChatController.friendsList.add(user));
+
+        Platform.runLater( () -> {ChatController.friendsList.add(user);
+        appNotifications.getInstance().sucessNotify("You and " + user.getDisplayName() + " Are Now Friends","Congratulations", Duration.seconds(5));});
         ModelsFactory.getInstance().getCurrentUser().getFriends().put(user.getPhoneNumber(), user);
     }
 
@@ -87,6 +90,9 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
     @Override
     public void notifyRequest(FriendEntity user) throws RemoteException {
         ChatController.requestLists.add(user);
+       Platform.runLater(() ->{
+        appNotifications.getInstance().sideInfo("Yor Received a Friend Request From "+ user.getDisplayName()  , "Friend Request" , Duration.seconds(5));
+    });
     }
 
 

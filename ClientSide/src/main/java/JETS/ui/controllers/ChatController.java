@@ -235,6 +235,8 @@ public class ChatController implements Initializable {
                                             ClientProxy.getInstance().acceptRequest(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), friendEntity.getPhoneNumber());
                                             requestLists.remove(friendEntity);
                                             friendsList.add(friendEntity);
+                                            appNotifications.getInstance().sucessNotify("You and " + friendEntity.getDisplayName() + " Are Now Friends","Congratulations",Duration.seconds(5));
+
                                             currentUser.getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
                                         } catch (RemoteException e) {
                                             e.printStackTrace();
@@ -395,7 +397,6 @@ public class ChatController implements Initializable {
                         VBox vBox2 = addChatToMap(currentIdx);
                         msgProperty.addListener((obs, old, newval) -> {
                             vBox2.getChildren().add(new ChatBox(newval));
-                            System.out.println("testtest");
                         });
                     }
 
