@@ -31,7 +31,6 @@ public class ChatManager {
             Long chatID = message.getChatEntitiy().getId();
             if (RESPONSES.containsKey(chatID)) {
                 System.out.println(chatID);
-                System.err.println("test receive response ");
                 RESPONSES.get(chatID).set(message);
             } else {
                 SimpleObjectProperty<MessageEntity> simpleMsg = createNewChatResponse(chatID);

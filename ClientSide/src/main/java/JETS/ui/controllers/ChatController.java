@@ -1,22 +1,14 @@
 package JETS.ui.controllers;
 
-import JETS.ClientMain;
 import JETS.ClientServices.ClientServicesFactory;
+import JETS.bot.BotManager;
 import JETS.net.ClientProxy;
 import JETS.ui.helpers.*;
 import Models.*;
 import com.jfoenix.controls.*;
-import javafx.scene.Group;
-
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ArrayChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.util.stream.Collectors;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -26,35 +18,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Callback;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.w3c.dom.UserDataHandler;
 import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,20 +65,18 @@ public class ChatController implements Initializable {
     public VBox chatsVbox;
     @FXML
     public ComboBox statusComboBox;
-    @FXML
-    private FontIcon fileButton;
     public GridPane grid = new GridPane();
     public Dialog dialog = new Dialog();
     public Alert alert;
     public AnchorPane MainAnchorPane;
-    private Screen screen;
-
-
     ChatEntitiy chatEntitiy;
     CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
     int currentIdx;
     ListView<FriendEntity> listViewRequestList;
     ListView<FriendEntity> listViewFriendList = new ListView<>();
+    @FXML
+    private FontIcon fileButton;
+    private Screen screen;
     @FXML
     private StackPane spChatBoxes;
     @FXML
@@ -106,6 +92,7 @@ public class ChatController implements Initializable {
     private HBox chatControllersContainer;
     private double oldMessageFieldHigh;
     private File attachedFile = null;
+    private BotManager chatBot = new BotManager();
 
 
     @FXML
@@ -131,6 +118,37 @@ public class ChatController implements Initializable {
     @FXML
     private JFXButton btnSaveChanges;
 
+    @FXML
+    private JFXToggleButton botToggle;
+
+    public static void loadRequestList() {
+        try {
+            requestLists.setAll(ClientProxy.getInstance().getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    to take the user data from the specified field and store it in the current object
+     */
+
+    public static void loadFriendList() {
+        try {
+
+
+            friendsList.addAll(ClientProxy.getInstance().getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
+            for (FriendEntity friendEntity : friendsList) {
+                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
+                System.out.println(friendEntity.getDisplayName() + ":" + friendEntity.getStatus());
+
+            }
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
     this method will show the put up for changing password
@@ -152,36 +170,6 @@ public class ChatController implements Initializable {
             newWindow.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-    to take the user data from the specified field and store it in the current object
-     */
-
-
-    public static void loadRequestList() {
-        try {
-            requestLists.setAll(ClientProxy.getInstance().getFriendRequests(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadFriendList() {
-        try {
-
-
-            friendsList.addAll(ClientProxy.getInstance().getFriends(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()));
-            for (FriendEntity friendEntity : friendsList) {
-                ModelsFactory.getInstance().getCurrentUser().getFriends().put(friendEntity.getPhoneNumber(), friendEntity);
-                System.out.println(friendEntity.getDisplayName() + ":" + friendEntity.getStatus());
-
-            }
-
-        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -375,8 +363,8 @@ public class ChatController implements Initializable {
         tFDisplayName.setText(currentUser.getDisplayName());
         tFEmailAddress.setText(currentUser.getEmail());
         TABio.setText(currentUser.getBio());
-        ObservableList<String> genderOptions  =  FXCollections.observableArrayList("MALE","FEMALE");
-        String gender =  currentUser.getGender();
+        ObservableList<String> genderOptions = FXCollections.observableArrayList("MALE", "FEMALE");
+        String gender = currentUser.getGender();
         cbGender.getItems().addAll(genderOptions);
         cbGender.getSelectionModel().select(gender);
     }
@@ -393,9 +381,15 @@ public class ChatController implements Initializable {
                         chatEntitiy = ClientProxy.getInstance().initiateChat(chatEntitiy);
                         SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
                         VBox vBox2 = addChatToMap(currentIdx);
-                        msgProperty.addListener((obs, old, newval) -> {
-                            vBox2.getChildren().add(new ChatBox(newval));
-                            System.out.println("testtest");
+                        msgProperty.addListener((obs, oldVal, newVal) -> {
+                            vBox2.getChildren().add(new ChatBox(newVal));
+                            if(botToggle.isSelected()) {
+                                try {
+                                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+                                } catch (RemoteException e) {
+                                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+                                }
+                            }
                         });
                     }
 
@@ -422,6 +416,13 @@ public class ChatController implements Initializable {
             }
         }
 
+    }
+
+    private void sendMessage(String message, ChatEntitiy chat) throws RemoteException {
+        VBox vBox = addChatToMap(currentIdx);
+        MessageEntity msg = new MessageEntity(chat, message, currentUser.getPhoneNumber());
+        vBox.getChildren().add(new ChatBox(msg));
+        ClientProxy.getInstance().sendMessage(msg);
     }
 
     @FXML
@@ -507,10 +508,9 @@ public class ChatController implements Initializable {
     public void startChatAction(ActionEvent actionEvent) {
 
 
-
         List<String> chooseFriends = new ArrayList<>();
         chooseFriends.add(currentUser.getPhoneNumber());
-        listViewFriendList.getSelectionModel().getSelectedItems().forEach((e)->{
+        listViewFriendList.getSelectionModel().getSelectedItems().forEach((e) -> {
             chooseFriends.add(e.getPhoneNumber());
             System.err.println(e.getPhoneNumber());
         });
@@ -550,7 +550,13 @@ public class ChatController implements Initializable {
         ScrollPane scrollPane = getScrollPane(vBox);
         spChatBoxes.getChildren().add(scrollPane);
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
-        System.out.println(messageEntity.get().getChatEntitiy().getParticipantsPhoneNumbers());
+        if(botToggle.isSelected()) {
+            try {
+                sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
+            } catch (RemoteException e) {
+                appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+            }
+        }
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
@@ -559,10 +565,15 @@ public class ChatController implements Initializable {
             scrollPane.toFront();
             currentIdx = idx;
         });
-        messageEntity.addListener((obs, old, newval) -> {
-
-            vBox.getChildren().add(new ChatBox(newval));
-            System.out.println("dada");
+        messageEntity.addListener((obs, oldVal, newVal) -> {
+            vBox.getChildren().add(new ChatBox(newVal));
+            if(botToggle.isSelected()) {
+                try {
+                    sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+                } catch (RemoteException e) {
+                    appNotifications.getInstance().okai("Bot cannot send messages right now.", "Error");
+                }
+            }
         });
     }
 
@@ -591,10 +602,10 @@ public class ChatController implements Initializable {
     @FXML
     void SaveUpdateChanges(ActionEvent event) throws SQLException, RemoteException {
         //if the user update the value get the value, if not get the value stored in the current object.
-        currentUser.setDisplayName(tFDisplayName.getText()!=null?tFDisplayName.getText():currentUser.getDisplayName());
-        currentUser.setEmail(tFEmailAddress.getText()!=null ?tFEmailAddress.getText():currentUser.getEmail());
-        currentUser.setBio(TABio.getText()!=null ?TABio.getText():currentUser.getBio());
-        currentUser.setGender(cbGender.getSelectionModel().getSelectedItem()!=null?cbGender.getSelectionModel().getSelectedItem():currentUser.getGender());
+        currentUser.setDisplayName(tFDisplayName.getText() != null ? tFDisplayName.getText() : currentUser.getDisplayName());
+        currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
+        currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
+        currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
         currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
         //set the date of birth = DPDatePicker.getValue;
 
@@ -615,7 +626,7 @@ public class ChatController implements Initializable {
         alert1.setTitle("Sign out");
         alert1.setContentText("Do you really want to Sign out");
         alert1.setHeaderText(null);
-        if (alert1.showAndWait().get() == ButtonType.OK){
+        if (alert1.showAndWait().get() == ButtonType.OK) {
             StageCoordinator.getInstance().switchToLoginScene();
             ConfigurationHandler.getInstance().clearPassword();
             System.out.println("out out out");
@@ -645,7 +656,7 @@ public class ChatController implements Initializable {
                 icon.setIconColor(Color.WHITE);
                 icon.setIconSize(20);
                 icon.setWrappingWidth(25);
-                icon.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
+                icon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     chatControllersContainer.getChildren().remove(container);
                     attachedFile = null;
                 });
@@ -662,17 +673,18 @@ public class ChatController implements Initializable {
     }
 
 
-    private String getReciversNames(ChatEntitiy chatEntitiy){
+    private String getReciversNames(ChatEntitiy chatEntitiy) {
         List<String> participants = chatEntitiy.getParticipantsPhoneNumbers()
                 .stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
                 .collect(Collectors.toList());
-        StringBuilder receiverNames=new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
-        for (int i = 1;i<participants.size();i++){
+        StringBuilder receiverNames = new StringBuilder(FriendsManager.getInstance().getFriendName(participants.get(0)));
+        for (int i = 1; i < participants.size(); i++) {
             receiverNames.append(", ");
             receiverNames.append(FriendsManager.getInstance().getFriendName(participants.get(i)));
         }
         return receiverNames.toString();
     }
+
     public void showNotification(String message) {
 
         String title = "LONGTALK CHAT";
@@ -685,7 +697,7 @@ public class ChatController implements Initializable {
     }
 
     public void viewing() {
-        appNotifications.getInstance().okai("hello","yes");
+        appNotifications.getInstance().okai("hello", "yes");
     }
 }
 
