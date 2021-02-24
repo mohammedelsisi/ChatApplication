@@ -1,6 +1,8 @@
 package JETS.ui.controllers;
 
 import JETS.ClientServices.ClientServicesFactory;
+import JETS.SavingChat.MessageType;
+import JETS.SavingChat.SavingSession;
 import JETS.bot.BotManager;
 import JETS.net.ClientProxy;
 import JETS.net.ServerOfflineHandler;
@@ -49,17 +51,18 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
-    public static Map<Integer,List<MessageType>> chatHistort=new HashMap<>();
+    public static Map<Integer, List<MessageType>> chatHistort = new HashMap<>();
 
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
     private final TreeItem<FriendEntity> root = new TreeItem<FriendEntity>(new FriendEntity("Contacts"));
     private final TreeItem<FriendEntity> available = new TreeItem<>(new FriendEntity("Available"));
-    private final Map<Integer, VBox> chatBoxesMap = new HashMap<>();
+    private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
     public JFXTextArea messageField;
     @FXML
     public VBox contacts;
@@ -339,7 +342,7 @@ public class ChatController implements Initializable {
             }
         });
         contacts.getChildren().addAll(listViewFriendList);
-        statusComboBox.setValue(ModelsFactory.getInstance().getCurrentUser().getStatus());
+        statusComboBox.setValue("AVAILABLE");
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             // notify my friends during termination or sign out
             ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
@@ -377,23 +380,19 @@ public class ChatController implements Initializable {
                     messageField.appendText("\n");
                 } else {
                     try {
-                        VBox vBox = addChatToMap(currentIdx);
+                        if(chatEntitiy!=null){
 
-                        if (chatEntitiy.getId() == 0) {
-                            chatEntitiy = ClientProxy.getInstance().initiateChat(chatEntitiy);
-                            if (chatEntitiy != null) {
-                                SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(chatEntitiy.getId());
-                                VBox vBox2 = addChatToMap(currentIdx);
-                                msgProperty.addListener((obs, oldVal, newVal) -> {
-                                    vBox2.getChildren().add(new ChatBox(newVal));
-                                    if (botToggle.isSelected()) {
-                                        sendMessage(currentIdx, chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
-                                    }
-                                });
-                            }
-                        }
-                        if (chatEntitiy != null) {
+                            VBox vBox = addChatToMap(chatEntitiy);
                             MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
+
+                            if (!ChatController.chatHistort.containsKey(chatEntitiy.getId())) {
+                                ChatController.chatHistort.put(chatEntitiy.getId(), new ArrayList<MessageType>());
+                            }
+                            chatHistort.get(chatEntitiy.getId()).add(new MessageType(msg.getSenderPhone(), msg.getMsgContent(), "left"));
+
+
+//                        if (chatEntitiy != null) {
+//                            MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
                             if (attachedFile != null) {
                                 msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
@@ -405,6 +404,7 @@ public class ChatController implements Initializable {
                             ClientProxy.getInstance().sendMessage(msg);
                             messageField.clear();
                         }
+
                     } catch (RemoteException e) {
                         ServerOfflineHandler.handle("Sorry, cannot continue your request. :(");
                     }
@@ -416,9 +416,9 @@ public class ChatController implements Initializable {
 
     }
 
-    private void sendMessage(int idx, String message, ChatEntitiy chat) {
+    private void sendMessage(String message, ChatEntitiy chat) {
         try {
-            VBox vBox = addChatToMap(idx);
+            VBox vBox = addChatToMap(chat);
             MessageEntity msg = new MessageEntity(chat, message, currentUser.getPhoneNumber());
             vBox.getChildren().add(new ChatBox(msg));
             ClientProxy.getInstance().sendMessage(msg);
@@ -479,9 +479,35 @@ public class ChatController implements Initializable {
             chooseFriends.add(e.getPhoneNumber());
             System.err.println(e.getPhoneNumber());
         });
-        ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
-        createChatLayout(createdEntity);
-        tabPane.getSelectionModel().selectPrevious();
+        AtomicBoolean flag = new AtomicBoolean(true);
+        if (chooseFriends.size() == 2) {
+            chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).forEach(e -> {
+                if (chooseFriends.get(1).equals(getReceiverPhones(e.getParticipantsPhoneNumbers()))) {
+                    System.out.println(e.getParticipantsPhoneNumbers().size());
+                    System.out.println(getReceiverPhones(e.getParticipantsPhoneNumbers()));
+                    tabPane.getSelectionModel().selectPrevious();
+
+                    flag.set(false);
+                }
+            });
+        }
+
+        if (flag.get()) {
+            ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
+            try {
+
+                createdEntity = ClientProxy.getInstance().initiateChat(createdEntity);
+                if (createdEntity != null) {
+
+                    createChatLayout(createdEntity);
+                    tabPane.getSelectionModel().selectPrevious();
+                }
+
+            } catch (RemoteException e) {
+                ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
+            }
+        }
+
 
     }
 
@@ -489,11 +515,23 @@ public class ChatController implements Initializable {
 
         HBox hBox = StageCoordinator.getInstance().createChatLayout(createdEntity);
         chatsVbox.getChildren().add(hBox);
-        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
-        VBox vBox = addChatToMap(idx);
+        VBox vBox = addChatToMap(createdEntity);
         vBox.setStyle("-fx-background-color: #dcdcde");
         ScrollPane scrollPane = getScrollPane(vBox);
         spChatBoxes.getChildren().add(scrollPane);
+
+
+        SimpleObjectProperty<MessageEntity> msgProperty = ChatManager.getInstance().createNewChatResponse(createdEntity.getId());
+
+        msgProperty.addListener((obs, oldVal, newVal) -> {
+            vBox.getChildren().add(new ChatBox(newVal));
+            if (botToggle.isSelected()) {
+
+                sendMessage(chatBot.getResponse(newVal.getMsgContent()), chatEntitiy);
+
+            }
+        });
+
 
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(createdEntity));
@@ -501,22 +539,30 @@ public class ChatController implements Initializable {
             fileButton.setDisable(false);
             chatEntitiy = createdEntity;
             scrollPane.toFront();
-            currentIdx = idx;
         });
     }
 
     public void createChatLayout(SimpleObjectProperty<MessageEntity> messageEntity) {
-
+        int chatId = messageEntity.get().getChatEntitiy().getId();
+        try {
+            Map<String, FriendEntity> participantsInGroupChat = ClientProxy.getInstance().loadParticipants(chatId, currentUser.getPhoneNumber());
+            for (FriendEntity s : participantsInGroupChat.values()) {
+                System.out.println(s.getPhoneNumber());
+            }
+            currentUser.getParticipantsInGroup().putAll(participantsInGroupChat);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         HBox hBox = StageCoordinator.getInstance().createChatLayout(messageEntity.get().getChatEntitiy());
         chatsVbox.getChildren().add(hBox);
-        int idx = chatsVbox.getChildren().lastIndexOf(hBox);
-        VBox vBox = addChatToMap(idx);
+        VBox vBox = addChatToMap(messageEntity.get().getChatEntitiy());
+
         vBox.setStyle("-fx-background-color: #dcdcde");
         ScrollPane scrollPane = getScrollPane(vBox);
         spChatBoxes.getChildren().add(scrollPane);
         vBox.getChildren().add(new ChatBox(messageEntity.get()));
         if (botToggle.isSelected()) {
-            sendMessage(idx, chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
+            sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
         }
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
@@ -524,23 +570,23 @@ public class ChatController implements Initializable {
             fileButton.setDisable(false);
             chatEntitiy = messageEntity.get().getChatEntitiy();
             scrollPane.toFront();
-            currentIdx = idx;
+
         });
         messageEntity.addListener((obs, oldVal, newVal) -> {
             vBox.getChildren().add(new ChatBox(newVal));
             if (botToggle.isSelected()) {
-                sendMessage(idx, chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
+                sendMessage(chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
             }
         });
     }
 
-    private VBox addChatToMap(int id) {
+    private VBox addChatToMap(ChatEntitiy createdEntity) {
         VBox vBox;
-        if (!chatBoxesMap.containsKey(id)) {
+        if (!chatBoxesMap.containsKey(createdEntity)) {
             vBox = new VBox();
-            chatBoxesMap.put(id, vBox);
+            chatBoxesMap.put(createdEntity, vBox);
         } else {
-            vBox = chatBoxesMap.get(id);
+            vBox = chatBoxesMap.get(createdEntity);
         }
         return vBox;
     }
@@ -570,7 +616,7 @@ public class ChatController implements Initializable {
             ClientProxy.getInstance().update(currentUser);
 
             //showing the update alert
-            appNotifications.getInstance().okai("Information Updated Successfully","Updated Information");
+            appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
         } catch (RemoteException e) {
             ServerOfflineHandler.handle("Bot cannot send messages right now.");
         } catch (SQLException e) {
@@ -673,20 +719,21 @@ public class ChatController implements Initializable {
     public ObservableList<FriendEntity> getFriendsList() {
         return friendsList;
     }
-    private String getReceiverPhones(List <String> participants) {
 
-        return  participants.stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
+    private String getReceiverPhones(List<String> participants) {
+
+        return participants.stream().filter((e) -> !e.equals(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber()))
                 .collect(Collectors.toList()).get(0);
 
     }
 
     @FXML
-    public void saveChat(ActionEvent event){
-        FileChooser fileChooser=new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
-        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
-        if(chatEntitiy!=null){
-            new SavingSession().saveChat(chatEntitiy.getId(),chatHistort.get(chatEntitiy.getId()),savedPath);
+    public void saveChat(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html"));
+        File savedPath = fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
+        if (chatEntitiy != null) {
+            new SavingSession().saveChat(chatEntitiy.getId(), chatHistort.get(chatEntitiy.getId()), savedPath);
         }
     }
 }
