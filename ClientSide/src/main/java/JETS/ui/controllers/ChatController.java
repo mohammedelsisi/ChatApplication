@@ -613,19 +613,68 @@ public class ChatController implements Initializable {
     @FXML
     void SaveUpdateChanges(ActionEvent event) {
         try {
-            //if the user update the value get the value, if not get the value stored in the current object.
-            currentUser.setDisplayName(tFDisplayName.getText() != null ? tFDisplayName.getText() : currentUser.getDisplayName());
-            currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
-            currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
-            currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
-            currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
-            lblUserName.setText(tFDisplayName.getText());
+
+            boolean isValidDisplayName = false;
+            boolean isValidEmailAddress = false;
+            boolean isValidDateOfBirth = false;
+            boolean isValidBio = false;
+
+            //display name validation
+            if (tFDisplayName.getText() == null || tFDisplayName.getText().isBlank()) {
+                appNotifications.getInstance().errorBox("Display name can't be Empty ", "InValid Display Name!");
+            } else {
+                currentUser.setDisplayName(tFDisplayName.getText());
+                isValidDisplayName = true;
+            }
+
+            //check that we have a valid email
+            String emailValue = tFEmailAddress.getText();
+            boolean validEmail = SignUpController.isValidEmail(emailValue);
+            if (!validEmail ) {
+                appNotifications.getInstance().errorBox( "Please enter a valid Email Address ", "Invalid Email Address!");
+            } else {
+                currentUser.setEmail(emailValue);
+                isValidEmailAddress = true;
+            }
+
+
+//            validating date of birth
+
+            LocalDate minAllowedDate = LocalDate.now().minusYears(12);
+            LocalDate maxAllowedDate = LocalDate.now().minusYears(80);
+
+            LocalDate dateOfBirth = DPDatePicker.getValue();
+            if (dateOfBirth.isBefore(maxAllowedDate) || dateOfBirth.isAfter (minAllowedDate )) {
+                appNotifications.getInstance().errorBox("Date of birth must be between ( kaza and kaza) ", "Birth date is not Valid");
+
+            }else{
+                currentUser.setDOB(dateOfBirth.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            }
+
+            //validating the user BIo
+            if (TABio.getText() == null || TABio.getText().equals("")){
+                appNotifications.getInstance().errorBox("Bio can't be Empty ", "Bio is not Valid");
+            }else {
+                currentUser.setBio(TABio.getText());
+                isValidBio = true;
+            }
+
+//            currentUser.setDisplayName(tFEmailAddress.getText()!=null?tFEmailAddress.getText():currentUser.getDisplayName());
+//            currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
+//            currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
+//            currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
+//            currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            lblUserName.setText(tFDisplayName.getText());
             //set the date of birth = DPDatePicker.getValue;
 
-            ClientProxy.getInstance().update(currentUser);
+            if (isValidDisplayName && isValidEmailAddress && isValidDateOfBirth && isValidBio){
 
-            //showing the update alert
-            appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
+                ClientProxy.getInstance().update(currentUser);//update the user info in the database
+
+                //showing the update completed successfully notification
+                appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
+            }
+
         } catch (RemoteException e) {
             ServerOfflineHandler.handle("Bot cannot send messages right now.");
         } catch (SQLException e) {
@@ -756,7 +805,6 @@ public class ChatController implements Initializable {
             noPhotoSelected.setHeaderText(null);
             noPhotoSelected.setContentText("No Photo selected !");
             noPhotoSelected.showAndWait();*/
-           appNotifications.getInstance().cancel("No Photo Selected","Change Photo ");
         }
 
     }
