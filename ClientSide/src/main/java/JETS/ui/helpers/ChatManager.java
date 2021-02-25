@@ -43,7 +43,6 @@ public class ChatManager {
             } else {
                 SimpleObjectProperty<MessageEntity> simpleMsg = createNewChatResponse(chatID);
                 simpleMsg.set(message);
-
                 chat.createChatLayout(simpleMsg);
             }
         });

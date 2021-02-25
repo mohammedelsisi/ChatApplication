@@ -50,6 +50,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -111,7 +113,7 @@ public class ChatController implements Initializable {
     private JFXButton btnChangePassword;
     @FXML
     private JFXButton btnSaveChanges;
-
+    private ExecutorService executorService= Executors.newCachedThreadPool();
     public Map<Integer, List<MessageType>> getChatHistory() {
         return chatHistory;
     }
@@ -177,6 +179,7 @@ public class ChatController implements Initializable {
             }
         });
         lblUserName.setText(currentUser.getDisplayName());
+        if (currentUser.getUserPhoto()!=null)
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
         currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
@@ -352,22 +355,22 @@ public class ChatController implements Initializable {
             // notify my friends during termination or sign out
             ModelsFactory.getInstance().getCurrentUser().setStatus(newValue.toString());
             try {
-                System.out.println(newValue.toString());
                 ClientProxy.getInstance().tellStatus(ModelsFactory.getInstance().getCurrentUser().getPhoneNumber(), newValue.toString());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         });
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentUser.getUserPhoto())) {
-            circleView.setFill(new ImagePattern(new Image(byteArrayInputStream)));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (currentUser.getUserPhoto()!=null){
+
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentUser.getUserPhoto())) {
+                circleView.setFill(new ImagePattern(new Image(byteArrayInputStream)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         //retrieving current user data and displaying it inside the update info tab
         CurrentUser currentUser = ModelsFactory.getInstance().getCurrentUser();
-        System.out.println(currentUser.getDOB());
-        System.out.println(DPDatePicker.getValue());
         DPDatePicker.setValue(LocalDate.parse(currentUser.getDOB()));
         tFDisplayName.setText(currentUser.getDisplayName());
         tFEmailAddress.setText(currentUser.getEmail());
@@ -399,12 +402,21 @@ public class ChatController implements Initializable {
 //                        if (chatEntitiy != null) {
 //                            MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
+                            executorService.submit(()->{
+                                if (attachedFile != null) {
+                                    msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
+                                    attachedFile = null;
+                                    Platform.runLater(()->{
 
-                            if (attachedFile != null) {
-                                msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
-                                attachedFile = null;
-                                chatControllersContainer.getChildren().remove(0);
-                            }
+                                        chatControllersContainer.getChildren().remove(0);
+                                    });
+                                }
+                            });
+//                            if (attachedFile != null) {
+//                                msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
+//                                attachedFile = null;
+//                                chatControllersContainer.getChildren().remove(0);
+//                            }
                             vBox.getChildren().add(new ChatBox(msg));
 
                             ClientProxy.getInstance().sendMessage(msg);
@@ -481,34 +493,20 @@ public class ChatController implements Initializable {
             chooseFriends.add(e.getPhoneNumber());
             System.err.println(e.getPhoneNumber());
         });
-        boolean createChat = true;
+        AtomicBoolean flag = new AtomicBoolean(true);
         if (chooseFriends.size() == 2) {
-            List<ChatEntitiy> chats = chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).collect(Collectors.toList());
-
-            for (ChatEntitiy chatEntitiy : chats) {
-                if (chooseFriends.get(1).equals(getReceiverPhones(chatEntitiy.getParticipantsPhoneNumbers()))) {
-                    createChat = false;
+            chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).forEach(e -> {
+                if (chooseFriends.get(1).equals(getReceiverPhones(e.getParticipantsPhoneNumbers()))) {
+                    System.out.println(e.getParticipantsPhoneNumbers().size());
+                    System.out.println(getReceiverPhones(e.getParticipantsPhoneNumbers()));
                     tabPane.getSelectionModel().selectPrevious();
-                    break;
+
+                    flag.set(false);
                 }
-            }
-            if (createChat) {
-                ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
-                try {
+            });
+        }
 
-                    createdEntity = ClientProxy.getInstance().initiateChat(createdEntity);
-                    if (createdEntity != null) {
-
-                        createChatLayout(createdEntity);
-                        tabPane.getSelectionModel().selectPrevious();
-                    }
-
-                } catch (RemoteException es) {
-                    ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
-                }
-            }
-        } else {
-
+        if (flag.get()) {
             ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
             try {
 
@@ -523,6 +521,7 @@ public class ChatController implements Initializable {
                 ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
             }
         }
+
 
 
     }
@@ -572,9 +571,6 @@ public class ChatController implements Initializable {
         int chatId = messageEntity.get().getChatEntitiy().getId();
         try {
             Map<String, FriendEntity> participantsInGroupChat = ClientProxy.getInstance().loadParticipants(chatId, currentUser.getPhoneNumber());
-            for (FriendEntity s : participantsInGroupChat.values()) {
-                System.out.println(s.getPhoneNumber());
-            }
             currentUser.getParticipantsInGroup().putAll(participantsInGroupChat);
         } catch (RemoteException e) {
             e.printStackTrace();

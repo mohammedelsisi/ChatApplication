@@ -101,8 +101,7 @@ public class ChatBox extends GridPane {
         setValignment(messageSeen, VPos.CENTER);
 
 
-        Text messageDate = new Text(LocalDateTime.now().format(DateTimeFormatter.ofPattern("d-MM-YYYY H:m:s a")));
-        messageDate.setStrokeWidth(0);
+        Label messageDate = new Label(LocalDateTime.now().format(DateTimeFormatter.ofPattern("d-MM-YYYY H:m:s a")));
         messageDate.setFont(Font.font("Calibri", 12.0));
         this.add(messageDate, 2, 2, 1, 1);
         setHalignment(messageDate, HPos.RIGHT);

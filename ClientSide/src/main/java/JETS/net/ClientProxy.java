@@ -1,5 +1,6 @@
 package JETS.net;
 
+import JETS.ClientDemo;
 import JETS.ui.helpers.ConfigurationHandler;
 import JETS.ui.helpers.ModelsFactory;
 import JETS.ui.helpers.StageCoordinator;
@@ -27,10 +28,16 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     private ChatDao chatDao;
     private FileService fileService;
     private Registry registry;
-
+    private static String serverIP;
+    public static String getServerIp(){
+        return serverIP;
+    }
+    public static void  setServerIP(String ss){
+        serverIP =ss;
+    }
     private ClientProxy() {
         try {
-            registry = LocateRegistry.getRegistry(9999);
+            registry = LocateRegistry.getRegistry(ClientDemo.ipOfserver,9999);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

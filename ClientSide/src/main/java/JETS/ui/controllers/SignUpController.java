@@ -245,13 +245,13 @@ public class SignUpController implements Initializable {
                     if(user.getGender().equals("MALE")){
 
 
-                        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(getClass().getResource("/Pics/Male.png").getPath()))) {
+                        try (InputStream bufferedInputStream =getClass().getResourceAsStream("/Pics/Male.png")) {
                             photoBytes = bufferedInputStream.readAllBytes();
                         } catch (IOException fileNotFoundException) {
                             fileNotFoundException.printStackTrace();
                         }
                     }else if (user.getGender().equals("FEMALE"))
-                    try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(getClass().getResource("/Pics/Female.png").getPath()))) {
+                        try (InputStream bufferedInputStream =getClass().getResourceAsStream("/Pics/Female.png")) {
                         photoBytes = bufferedInputStream.readAllBytes();
                     } catch (IOException fileNotFoundException) {
                         fileNotFoundException.printStackTrace();

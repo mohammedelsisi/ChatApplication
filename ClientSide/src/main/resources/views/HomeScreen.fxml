@@ -332,7 +332,7 @@
                            <children>
                               <Pane prefHeight="35.0" prefWidth="250.0" styleClass="upper_rightBar" stylesheets="@../styles/StyleSheet.css">
                                  <children>
-                                    <Group id="cc" layoutX="50.0" layoutY="35.0" onMouseClicked="#requestFriend" styleClass="logos">
+                                    <Group id="cc" layoutX="75.0" layoutY="35.0" onMouseClicked="#requestFriend" styleClass="logos">
                                        <children>
                                           <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE" styleClass="logos">
                                              <fill>
@@ -362,7 +362,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Group>
-                                    <Group layoutX="203.0" layoutY="35.0">
+                                    <Group layoutX="160.0" layoutY="35.0">
                                        <children>
                                           <Circle radius="17.0" stroke="WHITE" strokeType="INSIDE" styleClass="logos">
                                              <fill>
@@ -396,50 +396,6 @@
                                        </cursor>
                                     </Group>
                                     <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
-                                       <children>
-                                          <Circle fill="WHITE" radius="17.0" strokeType="INSIDE" styleClass="logos">
-                                             <stroke>
-                                                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                                                   <stops>
-                                                      <Stop>
-                                                         <color>
-                                                            <Color green="0.2980392277240753" blue="0.2980392277240753" />
-                                                         </color>
-                                                      </Stop>
-                                                      <Stop offset="1.0">
-                                                         <color>
-                                                            <Color green="0.501960813999176" blue="0.501960813999176" />
-                                                         </color>
-                                                      </Stop>
-                                                   </stops>
-                                                </RadialGradient>
-                                             </stroke>
-                                          </Circle>
-                                          <FontIcon iconLiteral="fas-comment-alt" layoutX="-7.0" layoutY="7.0">
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                             <iconColor>
-                                                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                                                   <stops>
-                                                      <Stop>
-                                                         <color>
-                                                            <Color green="0.2980392277240753" blue="0.2980392277240753" />
-                                                         </color>
-                                                      </Stop>
-                                                      <Stop offset="1.0">
-                                                         <color>
-                                                            <Color green="0.501960813999176" blue="0.501960813999176" />
-                                                         </color>
-                                                      </Stop>
-                                                   </stops>
-                                                </RadialGradient>
-                                             </iconColor>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </FontIcon>
-                                       </children>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
