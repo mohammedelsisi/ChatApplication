@@ -17,6 +17,15 @@ public class ChatEntitiy implements Serializable {
         this.chatName = chatName;
     }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return id==(((ChatEntitiy)obj).id);
+    }
     public ChatEntitiy() {
 
     }

@@ -581,6 +581,9 @@ public class ChatController implements Initializable {
         if (botToggle.isSelected()) {
             sendMessage(chatBot.getResponse(messageEntity.get().getMsgContent()), messageEntity.get().getChatEntitiy());
         }
+
+
+
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
             messageField.setDisable(false);
