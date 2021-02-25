@@ -10,11 +10,8 @@ public class BotManager {
     private Chat chat;
 
     private void initBot() {
-//        Bot bot = new Bot("LongTalk", Path.of(System.getProperty("user.dir")).resolve("src/main/resources/bot").toString());
-
-        String botname = "Long Talk";
         String path = getResourcesPath();
-        Bot bot = new Bot(botname, path);
+        Bot bot = new Bot("LongTalk", Path.of("bot").toAbsolutePath().toString());
         chat = new Chat(bot);
     }
 
