@@ -56,12 +56,7 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
-    public Map<Integer, List<MessageType>> getChatHistory() {
-        return chatHistory;
-    }
-
     private final Map<Integer, List<MessageType>> chatHistory = new HashMap<>();
-
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
     private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
@@ -82,7 +77,6 @@ public class ChatController implements Initializable {
     private BotManager chatBot = new BotManager();
     @FXML
     private FontIcon fileButton;
-
     @FXML
     private StackPane spChatBoxes;
     @FXML
@@ -100,29 +94,26 @@ public class ChatController implements Initializable {
     private File attachedFile = null;
     @FXML
     private JFXToggleButton botToggle;
-
     @FXML
     private HBox HBDisplayName;
-
     @FXML
     private JFXDatePicker DPDatePicker;
     @FXML
     private JFXTextField tFDisplayName;
-
     @FXML
     private JFXTextField tFEmailAddress;
-
     @FXML
     private JFXComboBox<String> cbGender;
-
     @FXML
     private JFXTextArea TABio;
-
     @FXML
     private JFXButton btnChangePassword;
-
     @FXML
     private JFXButton btnSaveChanges;
+
+    public Map<Integer, List<MessageType>> getChatHistory() {
+        return chatHistory;
+    }
 
     public void loadRequestList() {
         try {
@@ -381,7 +372,7 @@ public class ChatController implements Initializable {
                     messageField.appendText("\n");
                 } else {
                     try {
-                        if(chatEntitiy!=null){
+                        if (chatEntitiy != null) {
 
                             VBox vBox = addChatToMap(chatEntitiy);
                             MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
@@ -480,20 +471,30 @@ public class ChatController implements Initializable {
             chooseFriends.add(e.getPhoneNumber());
             System.err.println(e.getPhoneNumber());
         });
-        AtomicBoolean flag = new AtomicBoolean(true);
         if (chooseFriends.size() == 2) {
             chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).forEach(e -> {
                 if (chooseFriends.get(1).equals(getReceiverPhones(e.getParticipantsPhoneNumbers()))) {
-                    System.out.println(e.getParticipantsPhoneNumbers().size());
-                    System.out.println(getReceiverPhones(e.getParticipantsPhoneNumbers()));
+
                     tabPane.getSelectionModel().selectPrevious();
 
-                    flag.set(false);
+                } else {
+                    ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
+                    try {
+
+                        createdEntity = ClientProxy.getInstance().initiateChat(createdEntity);
+                        if (createdEntity != null) {
+
+                            createChatLayout(createdEntity);
+                            tabPane.getSelectionModel().selectPrevious();
+                        }
+
+                    } catch (RemoteException es) {
+                        ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
+                    }
                 }
             });
-        }
+        } else {
 
-        if (flag.get()) {
             ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
             try {
 
@@ -541,6 +542,11 @@ public class ChatController implements Initializable {
             chatEntitiy = createdEntity;
             scrollPane.toFront();
         });
+        receiverName.setText(getReciversNames(createdEntity));
+        messageField.setDisable(false);
+        scrollPane.toFront();
+        fileButton.setDisable(false);
+        chatEntitiy = createdEntity;
     }
 
     public void createChatLayout(SimpleObjectProperty<MessageEntity> messageEntity) {
