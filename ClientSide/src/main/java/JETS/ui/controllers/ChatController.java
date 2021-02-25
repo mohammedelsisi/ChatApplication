@@ -756,7 +756,7 @@ public class ChatController implements Initializable {
             noPhotoSelected.setHeaderText(null);
             noPhotoSelected.setContentText("No Photo selected !");
             noPhotoSelected.showAndWait();*/
-           appNotifications.getInstance().okai("No Photo Selected","Change Photo ");
+           appNotifications.getInstance().cancel("No Photo Selected","Change Photo ");
         }
 
     }
