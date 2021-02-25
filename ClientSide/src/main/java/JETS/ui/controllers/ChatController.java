@@ -227,8 +227,7 @@ public class ChatController implements Initializable {
                                     }
                                 });
                                 Pane pane = new Pane();
-                                Image img;
-                                Circle imageCircle = new Circle(50);
+                                Circle imageCircle = new Circle(20);
                                 byte[] userImage = null;
                                 if ((userImage = friendEntity.getUserPhoto()) != null) {
                                     try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)) {
@@ -244,6 +243,7 @@ public class ChatController implements Initializable {
                                 hBox.getChildren().addAll(label, pane, acceptButton, rejectButton);
                                 hBox.setHgrow(pane, Priority.ALWAYS);
                                 hBox.setFillHeight(true);
+                                hBox.setSpacing(5.0);
                                 hBox.setAlignment(Pos.CENTER_LEFT);
                                 this.setGraphic(hBox);
 
@@ -294,9 +294,14 @@ public class ChatController implements Initializable {
 
                         if (!b) {
                             HBox hBox = new HBox();
+                            Group imagesContainer = new Group();
                             Circle imageCircle = new Circle(20);
                             Label label = new Label();
                             Circle status = new Circle(5);
+                            status.setLayoutX(12.0);
+                            status.setLayoutY(15.0);
+                            status.setStrokeWidth(1.0);
+                            status.setStroke(Color.WHITE);
                             if (friendEntity.getStatus().equals("AVAILABLE")) {
                                 status.setFill(Color.LIME);
                             } else if (friendEntity.getStatus().equals("AWAY")) {
@@ -306,6 +311,7 @@ public class ChatController implements Initializable {
                             } else {
                                 status.setFill(Color.GRAY);
                             }
+                            imagesContainer.getChildren().addAll(imageCircle, status);
                             byte[] userImage = null;
                             if ((userImage = friendEntity.getUserPhoto()) != null) {
                                 try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userImage)) {
@@ -315,12 +321,12 @@ public class ChatController implements Initializable {
                                 }
                             }
                             label.setText(friendEntity.getDisplayName() + "\n" + friendEntity.getStatus());
-                            label.setGraphic(imageCircle);
-                            hBox.getChildren().addAll(label, status);
+                            hBox.getChildren().addAll(imagesContainer, label);
 
 
                             hBox.setAlignment(Pos.CENTER_LEFT);
                             hBox.setFillHeight(true);
+                            hBox.setSpacing(5.0);
                             hBox.setPadding(new Insets(10));
                             this.setGraphic(hBox);
                             //Image
