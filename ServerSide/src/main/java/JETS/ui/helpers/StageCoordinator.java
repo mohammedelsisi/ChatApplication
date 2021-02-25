@@ -3,6 +3,7 @@ package JETS.ui.helpers;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +29,8 @@ public class StageCoordinator {
             throw new IllegalArgumentException("The Stage Already been initialized");
         }
         primaryStage = stage;
+        primaryStage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+        primaryStage.setTitle("ServerSide");
     }
 
     public static StageCoordinator getInstance() {

@@ -8,16 +8,16 @@
 
 .tab
 {
-    -fx-background-color : #05071F;
+    -fx-background-color : #004c4c;
     -fx-text-fill : #e7e5e5;
 
 }
 .tab:hover{
-    -fx-background-color : #10165F;
+    -fx-background-color : #008080;
 }
 .tab:selected
 {
-    -fx-background-color : #a7acff;
+    -fx-background-color : #008080;
 }
 .label{
     /*-fx-text-fill: white;*/

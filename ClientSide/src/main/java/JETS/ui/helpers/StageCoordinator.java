@@ -49,6 +49,8 @@ public class StageCoordinator {
             throw new IllegalArgumentException("The Stage Already been initialized");
         }
         primaryStage = stage;
+        primaryStage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
+        primaryStage.setTitle("LONGTALK-CHAT");
 
         stage.setOnCloseRequest((e) -> {
             if (ModelsFactory.getInstance().getCurrentUser() != null) {

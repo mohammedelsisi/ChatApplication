@@ -45,8 +45,8 @@ public class ChangePasswordController {
         requiredInputField.setMessage("* Filed Can not be Empty");
 
         pfOldPassword.getValidators().add(requiredInputField);
-        pfOldPassword.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (!t1) pfOldPassword.validate();
+        pfOldPassword.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue) pfOldPassword.validate();
         });
 
         pfNewPassword.disableProperty().bind((
@@ -79,10 +79,13 @@ public class ChangePasswordController {
 
         if (!checkOldPassword(oldPassword)) {
             appNotifications.getInstance().errorBox("Entered Password Doesn't match the old one.","Wrong old password");
-        } else if (!newPassword.equals(confirmNewPassword)) {
+        }else if(oldPassword.equals(newPassword)){
+            appNotifications.getInstance().errorBox("Please Enter Different Password than The Old One .","Same Password!");
+        }
+        else if (!newPassword.equals(confirmNewPassword)) {
             appNotifications.getInstance().errorBox("Password Values must Be identical","Doesn't Match!");
 
-        } else {
+        } else if (newPassword.equals(confirmNewPassword) && newPassword.length()>=6){
 
             currentUser.setPassword(newPassword);
             CurrentUser user = ClientProxy.getInstance().update(currentUser);
@@ -91,6 +94,9 @@ public class ChangePasswordController {
                 appNotifications.getInstance().okai("wohooo! Password Updated Successfully!","Successfully Changed");
             }
             pfOldPassword.getScene().getWindow().hide();
+        }else {
+            appNotifications.getInstance().errorBox("Password Must Contain at Least 6 characters","InValid Trial");
+
         }
 
     }
