@@ -52,16 +52,7 @@ public class StageCoordinator {
         primaryStage.getIcons().add(new Image(this.getClass().getResource("/Pics/logo.png").toString()));
         primaryStage.setTitle("LONGTALK-CHAT");
 
-        stage.setOnCloseRequest((e) -> {
-            if (ModelsFactory.getInstance().getCurrentUser() != null) {
-                try {
 
-                    ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
-                } catch (RuntimeException s) {
-
-                }
-            }
-        });
         //if the user closes the application, call the method that keeps him logged in.(basiony)
     }
 
@@ -129,6 +120,16 @@ public class StageCoordinator {
             e.printStackTrace();
             System.out.println("IO Exception: Couldn't load 'Chat View' FXML file");
         }
+
+        primaryStage.setOnCloseRequest((e) -> {
+            if (ModelsFactory.getInstance().getCurrentUser() != null) {
+                try {
+                    ClientProxy.getInstance().disconnect(ClientServicesFactory.getClientServicesImp());
+                } catch (RuntimeException s) {
+
+                }
+            }
+        });
 
     }
 

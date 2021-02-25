@@ -7,6 +7,7 @@ import JETS.ui.helpers.appNotifications;
 import Models.*;
 import Services.*;
 
+import java.rmi.AccessException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -83,7 +84,7 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
     }
 
     @Override
-    public void sendMessage(MessageEntity messageEntity) throws RemoteException {
+    public void sendMessage(MessageEntity messageEntity)  {
         try {
             if (chatServiceInt == null) {
                 chatServiceInt = (ChatServiceInt) registry.lookup("ChatService");
@@ -92,6 +93,8 @@ public class ClientProxy implements UserDao, ConnectionInt, ChatServiceInt, Chat
         } catch (NotBoundException e) {
             ServerOfflineHandler.handle("Oops! service not available right now.\ntry to login later.");
         } catch (ConnectException e) {
+            ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
+        } catch (RemoteException e) {
             ServerOfflineHandler.handle("Oops! server is down right now.\ntry to login later.");
         }
     }

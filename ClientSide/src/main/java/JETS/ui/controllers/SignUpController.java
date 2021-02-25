@@ -72,8 +72,8 @@ public class SignUpController implements Initializable {
     private boolean firstTimeChkPass = true;
 
     public static boolean isValidName(final String username) {
-        Matcher matcher = pattern.matcher(username);
-        return matcher.matches();
+
+        return (username.length()>3);
     }
 
     public static boolean isValidEmail(String email) {

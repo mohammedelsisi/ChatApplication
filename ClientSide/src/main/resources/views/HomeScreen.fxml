@@ -239,7 +239,7 @@
                   </Tab>
                   <Tab style="-fx-background-color: #004040;">
                      <graphic>
-                        <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #004c4c;" value="My Status">
+                        <ComboBox fx:id="statusComboBox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color:#69e3e3;" value="My Status">
                            <VBox.margin>
                               <Insets left="15.0" />
                            </VBox.margin>

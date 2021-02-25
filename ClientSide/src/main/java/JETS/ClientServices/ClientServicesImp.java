@@ -90,7 +90,7 @@ public class ClientServicesImp extends UnicastRemoteObject implements ClientServ
         ChatController chatController = StageCoordinator.getInstance().getScenes().get("Chat").getLoader().getController();
         chatController.getRequestList().add(user);
         Platform.runLater(() -> {
-            appNotifications.getInstance().sideInfo("Yor Received a Friend Request From " + user.getDisplayName(), "Friend Request", Duration.seconds(5));
+            appNotifications.getInstance().sideInfo("You Received a Friend Request From " + user.getDisplayName(), "Friend Request", Duration.seconds(5));
         });
     }
 

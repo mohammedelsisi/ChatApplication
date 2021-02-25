@@ -40,7 +40,7 @@ public class ChatDaoImp extends UnicastRemoteObject implements ChatDao {
 
 
     @Override
-    public ChatEntitiy initiateChat(ChatEntitiy dto) throws RemoteException {
+    public synchronized ChatEntitiy initiateChat(ChatEntitiy dto) throws RemoteException {
         try (PreparedStatement statement = this.connection.prepareStatement(INSERTChat)) {
             //id++;
             //statement.setLong(1, id);

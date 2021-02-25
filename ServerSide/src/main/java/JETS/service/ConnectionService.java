@@ -22,13 +22,13 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
     }
 
     @Override
-    public boolean registerAsConnected(ClientServices client) throws RemoteException {
+    public synchronized boolean registerAsConnected(ClientServices client) throws RemoteException {
         connectedClients.put(client.getPhoneNumber(), client);
         return true;
     }
 
     @Override
-    public boolean disconnect(ClientServices client) throws RemoteException {
+    public synchronized boolean disconnect(ClientServices client) throws RemoteException {
         boolean isSucceed = false;
         System.out.println(client.getPhoneNumber() + " disconnected");
         String clientPhoneNumber = client.getPhoneNumber();
@@ -39,7 +39,7 @@ public class ConnectionService extends UnicastRemoteObject implements Connection
         return isSucceed;
     }
     @Override
-    public boolean isConnected(String clientPhoneNumber) {
+    public synchronized boolean isConnected(String clientPhoneNumber) {
 
         return connectedClients.containsKey(clientPhoneNumber);
     }

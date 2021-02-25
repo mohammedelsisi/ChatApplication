@@ -9,6 +9,7 @@ import JETS.net.ServerOfflineHandler;
 import JETS.ui.helpers.*;
 import Models.*;
 import com.jfoenix.controls.*;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,13 +55,12 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
-    public JFXButton btnChangeUserPic;
-    public Label lblUserName;
-
     private final Map<Integer, List<MessageType>> chatHistory = new HashMap<>();
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
     private final Map<ChatEntitiy, VBox> chatBoxesMap = new HashMap<>();
+    public JFXButton btnChangeUserPic;
+    public Label lblUserName;
     public JFXTextArea messageField;
     @FXML
     public VBox contacts;
@@ -171,6 +171,11 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        botToggle.selectedProperty().addListener((obs, oldVal, newVal)->{
+            if (newVal){
+                messageField.setDisable(true);
+            }
+        });
         lblUserName.setText(currentUser.getDisplayName());
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
@@ -379,7 +384,7 @@ public class ChatController implements Initializable {
                 if (keyEvent.isAltDown()) {
                     messageField.appendText("\n");
                 } else {
-                    try {
+
                         if (chatEntitiy != null) {
 
                             VBox vBox = addChatToMap(chatEntitiy);
@@ -394,6 +399,7 @@ public class ChatController implements Initializable {
 //                        if (chatEntitiy != null) {
 //                            MessageEntity msg = new MessageEntity(chatEntitiy, messageField.getText().trim(), currentUser.getPhoneNumber());
 
+
                             if (attachedFile != null) {
                                 msg.setFile(new FileEntity(attachedFile.getName(), FileManager.readFile(attachedFile)));
                                 attachedFile = null;
@@ -405,9 +411,7 @@ public class ChatController implements Initializable {
                             messageField.clear();
                         }
 
-                    } catch (RemoteException e) {
-                        ServerOfflineHandler.handle("Sorry, cannot continue your request. :(");
-                    }
+
                 }
             } else {
                 messageField.clear();
@@ -417,14 +421,12 @@ public class ChatController implements Initializable {
     }
 
     private void sendMessage(String message, ChatEntitiy chat) {
-        try {
+
             VBox vBox = addChatToMap(chat);
             MessageEntity msg = new MessageEntity(chat, message, currentUser.getPhoneNumber());
             vBox.getChildren().add(new ChatBox(msg));
             ClientProxy.getInstance().sendMessage(msg);
-        } catch (RemoteException e) {
-            ServerOfflineHandler.handle("Bot cannot send messages right now.");
-        }
+
     }
 
 
@@ -549,15 +551,20 @@ public class ChatController implements Initializable {
 
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(createdEntity));
-            messageField.setDisable(false);
-            fileButton.setDisable(false);
+            if (!botToggle.isSelected()) {
+                messageField.setDisable(false);
+                fileButton.setDisable(false);
+            }
             chatEntitiy = createdEntity;
             scrollPane.toFront();
         });
         receiverName.setText(getReciversNames(createdEntity));
-        messageField.setDisable(false);
+        if (!botToggle.isSelected()) {
+
+            messageField.setDisable(false);
+            fileButton.setDisable(false);
+        }
         scrollPane.toFront();
-        fileButton.setDisable(false);
         chatEntitiy = createdEntity;
     }
 
@@ -585,11 +592,14 @@ public class ChatController implements Initializable {
         }
 
 
-
         hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             receiverName.setText(getReciversNames(messageEntity.get().getChatEntitiy()));
-            messageField.setDisable(false);
-            fileButton.setDisable(false);
+            if (!botToggle.isSelected()) {
+
+                messageField.setDisable(false);
+                fileButton.setDisable(false);
+            }
+
             chatEntitiy = messageEntity.get().getChatEntitiy();
             scrollPane.toFront();
 
@@ -600,6 +610,7 @@ public class ChatController implements Initializable {
                 sendMessage(chatBot.getResponse(newVal.getMsgContent()), messageEntity.get().getChatEntitiy());
             }
         });
+        appNotifications.getInstance().sideInfo(getReciversNames(messageEntity.get().getChatEntitiy())+" Started  chatting with you","NEW MESSAGE",Duration.seconds(3));
     }
 
     private VBox addChatToMap(ChatEntitiy createdEntity) {
@@ -631,10 +642,10 @@ public class ChatController implements Initializable {
             boolean isValidDisplayName = false;
             boolean isValidEmailAddress = false;
             boolean isValidDateOfBirth = false;
-            boolean isValidBio = false;
+//            boolean isValidBio = false;
 
             //display name validation
-            if ( tFDisplayName.getText().isBlank()) {
+            if (tFDisplayName.getText().isBlank()) {
                 appNotifications.getInstance().errorBox("Display name can't be Empty ", "InValid Display Name!");
                 return;
             } else {
@@ -645,8 +656,8 @@ public class ChatController implements Initializable {
             //check that we have a valid email
             String emailValue = tFEmailAddress.getText();
             boolean validEmail = SignUpController.isValidEmail(emailValue);
-            if (!validEmail ) {
-                appNotifications.getInstance().errorBox( "Please enter a valid Email Address ", "Invalid Email Address!");
+            if (!validEmail) {
+                appNotifications.getInstance().errorBox("Please enter a valid Email Address ", "Invalid Email Address!");
                 return;
             } else {
                 currentUser.setEmail(emailValue);
@@ -660,42 +671,29 @@ public class ChatController implements Initializable {
             LocalDate maxAllowedDate = LocalDate.now().minusYears(80);
 
             LocalDate dateOfBirth = DPDatePicker.getValue();
-            if (dateOfBirth.isBefore(maxAllowedDate) || dateOfBirth.isAfter (minAllowedDate )) {
+            if (dateOfBirth.isBefore(maxAllowedDate) || dateOfBirth.isAfter(minAllowedDate)) {
                 appNotifications.getInstance().errorBox("Date of birth must be between ( 12 and 80) ", "Birth date is not Valid");
                 return;
 
-            }else{
+            } else {
                 currentUser.setDOB(dateOfBirth.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                isValidDateOfBirth = true;
             }
 
-            //validating the user BIo
-//            if ( TABio.getText().isBlank()){
-//                appNotifications.getInstance().errorBox("Bio can't be Empty ", "Bio is not Valid");
-//            }else {
-//                currentUser.setBio(TABio.getText());
-//                isValidBio = true;
-//            }
 
-//            currentUser.setDisplayName(tFEmailAddress.getText()!=null?tFEmailAddress.getText():currentUser.getDisplayName());
-//            currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
-//            currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
-//            currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
-//            currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
-//            lblUserName.setText(tFDisplayName.getText());
-            //set the date of birth = DPDatePicker.getValue;
-
-            if (isValidDisplayName && isValidEmailAddress && isValidDateOfBirth ){
+            if (isValidDisplayName && isValidEmailAddress && isValidDateOfBirth) {
 
                 ClientProxy.getInstance().update(currentUser);//update the user info in the database
-
-                //showing the update completed successfully notification
                 appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
+                ClientProxy.getInstance().tellStatus(currentUser.getPhoneNumber(), currentUser.getStatus());
+                lblUserName.setText(currentUser.getDisplayName());
+                //showing the update completed successfully notification
             }
 
         } catch (RemoteException e) {
             ServerOfflineHandler.handle("Oops, Server isn't available.");
         } catch (SQLException e) {
-           appNotifications.getInstance().errorBox("Please Validate your data","Invalid data");
+            appNotifications.getInstance().errorBox("Please Validate your data", "Invalid data");
         }
     }
 
@@ -772,8 +770,6 @@ public class ChatController implements Initializable {
     }
 
 
-
-
     public ObservableList<FriendEntity> getRequestList() {
         return requestLists;
     }
@@ -791,13 +787,14 @@ public class ChatController implements Initializable {
 
     @FXML
     public void saveChat(ActionEvent event) {
-        FileChooser fileChooser=new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
-        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
-        if(chatEntitiy!=null){
-            new SavingSession().saveChat(chatEntitiy.getId(),chatHistory.get(chatEntitiy.getId()),chatEntitiy.getParticipantsPhoneNumbers(),savedPath);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html"));
+        File savedPath = fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
+        if (chatEntitiy != null) {
+            new SavingSession().saveChat(chatEntitiy.getId(), chatHistory.get(chatEntitiy.getId()), chatEntitiy.getParticipantsPhoneNumbers(), savedPath);
         }
     }
+
     public void ChangeUserPic(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(
@@ -805,17 +802,18 @@ public class ChatController implements Initializable {
         );
 
         File selectedPhoto = chooser.showOpenDialog(btnChangeUserPic.getScene().getWindow());
-        if(selectedPhoto !=null){
+        if (selectedPhoto != null) {
             try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(selectedPhoto))) {
                 byte[] photoBytes = bufferedInputStream.readAllBytes();
                 circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(photoBytes))));
                 currentUser.setUserPhoto(photoBytes);
                 ClientProxy.getInstance().update(currentUser);
+                ClientProxy.getInstance().tellStatus(currentUser.getPhoneNumber(), currentUser.getStatus());
             } catch (IOException | SQLException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
-        }else {
-          appNotifications.getInstance().okai("No Photo Selected invalid, please insert Photo"," Insert Photo!!");
+        } else {
+            appNotifications.getInstance().okai("No Photo Selected invalid, please insert Photo", " Insert Photo!!");
         }
 
     }
