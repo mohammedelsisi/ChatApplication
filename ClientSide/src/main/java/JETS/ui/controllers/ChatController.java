@@ -477,28 +477,32 @@ public class ChatController implements Initializable {
             chooseFriends.add(e.getPhoneNumber());
             System.err.println(e.getPhoneNumber());
         });
+        boolean createChat = true;
         if (chooseFriends.size() == 2) {
-            chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).forEach(e -> {
-                if (chooseFriends.get(1).equals(getReceiverPhones(e.getParticipantsPhoneNumbers()))) {
+            List<ChatEntitiy> chats = chatBoxesMap.keySet().stream().filter((e -> e.getParticipantsPhoneNumbers().size() == 2)).collect(Collectors.toList());
 
+            for (ChatEntitiy chatEntitiy : chats) {
+                if (chooseFriends.get(1).equals(getReceiverPhones(chatEntitiy.getParticipantsPhoneNumbers()))) {
+                    createChat = false;
                     tabPane.getSelectionModel().selectPrevious();
-
-                } else {
-                    ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
-                    try {
-
-                        createdEntity = ClientProxy.getInstance().initiateChat(createdEntity);
-                        if (createdEntity != null) {
-
-                            createChatLayout(createdEntity);
-                            tabPane.getSelectionModel().selectPrevious();
-                        }
-
-                    } catch (RemoteException es) {
-                        ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
-                    }
+                    break;
                 }
-            });
+            }
+            if (createChat) {
+                ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
+                try {
+
+                    createdEntity = ClientProxy.getInstance().initiateChat(createdEntity);
+                    if (createdEntity != null) {
+
+                        createChatLayout(createdEntity);
+                        tabPane.getSelectionModel().selectPrevious();
+                    }
+
+                } catch (RemoteException es) {
+                    ServerOfflineHandler.handle("Sorry, Cannot continue your request :(");
+                }
+            }
         } else {
 
             ChatEntitiy createdEntity = new ChatEntitiy(0, chooseFriends, null);
