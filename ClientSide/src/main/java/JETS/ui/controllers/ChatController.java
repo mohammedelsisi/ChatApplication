@@ -735,11 +735,11 @@ public class ChatController implements Initializable {
 
     @FXML
     public void saveChat(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html"));
-        File savedPath = fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
-        if (chatEntitiy != null) {
-            new SavingSession().saveChat(chatEntitiy.getId(), chatHistory.get(chatEntitiy.getId()), savedPath);
+        FileChooser fileChooser=new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML","*.html"));
+        File savedPath=fileChooser.showSaveDialog(chatsVbox.getScene().getWindow());
+        if(chatEntitiy!=null){
+            new SavingSession().saveChat(chatEntitiy.getId(),chatHistory.get(chatEntitiy.getId()),chatEntitiy.getParticipantsPhoneNumbers(),savedPath);
         }
     }
 }
