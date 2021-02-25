@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ChatBox extends GridPane {
 
@@ -99,7 +101,7 @@ public class ChatBox extends GridPane {
         setValignment(messageSeen, VPos.CENTER);
 
 
-        Text messageDate = new Text("DD-MM-YY HH:MI:SS AM");
+        Text messageDate = new Text(LocalDateTime.now().format(DateTimeFormatter.ofPattern("d-MM-YYYY H:m:s a")));
         messageDate.setStrokeWidth(0);
         messageDate.setFont(Font.font("Calibri", 12.0));
         this.add(messageDate, 2, 2, 1, 1);
