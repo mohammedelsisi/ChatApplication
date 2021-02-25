@@ -395,7 +395,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Group>
-                                    <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0" onMouseClicked="#viewing">
+                                    <Group fx:id="NewChatCreation" layoutX="125.0" layoutY="35.0">
                                        <children>
                                           <Circle fill="WHITE" radius="17.0" strokeType="INSIDE" styleClass="logos">
                                              <stroke>
@@ -472,7 +472,10 @@
       <JFXButton fx:id="btnChangeUserPic" buttonType="RAISED" layoutX="111.0" layoutY="111.0" minHeight="0.0" minWidth="0.0" onAction="#ChangeUserPic" prefHeight="25.0" prefWidth="35.0" textFill="#075727">
          <graphic>
             <FontIcon iconColor="WHITE" iconLiteral="far-file-image" iconSize="20" wrappingWidth="1.0" />
-         </graphic></JFXButton>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
       <JFXToggleButton fx:id="botToggle" layoutX="10.0" layoutY="340.0" prefHeight="58.0" prefWidth="139.0" text="Enable Bot" textFill="WHITE" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="10.0" />
       <Button fx:id="btnSignout" layoutX="26.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleSignOut" prefHeight="25.0" prefWidth="97.0" styleClass="signOut" text="SignOut" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="26.0">
          <graphic>

@@ -42,9 +42,7 @@ import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -56,6 +54,9 @@ import java.util.stream.Collectors;
 
 
 public class ChatController implements Initializable {
+    public JFXButton btnChangeUserPic;
+    public Label lblUserName;
+
     private final Map<Integer, List<MessageType>> chatHistory = new HashMap<>();
     private final ObservableList<FriendEntity> requestLists = FXCollections.observableArrayList();
     private final ObservableList<FriendEntity> friendsList = FXCollections.observableArrayList();
@@ -170,6 +171,7 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        lblUserName.setText(currentUser.getDisplayName());
         circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(currentUser.getUserPhoto()))));
 
         currentUser.userPhotoProperty().addListener((obs, oldVal, newVal) -> {
@@ -625,22 +627,75 @@ public class ChatController implements Initializable {
     @FXML
     void SaveUpdateChanges(ActionEvent event) {
         try {
-            //if the user update the value get the value, if not get the value stored in the current object.
-            currentUser.setDisplayName(tFDisplayName.getText() != null ? tFDisplayName.getText() : currentUser.getDisplayName());
-            currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
-            currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
-            currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
-            currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+            boolean isValidDisplayName = false;
+            boolean isValidEmailAddress = false;
+            boolean isValidDateOfBirth = false;
+            boolean isValidBio = false;
+
+            //display name validation
+            if ( tFDisplayName.getText().isBlank()) {
+                appNotifications.getInstance().errorBox("Display name can't be Empty ", "InValid Display Name!");
+                return;
+            } else {
+                currentUser.setDisplayName(tFDisplayName.getText());
+                isValidDisplayName = true;
+            }
+
+            //check that we have a valid email
+            String emailValue = tFEmailAddress.getText();
+            boolean validEmail = SignUpController.isValidEmail(emailValue);
+            if (!validEmail ) {
+                appNotifications.getInstance().errorBox( "Please enter a valid Email Address ", "Invalid Email Address!");
+                return;
+            } else {
+                currentUser.setEmail(emailValue);
+                isValidEmailAddress = true;
+            }
+
+
+//            validating date of birth
+
+            LocalDate minAllowedDate = LocalDate.now().minusYears(12);
+            LocalDate maxAllowedDate = LocalDate.now().minusYears(80);
+
+            LocalDate dateOfBirth = DPDatePicker.getValue();
+            if (dateOfBirth.isBefore(maxAllowedDate) || dateOfBirth.isAfter (minAllowedDate )) {
+                appNotifications.getInstance().errorBox("Date of birth must be between ( 12 and 80) ", "Birth date is not Valid");
+                return;
+
+            }else{
+                currentUser.setDOB(dateOfBirth.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            }
+
+            //validating the user BIo
+//            if ( TABio.getText().isBlank()){
+//                appNotifications.getInstance().errorBox("Bio can't be Empty ", "Bio is not Valid");
+//            }else {
+//                currentUser.setBio(TABio.getText());
+//                isValidBio = true;
+//            }
+
+//            currentUser.setDisplayName(tFEmailAddress.getText()!=null?tFEmailAddress.getText():currentUser.getDisplayName());
+//            currentUser.setEmail(tFEmailAddress.getText() != null ? tFEmailAddress.getText() : currentUser.getEmail());
+//            currentUser.setBio(TABio.getText() != null ? TABio.getText() : currentUser.getBio());
+//            currentUser.setGender(cbGender.getSelectionModel().getSelectedItem() != null ? cbGender.getSelectionModel().getSelectedItem() : currentUser.getGender());
+//            currentUser.setDOB(DPDatePicker.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            lblUserName.setText(tFDisplayName.getText());
             //set the date of birth = DPDatePicker.getValue;
 
-            ClientProxy.getInstance().update(currentUser);
+            if (isValidDisplayName && isValidEmailAddress && isValidDateOfBirth ){
 
-            //showing the update alert
-            appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
+                ClientProxy.getInstance().update(currentUser);//update the user info in the database
+
+                //showing the update completed successfully notification
+                appNotifications.getInstance().okai("Information Updated Successfully", "Updated Information");
+            }
+
         } catch (RemoteException e) {
-            ServerOfflineHandler.handle("Bot cannot send messages right now.");
+            ServerOfflineHandler.handle("Oops, Server isn't available.");
         } catch (SQLException e) {
-            e.printStackTrace();
+           appNotifications.getInstance().errorBox("Please Validate your data","Invalid data");
         }
     }
 
@@ -716,9 +771,7 @@ public class ChatController implements Initializable {
         tray.showAndWait();
     }
 
-    public void viewing() {
-        appNotifications.getInstance().okai("hello", "yes");
-    }
+
 
 
     public ObservableList<FriendEntity> getRequestList() {
@@ -744,6 +797,27 @@ public class ChatController implements Initializable {
         if(chatEntitiy!=null){
             new SavingSession().saveChat(chatEntitiy.getId(),chatHistory.get(chatEntitiy.getId()),chatEntitiy.getParticipantsPhoneNumbers(),savedPath);
         }
+    }
+    public void ChangeUserPic(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Image", "*.jpg", "*.png", "*.jpeg")
+        );
+
+        File selectedPhoto = chooser.showOpenDialog(btnChangeUserPic.getScene().getWindow());
+        if(selectedPhoto !=null){
+            try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(selectedPhoto))) {
+                byte[] photoBytes = bufferedInputStream.readAllBytes();
+                circleView.setFill(new ImagePattern(new Image(new ByteArrayInputStream(photoBytes))));
+                currentUser.setUserPhoto(photoBytes);
+                ClientProxy.getInstance().update(currentUser);
+            } catch (IOException | SQLException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+        }else {
+          appNotifications.getInstance().okai("No Photo Selected invalid, please insert Photo"," Insert Photo!!");
+        }
+
     }
 }
 
